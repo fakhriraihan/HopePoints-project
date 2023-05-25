@@ -1,0 +1,36 @@
+.sidebar {
+  min-height: 100vh;
+}
+
+.list-group a:hover {
+  background-color: #f94892;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.sidebar .header-sidebar {
+  display: flex;
+  align-items: center;
+  margin: 20px 15px;
+}
+
+.sidebar .header-sidebar > img {
+  width: 30px;
+  height: 30px;
+}
+
+.button-account:hover {
+  background-color: #f94892;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}

@@ -1,10 +1,10 @@
 import React from 'react';
+import DashDetailReport from '../../Components/DashboardComp/DashDetailReport';
 import Sidebar from '../../Components/DashboardComp/Sidebar';
-import Dashboard from '../../Components/DashboardComp/Dashboard';
 import { useState } from 'react';
 import './dashboardpage.css';
 
-const DashboardPage = () => {
+const DashDetailReportPage = () => {
   const [toggle, setToggle] = useState(true);
   const Toggle = () => {
     setToggle(!toggle);
@@ -19,11 +19,11 @@ const DashboardPage = () => {
         )}
         {toggle && <div className='col-5 col-md-2'></div>}
         <div className='col'>
-          <Dashboard Toggle={Toggle} />
+          <DashDetailReport Toggle={Toggle} />
         </div>
       </div>
     </div>
   );
 };
 
-export default DashboardPage;
+export default DashDetailReportPage;

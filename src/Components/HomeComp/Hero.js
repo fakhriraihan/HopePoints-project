@@ -17,7 +17,7 @@ const Hero = () => {
               eius? Obcaecati perferendis voluptas temporibus. Eius neque qui
               quam quidem alias.
             </p>
-            <button onClick={() => navigate('form')}>Laporkan!</button>
+            <button onClick={() => navigate('/form')}>Laporkan!</button>
           </div>
           <div className='image'>
             <img src='/assets/hero/hero.png' alt='hero HopePoints' />
