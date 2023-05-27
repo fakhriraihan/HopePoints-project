@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../Config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginPage = () => {
     const [error, setError] = useState(false);
@@ -63,6 +63,7 @@ const LoginPage = () => {
                 <a href="/">Forgot password</a>
                 <a href="/register">Register</a>
             </div>
+        {error && <span className='wrong-login'>Wrong email or password!</span>}
     </form>
         </>
   );

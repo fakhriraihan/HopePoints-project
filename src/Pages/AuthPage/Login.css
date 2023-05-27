@@ -91,3 +91,8 @@
   .login a:hover {
     text-decoration: underline;
   }
+
+  .wrong-login {
+    text-align: center;
+    color: red;
+  }

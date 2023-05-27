@@ -55,7 +55,7 @@ const App = () => {
                 }
               />
               <Route
-                path="detail"
+                path="detail/:id"
                 element={
                   <RequireAuth requiredRole="admin">
                     <DashDetailReportPage />

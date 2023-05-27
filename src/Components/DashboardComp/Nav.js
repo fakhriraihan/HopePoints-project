@@ -1,9 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/collapse';
 import './dashboardcomp.css';
+import { AuthContext } from '../../Context/AuthContext';
 
 const Nav = ({ Toggle }) => {
+
+  const { dispatch } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
+
   return (
     <nav className='navbar navbar-expand-sm navbar-dark  bg-transparent'>
       <i
@@ -37,9 +45,9 @@ const Nav = ({ Toggle }) => {
               className='dropdown-menu dropdown-menu-end'
               aria-labelledby='dropdownId'
             >
-              <a className='dropdown-item' href='logout'>
+              <button className='dropdown-item' onClick={handleLogout}>
                 Logout
-              </a>
+              </button>
             </div>
           </li>
         </ul>
