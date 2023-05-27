@@ -15,7 +15,7 @@ const DashDetailReport = ({ Toggle }) => {
           <Button
             variant='danger'
             type='cancel'
-            onClick={() => navigate('/dashreport')}
+            onClick={() => navigate('/dashboard/report')}
           >
             Cancel
           </Button>

@@ -26,7 +26,7 @@ const Sidebar = () => {
           <i className='fa-solid fa-gauge me-3'></i>
           <span>Dashboard</span>
         </a>
-        <a href='/dashreport' className='list-group-item py-3'>
+        <a href='/dashboard/report' className='list-group-item py-3'>
           <i className='fa-solid fa-table me-3'></i>
           <span>Report</span>
         </a>
