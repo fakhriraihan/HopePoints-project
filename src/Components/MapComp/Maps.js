@@ -5,9 +5,9 @@ const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
   const [showPopup, setShowPopup] = React.useState(true);
   const [viewport, setViewport] = useState({
-    longitude: 120.37460565850304,
-    latitude: -2.09293964838372,
-    zoom: 4,
+    longitude: 117.27756850787405,
+    latitude: 0.09273370918533735,
+    zoom: 4.3,
   });
 
   const handlerAddClick = (e) =>{
