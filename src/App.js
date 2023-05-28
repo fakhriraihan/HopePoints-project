@@ -14,6 +14,7 @@ import DashUserPage from './Pages/DashboardPage/DashUserPage';
 import News from './Pages/HomePage/News';
 import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
+import MapPage from './Pages/MapPage/MapPage';
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/about' element={<AboutPage />} />
           <Route path='/form' element={<FormPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/maps' element={<MapPage />} />
 
           <Route path="dashboard">
             <Route
