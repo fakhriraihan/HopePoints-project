@@ -1,0 +1,69 @@
+#root {
+  padding: 40px;
+}
+
+.form-case {
+  padding: 40px;
+  background-color: #dad1d1;
+  border-radius: 20px;
+}
+
+.form-title-page {
+  margin-top: 80px;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.form-subtitle-page {
+  margin-top: 20px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.form-title {
+  margin-top: 0px;
+  font-size: 20px;
+  text-align: center;
+  color: #ff5c8d;
+}
+
+.form-check form-check-inline {
+  padding: 30px;
+}
+
+.checkbox-container {
+  display: inline-block;
+  padding: 20px;
+  margin: 0px 135px 0px 135px;
+  text-align: center;
+}
+
+.date-case {
+  border-radius: 10px;
+  padding: 9px;
+  border-color: transparent;
+}
+
+.btn.btn-pink {
+  background-color: #f94892;
+  color: white;
+  border-radius: 7px;
+}
+
+.btn.btn-pink::hover {
+  background-color: white;
+}
+
+.phone {
+  margin-top: 3px;
+  margin: 10px;
+  border-radius: 3px;
+  width: 1350px;
+  border-radius: 3px;
+}
+
+.PhoneInputInput {
+  border-radius: 7px;
+  height: 35px;
+  border-color: transparent;
+}
