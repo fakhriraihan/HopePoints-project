@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Map, {Marker, Popup } from "react-map-gl";
+import Map, {Marker, Popup, NavigationControl, ScaleControl,GeolocateControl } from "react-map-gl";
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
@@ -23,6 +23,9 @@ const MapComponent = () => {
       transitionDuration="200"
       onDblClick={handlerAddClick}
       >
+        <GeolocateControl position="bottom-right" />
+        <NavigationControl position="bottom-right" />
+        <ScaleControl />
         <Marker
       longitude={113.764686933965}
       latitude={0.6763165071501142}
