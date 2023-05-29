@@ -32,10 +32,7 @@
   height: 100%;
   border-radius: 16px;
 }
-.row {
-  align-items: center;
-  width: 100%;
-}
+
 .aboutUs {
   height: 100vh;
   text-align: center;
