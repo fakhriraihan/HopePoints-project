@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from "react-map-gl";
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
-const MapComponent = () => {
+const MapForm = () => {
   const [newPlace, setNewPlace] = useState(null); // [longitude, latitude
   const [showPopup, setShowPopup] = React.useState(true);
   const [viewport, setViewPort] = useState({
@@ -49,7 +49,7 @@ const MapComponent = () => {
   }, [newPlace]);
 
   return (
-    <div className="map-comp" style={{ width: "100vw", height: "100vh" }}>
+    <div className="map-comp" style={{ width: "1320px", height: "100vh" }}>
       <MapGL initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
         {newPlace && (
           <>
@@ -68,16 +68,8 @@ const MapComponent = () => {
         <GeolocateControl position="bottom-right" onGeolocate={handleGeolocateClick} />
         <NavigationControl position="bottom-right" />
         <ScaleControl />
-        {/* <Popup
-          longitude={113.764686933965}
-          latitude={0.6763165071501142}
-          anchor='bottom'
-          onClose={() => setShowPopup(false)}
-        >
-          You are here
-        </Popup> */}
       </MapGL>
     </div>
   );
 };
-export default MapComponent;
+export default MapForm;
