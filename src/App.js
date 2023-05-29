@@ -34,9 +34,20 @@ const App = () => {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutPage />} />
-          <Route path='/form' element={<FormPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegisterPage />} />
           <Route path='/maps' element={<MapPage />} />
+
+          <Route path="form">
+            <Route
+              index
+              element={
+                <RequireAuth requiredRole="user">
+                  <FormPage />
+                </RequireAuth>
+              }
+            />
+            </Route>
 
           <Route path="dashboard">
             <Route
@@ -61,6 +72,46 @@ const App = () => {
                 element={
                   <RequireAuth requiredRole="admin">
                     <DashDetailReportPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="review">
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole="admin">
+                    <DashReviewPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="admin">
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole="admin">
+                    <DashAdminPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="office">
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole="admin">
+                    <DashOfficePage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="user">
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole="admin">
+                    <DashUserPage />
                   </RequireAuth>
                 }
               />
