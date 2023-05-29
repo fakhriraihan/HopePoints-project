@@ -8,7 +8,6 @@ const FormComp = () => {
   const kekerasanSeksual = useState(true);
   const kekerasanFisik = useState(true);
   const kekerasanPsikis = useState(true);
-  const [newPlace, setNewPlace] = useState(null);
 
 
   const handleChange = (data) => {
@@ -27,14 +26,6 @@ const FormComp = () => {
     latitude: -2.09293964838372,
     zoom: 4,
   });
-
-  const handleAddClick = (e) => {
-    const [longitude, latitude] = e.lngLat;
-    setNewPlace({
-      lat: latitude,
-      long: longitude,
-    });
-  };
 
   return (
     <div>
@@ -92,7 +83,7 @@ const FormComp = () => {
             width="100%" 
             height="100%" 
             transitionDuration="200"
-            onDblClick={handleAddClick}></Map>
+           ></Map>
           </div>
         </Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
