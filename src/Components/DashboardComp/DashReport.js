@@ -64,7 +64,7 @@ const DashReport = ({ Toggle }) => {
                   <td>
                     <Button
                       variant='info'
-                      onClick={() => Navigate(`/dashboard/report/detail/${report.id}`)} >
+                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)} >
                       <i className='fa-solid fa-eye'></i>
                     </Button>{' '}
                   </td>

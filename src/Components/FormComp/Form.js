@@ -1,25 +1,154 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Dropdown, Card } from "react-bootstrap";
-import MapForm from "../MapComp/FormMap";
 import PhoneInput from "react-phone-number-input";
 import Dropdownlist from "./Dropdown";
+import { doc, getDoc, collection, addDoc, GeoPoint } from 'firebase/firestore';
+import { db } from '../../Config/firebase';
+import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from "react-map-gl";
+
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const FormComp = () => {
-  const token = process.env.REACT_APP_MAPBOX_TOKEN;
-  const kekerasanSeksual = useState(true);
-  const kekerasanFisik = useState(true);
-  const kekerasanPsikis = useState(true);
+  //maps
+  const [newPlace, setNewPlace] = useState(null); // [longitude, latitude
+  const [showPopup, setShowPopup] = React.useState(true);
+  const [viewport, setViewPort] = useState({
+    longitude: 117.27756850787405,
+    latitude: 0.09273370918533735,
+    zoom: 4.3,
+  });
 
-  const handleChange = (data) => {
-    console.log(data);
+  const handleMarkerDragEnd = (event) => {
+    const { lngLat } = event;
+    const { lng, lat } = lngLat;
+    setNewPlace({ lat, long: lng });
   };
 
-  const [date, setDate] = useState();
+  useEffect(() => {
+    // Set initial marker on map load
+    setNewPlace({
+      lat: viewport.latitude,
+      long: viewport.longitude,
+    });
+  }, []);
 
-  console.log("Date", date);
+  const handleGeolocateClick = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setViewPort((prevViewport) => ({
+          ...prevViewport,
+          longitude,
+          latitude,
+        }));
+        setNewPlace({ lat: latitude, long: longitude });
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
 
-  // phone number
-  const [value, setValue] = useState();
+  useEffect(() => {
+    if (newPlace) {
+      console.log(newPlace);
+    }
+  }, [newPlace]);
+
+
+  const [users, setUser] = useState(null);
+  const [name, setName] = useState("");
+  const [tlfn, setValue] = useState("");
+  const [kekerasanSeksual, setSeksual] = useState(false);
+  const [kekerasanFisik, setFisik] = useState(false);
+  const [kekerasanPsikis, setPsikis] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const usersData = localStorage.getItem("user");
+  
+        if (usersData) {
+          // Convert data to JavaScript object if found
+          const user = JSON.parse(usersData);
+  
+          // Access user data within the user object
+          if (user && user.user) {
+            const userData = user.user;
+            const uid = userData.uid;
+  
+            // Call Firebase Firestore to fetch user data
+            const docRef = doc(db, 'users', uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              const userData = docSnap.data();
+              setUser(userData); // Set user data to state
+            } else {
+              console.log("User data not found in Firestore.");
+            }
+          } else {
+            console.log("User data not found in localStorage.");
+          }
+        } else {
+          console.log("User data not found in localStorage.");
+        }
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    try {
+      // Buat objek data laporan berdasarkan nilai-nilai dari formulir
+      const reportData = {
+        kekerasanSeksual: kekerasanSeksual,
+        kekerasanFisik: kekerasanFisik,
+        kekerasanPsikis: kekerasanPsikis,
+        name: name,
+        // tlfn: tlfn,
+        location: new GeoPoint(newPlace.lat, newPlace.long),
+        // tambahkan properti lainnya sesuai dengan data yang ingin disimpan
+      };
+  
+      // Mengakses koleksi 'reports' di Firestore
+      const reportsRef = collection(db, 'reports');
+  
+      // Menyimpan data laporan ke Firestore
+      await addDoc(reportsRef, reportData);
+  
+      console.log('Data laporan berhasil disimpan ke Firestore');
+  
+      // Lakukan tindakan lainnya setelah berhasil menyimpan data, misalnya, mengosongkan formulir atau menavigasi ke halaman lain
+      console.log('Data laporan berhasil disimpan');
+  
+    } catch (error) {
+      console.error('Error menyimpan data laporan:', error);
+      throw new Error('Gagal menyimpan data laporan');
+    }
+  };
+  
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+
+    switch (name) {
+      case "kekerasanSeksual":
+        setSeksual(checked);
+        break;
+      case "kekerasanFisik":
+        setFisik(checked);
+        break;
+      case "kekerasanPsikis":
+        setPsikis(checked);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div>
@@ -28,38 +157,57 @@ const FormComp = () => {
 
       {/* form */}
 
-      <Form className="form-case">
+      <Form className="form-case" onSubmit={handleSubmit}>
         <h1 className="form-title">Sampaikan Pelaporan Anda!</h1>
         <div className="checkbox-container">
-          <input type="checkbox" value={kekerasanSeksual} onChange={() => handleChange("Kekerasan Seksual")} />
+          <input type="checkbox" name="kekerasanSeksual" checked={kekerasanSeksual} onChange={handleCheckboxChange} />
           Kekerasan Seksual
         </div>
         <div className="checkbox-container">
-          <input type="checkbox" value={kekerasanFisik} onChange={() => handleChange("Kekerasan Fisik")} />
+          <input type="checkbox" name="kekerasanFisik" checked={kekerasanFisik} onChange={handleCheckboxChange} />
           Kekerasan Fisik
         </div>
         <div className="checkbox-container">
-          <input type="checkbox" value={kekerasanPsikis} onChange={() => handleChange("Kekerasan Psikis")} />
+          <input type="checkbox" name="kekerasanPsikis" checked={kekerasanPsikis} onChange={handleCheckboxChange} />
           Kekerasan Psikis
         </div>
         <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Control type="email" placeholder="Nama Pelapor" />
+          <Form.Control type="text" placeholder="Nama Pelapor" onChange={(e) => setName(e.target.value)}/>
         </Form.Group>
-        <PhoneInput className="phone" defaultCountry="ID" placeholder="Masukkan nomor handphone Anda!" value={value} onChange={setValue} />
+        <PhoneInput className="phone" defaultCountry="ID" placeholder="Masukkan nomor handphone Anda!" onChange={(e) => setValue(e.target.value)} />
         <Dropdownlist></Dropdownlist>
 
         <Form.Group className="mb-3" controlId="desc-case ">
           <Form.Control as="textarea" placeholder="Ketikkan isi laporan Anda ..." rows={3} />
         </Form.Group>
         <Form.Group>
-          <input className="date-case" type="date" placeholder="Masukkan tanggal kejadian kekerasan" onChange={(e) => setDate(e.target.value)} />
-          <p className="date">Tanggal terjadi: {date} </p>
+          <input className="date-case" type="date" placeholder="Masukkan tanggal kejadian kekerasan" />
         </Form.Group>
         <Form.Group>
           <Card>
             <Card.Body>
               <p>Lokasi Kejadian:</p>
-              <MapForm></MapForm>
+              <div className="map-comp" style={{ width: "1320px", height: "100vh" }}>
+                <MapGL initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
+                  {newPlace && (
+                    <>
+                      <Marker latitude={newPlace?.lat} longitude={newPlace?.long} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={true} onDragEnd={handleMarkerDragEnd} style={{ zIndex: 999 }}>
+                        <i
+                          className="fa-solid fa-location-dot"
+                          style={{
+                            fontSize: 7 * viewport.zoom,
+                            color: "tomato",
+                            cursor: "pointer",
+                          }}
+                        ></i>
+                      </Marker>
+                    </>
+                  )}
+                  <GeolocateControl position="bottom-right" onGeolocate={handleGeolocateClick} />
+                  <NavigationControl position="bottom-right" />
+                  <ScaleControl />
+                </MapGL>
+              </div>
             </Card.Body>
           </Card>
         </Form.Group>
