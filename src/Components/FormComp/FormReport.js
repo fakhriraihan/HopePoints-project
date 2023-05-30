@@ -75,9 +75,6 @@ const FormReportComp = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-
-  
-            // Call Firebase Firestore to fetch user data
             const docRef = doc(db, 'users', uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -158,7 +155,7 @@ const FormReportComp = () => {
       };
       
       const reportsRef = collection(db, 'reports');
-      const reportDocRef = doc(reportsRef, idReport); // Ganti 'your_custom_id' dengan ID yang Anda inginkan
+      const reportDocRef = doc(reportsRef, idReport); 
       await setDoc(reportDocRef, reportData);
   
       console.log('Data laporan berhasil disimpan ke Firestore');
