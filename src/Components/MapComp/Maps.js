@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Map, {
-  Marker,
-  Popup,
   NavigationControl,
   ScaleControl,
   GeolocateControl,
+  Source,
+  Layer,
 } from 'react-map-gl';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
@@ -33,6 +33,16 @@ const MapComponent = () => {
     getReports();
   }, []);
 
+  const heatmapData = {
+    type: 'FeatureCollection',
+    features: reports.map((report) => ({
+      geometry: {
+        type: 'Point',
+        coordinates: [report.location.longitude, report.location.latitude],
+      },
+    })),
+  };
+
   return (
     <Map
       initialViewState={viewport}
@@ -42,38 +52,71 @@ const MapComponent = () => {
       height='100%'
       onViewportChange={setViewPort}
     >
-      {reports.map((report) => (
-        <Marker
-          key={report.idReport}
-          latitude={report.location.latitude}
-          longitude={report.location.longitude}
-          offsetleft={-3.5 * viewport.zoom}
-          offsetTop={-7 * viewport.zoom}
-          draggable={false}
-          style={{ zIndex: 999 }}
-        >
-          <i
-            className='fa-solid fa-location-dot'
-            style={{
-              fontSize: 7 * viewport.zoom,
-              color: 'tomato',
-              cursor: 'pointer',
-            }}
-          ></i>
-        </Marker>
-      ))}
+      <Source id='heatmapData' type='geojson' data={heatmapData}>
+        <Layer
+          id='heatmapLayer'
+          type='heatmap'
+          source='heatmapData'
+          maxzoom={15}
+          paint={{
+            'heatmap-weight': {
+              property: 'weight',
+              type: 'exponential',
+              stops: [
+                [1, 0],
+                [62, 1],
+              ],
+            },
+            'heatmap-intensity': {
+              stops: [
+                [11, 1],
+                [15, 3],
+              ],
+            },
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(236,222,239,0)',
+              0.2,
+              'rgb(208,209,230)',
+              0.4,
+              'yellow',
+              0.6,
+              'orange',
+              0.8,
+              'red',
+            ],
+            'heatmap-radius': {
+              stops: [
+                [11, 15],
+                [15, 20],
+              ],
+            },
+            'heatmap-opacity': {
+              default: 1,
+              stops: [
+                [14, 1],
+                [15, 0],
+              ],
+            },
+          }}
+        />
+      </Source>
       <GeolocateControl position='bottom-right' />
       <NavigationControl position='bottom-right' />
       <ScaleControl />
       {/* <Popup
-          longitude={113.764686933965}
-          latitude={0.6763165071501142}
-          anchor='bottom'
-          onClose={() => setShowPopup(false)}
-        >
-          You are here
-        </Popup> */}
+        longitude={113.764686933965}
+        latitude={0.6763165071501142}
+        anchor='bottom'
+        onClose={() => setShowPopup(false)}
+      >
+        You are here
+      </Popup> */}
     </Map>
   );
 };
+
 export default MapComponent;
