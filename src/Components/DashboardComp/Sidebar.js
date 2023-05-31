@@ -26,11 +26,11 @@ const Sidebar = () => {
           <i className='fa-solid fa-gauge me-3'></i>
           <span>Dashboard</span>
         </a>
-        <a href='/dashreport' className='list-group-item py-3'>
+        <a href='/dashboard/report' className='list-group-item py-3'>
           <i className='fa-solid fa-table me-3'></i>
           <span>Report</span>
         </a>
-        <a href='/dashreview' className='list-group-item py-3'>
+        <a href='/dashboard/review' className='list-group-item py-3'>
           <i className='fa-solid fa-comment me-3'></i>
           <span>Review</span>
         </a>
@@ -44,13 +44,13 @@ const Sidebar = () => {
         </a>
         {isOpen && (
           <div className='list-group'>
-            <a href='/dashadmin' className='list-group-item py-2'>
+            <a href='/dashboard/admin' className='list-group-item py-2'>
               <span>Admin</span>
             </a>
-            <a href='/dashoffice' className='list-group-item py-2'>
+            <a href='/dashboard/office' className='list-group-item py-2'>
               <span>Office</span>
             </a>
-            <a href='/dashuser' className='list-group-item py-2'>
+            <a href='/dashboard/user' className='list-group-item py-2'>
               <span>User</span>
             </a>
           </div>

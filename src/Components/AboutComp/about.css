@@ -1,0 +1,53 @@
+.about {
+  height: 100vh;
+  top: 0;
+  display: grid;
+  grid-template-columns: 700px 1fr;
+  align-items: center;
+  justify-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #d3d3d3;
+}
+
+.about .about-hopePoints {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 10em;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.about .about-hopePoints > h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+.about .about-hopePoints > p {
+  display: grid;
+  margin-left: 55px;
+  font-size: 24px;
+}
+.about .image > img {
+  width: 350px;
+  height: 100%;
+  border-radius: 16px;
+}
+
+.aboutUs {
+  height: 100vh;
+  text-align: center;
+  align-items: center;
+  background-color: #fc6aa7;
+}
+.aboutUs > h1 {
+  margin-bottom: 48px;
+}
+
+.card-team {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 5%;
+}

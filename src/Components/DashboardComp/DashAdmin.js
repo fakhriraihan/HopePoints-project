@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Nav from './Nav';
 import { Table, Button, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
+import { collection, onSnapshot, doc, deleteDoc, query, where } from 'firebase/firestore';
+import { db } from '../../Config/firebase';
 
 const DashAdmin = ({ Toggle }) => {
   const Navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, 'users'), where('role', '==', 'admin')), 
+      (snapshot) => {
+        const userList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        console.log('Retrieved data:', userList);
+        setUsers(userList);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  
+
+ 
+  const handleDeleteUser = async (userId) => {
+    try {
+      const userRef = doc(db, 'users', userId);
+      await deleteDoc(userRef);
+      console.log('User deleted successfully!');
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
+  };
+  
 
   return (
     <div className='px-3'>
@@ -13,7 +47,9 @@ const DashAdmin = ({ Toggle }) => {
       <h2 className='text-white mb-3'>Table Data Admin</h2>
       <Card>
         <Card.Header className='d-flex align-items-center justify-content-between'>
-          <h5>Admin</h5>
+        <Button variant='primary' onClick={() => Navigate('/dashboard/office/add')}>
+            Add Admin
+          </Button>
           <Form className='d-flex'>
             <Form.Control
               type='search'
@@ -31,42 +67,27 @@ const DashAdmin = ({ Toggle }) => {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>
-                  <Button variant='danger' onClick={() => Navigate('#')}>
-                    <i className='fa-solid fa-trash-can'></i>
-                  </Button>{' '}
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Otto</td>
-                <td>
-                  <Button variant='danger' onClick={() => Navigate('#')}>
-                    <i className='fa-solid fa-trash-can'></i>
-                  </Button>{' '}
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>@twitter</td>
-                <td>@mdo</td>
-                <td>
-                  <Button variant='danger' onClick={() => Navigate('#')}>
-                    <i className='fa-solid fa-trash-can'></i>
-                  </Button>{' '}
-                </td>
-              </tr>
+              {users.map((user, index) => (
+                <tr key={user.id}>
+                  <td>{index + 1}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <Button
+                      variant='danger'
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
+                      <i className='fa-solid fa-trash-can'></i>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Card.Body>
