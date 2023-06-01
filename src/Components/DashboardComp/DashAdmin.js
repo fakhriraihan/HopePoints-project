@@ -1,46 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Nav from './Nav';
 import { Table, Button, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
-import { collection, onSnapshot, doc, deleteDoc, query, where } from 'firebase/firestore';
-import { db } from '../../Config/firebase';
+import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashAdmin = ({ Toggle }) => {
   const Navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      query(collection(db, 'users'), where('role', '==', 'admin')), 
-      (snapshot) => {
-        const userList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log('Retrieved data:', userList);
-        setUsers(userList);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-  
-
-  const handleDeleteUser = async (userId) => {
-    try {
-      const userRef = doc(db, 'users', userId);
-      await deleteDoc(userRef);
-      console.log('User deleted successfully!');
-    } catch (error) {
-      console.log('Error deleting user:', error);
-    }
-  };
+  const [users, setUsers] = useState([]);  
 
   return (
     <div className='px-3'>
@@ -93,6 +60,8 @@ const DashAdmin = ({ Toggle }) => {
           </Table>
         </Card.Body>
       </Card>
+
+      <GetUserWhereRole setUsers={setUsers} setRole={'admin'} />
     </div>
   );
 };

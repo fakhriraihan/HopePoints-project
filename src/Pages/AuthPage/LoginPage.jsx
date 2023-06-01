@@ -4,7 +4,6 @@ import './Login.css';
 import { useContext, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../Config/firebase";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -13,7 +12,6 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
   
-    const navigate = useNavigate();
   
     const { dispatch } = useContext(AuthContext);
   
@@ -36,10 +34,10 @@ const LoginPage = () => {
     
         dispatch({ type: "LOGIN", payload: { user, role } });
     
-        if (role === "admin") {
-          navigate("/dashboard");
+        if (role === "admin" || role === "office") {
+          window.location.href = "/dashboard";
         } else if (role === "user") {
-          navigate("/");
+          window.location.href = "/";
         } else {
           setError(true);
         }

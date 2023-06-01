@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card, Form } from 'react-bootstrap';
 import Select from "react-select";
-import { provinces } from "./province";
-import { doc, getDoc, collection, setDoc, GeoPoint } from 'firebase/firestore';
+import { doc, collection, setDoc, GeoPoint, Timestamp } from 'firebase/firestore';
 import { db, storage } from '../../Config/firebase';
 import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from "react-map-gl";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { GetUserById, ProvincesSelect } from "../../Utils/crudData";
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -62,6 +62,7 @@ const FormReportComp = () => {
   const uid = userData.uid;
   const [users, setUser] = useState(null);
   const [title, setTitle] = useState("");
+  const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState("");
   const [tglkejadian, setTglKejadian] = useState("");
   const [description, setDescription] = useState("");
@@ -71,25 +72,6 @@ const FormReportComp = () => {
   const [file, setFile] = useState("");
   const [data, setData] = useState({});
   const [per, setPerc] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-            const docRef = doc(db, 'users', uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-              const userData = docSnap.data();
-              setUser(userData); // Set user data to state
-            } else {
-              console.log("User data not found in Firestore.");
-            }
-      } catch (error) {
-        console.log("Error fetching user data:", error);
-      }
-    };
-  
-    fetchUserData();
-  }, []);
 
   useEffect(() => {
     const uploadFile = () => {
@@ -133,12 +115,19 @@ const FormReportComp = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    const timestamp = Timestamp.fromDate(new Date());
+    const date = timestamp.toDate();
+    const dateString = date.toLocaleString("id-ID", {
+      timeZone: "Asia/Jakarta",
+      dateStyle: "long",
+      timeStyle: "medium",
+    });
     try {
       const idReport = "report" + new Date().getTime();
       const reportData = {
         uid: uid,
         idReport: idReport,
+        tgl: dateString,
         kekerasanSeksual: kekerasanSeksual,
         kekerasanFisik: kekerasanFisik,
         kekerasanPsikis: kekerasanPsikis,
@@ -147,7 +136,8 @@ const FormReportComp = () => {
         email: users.email,
         title: title,
         tglkejadian: tglkejadian,
-        province: selectedProvince.value,
+        idOffice: selectedProvince.value,
+        nameOffice: selectedProvince.label,
         description: description,
         img: data.img,
         status: "pending",
@@ -163,10 +153,6 @@ const FormReportComp = () => {
       console.error('Error menyimpan data laporan:', error);
       throw new Error('Gagal menyimpan data laporan');
     }
-  };
-
-  const handleProvinceChange = (selectedOption) => {
-    setSelectedProvince(selectedOption);
   };
   
   const handleCheckboxChange = (event) => {
@@ -261,10 +247,14 @@ const FormReportComp = () => {
                 <Form.Label>Date:</Form.Label>
                 <Form.Control type="date" onChange={(e) => setTglKejadian(e.target.value)} required/>
               </Form.Group>
-              <Form.Group className='mb-3' controlId="dateInput">
-                <Form.Label>Province Kejadian</Form.Label>
-                <Select placeholder="" value={selectedProvince} options={provinces} onChange={handleProvinceChange} required/>
-              </Form.Group>
+              <Form.Group id="province">
+              <Form.Label>Provinsi</Form.Label>
+              <Select
+                options={provinces}
+                onChange={(selectedOption) => setSelectedProvince(selectedOption)}
+              />
+            </Form.Group>
+            
               <Form.Group className='mb-3' controlId='formGridDescription'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control as='textarea' rows={3}  onChange={(e) => setDescription(e.target.value)} />
@@ -281,6 +271,9 @@ const FormReportComp = () => {
         </div>
       </Card.Body>
     </Card>
+
+    <GetUserById setUser={setUser} uid={uid} />
+    <ProvincesSelect setProvinces={setProvinces}/>
   </div>
   );
 };
