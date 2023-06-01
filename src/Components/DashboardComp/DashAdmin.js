@@ -14,7 +14,10 @@ const DashAdmin = ({ Toggle }) => {
     const unsubscribe = onSnapshot(
       query(collection(db, 'users'), where('role', '==', 'admin')), 
       (snapshot) => {
-        const userList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const userList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         console.log('Retrieved data:', userList);
         setUsers(userList);
       },
@@ -22,14 +25,13 @@ const DashAdmin = ({ Toggle }) => {
         console.log(error);
       }
     );
-  
+
     return () => {
       unsubscribe();
     };
   }, []);
   
 
- 
   const handleDeleteUser = async (userId) => {
     try {
       const userRef = doc(db, 'users', userId);
@@ -39,7 +41,6 @@ const DashAdmin = ({ Toggle }) => {
       console.log('Error deleting user:', error);
     }
   };
-  
 
   return (
     <div className='px-3'>
@@ -76,8 +77,8 @@ const DashAdmin = ({ Toggle }) => {
               {users.map((user, index) => (
                 <tr key={user.id}>
                   <td>{index + 1}</td>
+                  <td>{user.id}</td>
                   <td>{user.name}</td>
-                  <td>{user.email}</td>
                   <td>
                     <Button
                       variant='danger'
