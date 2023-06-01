@@ -6,8 +6,7 @@ import Map, {
   Source,
   Layer,
 } from 'react-map-gl';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../Config/firebase';
+import { GetReport } from '../../Utils/crudData';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
@@ -17,21 +16,6 @@ const MapComponent = () => {
     latitude: 0.09273370918533735,
     zoom: 4.3,
   });
-
-  useEffect(() => {
-    const getReports = async () => {
-      try {
-        const reportsCollection = collection(db, 'reports');
-        const reportsSnapshot = await getDocs(reportsCollection);
-        const reportsData = reportsSnapshot.docs.map((doc) => doc.data());
-        setReports(reportsData);
-      } catch (error) {
-        console.error('Error getting reports: ', error);
-      }
-    };
-
-    getReports();
-  }, []);
 
   const heatmapData = {
     type: 'FeatureCollection',
@@ -115,6 +99,7 @@ const MapComponent = () => {
       >
         You are here
       </Popup> */}
+      <GetReport setReports={setReports} />
     </Map>
   );
 };
