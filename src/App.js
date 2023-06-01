@@ -15,13 +15,18 @@ import News from './Pages/HomePage/News';
 import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
+import ListReportProfile from './Pages/ProfilePage/listReport';
 
 const App = () => {
 
-  const { currentUser } = useContext(AuthContext);
-
   const RequireAuth = ({ children, requiredRole }) => {
-    if (currentUser && currentUser.role === requiredRole) {
+    
+    const { currentUser } = useContext(AuthContext);
+  
+    // Check if the user role matches any of the required roles
+    const isAuthorized = Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
+  
+    if (isAuthorized) {
       return children;
     } else {
       return <Navigate to="/login" />;
@@ -38,31 +43,52 @@ const App = () => {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/maps' element={<MapPage />} />
 
+          <Route path="profile">
+            <Route
+              index
+              element={
+                <RequireAuth requiredRole={['user']}>
+                  <HomePage />
+                </RequireAuth>
+              }
+            />
+              <Route path="list">
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole={['user']}>
+                    <ListReportProfile />
+                  </RequireAuth>
+                }
+              />
+             </Route>
+            </Route>
+
           <Route path="form">
             <Route
               index
               element={
-                <RequireAuth requiredRole="user">
+                <RequireAuth requiredRole={['user']}>
                   <FormPage />
                 </RequireAuth>
               }
             />
             </Route>
 
-          <Route path="dashboard">
-            <Route
-              index
-              element={
-                <RequireAuth requiredRole="admin">
-                  <DashboardPage />
-                </RequireAuth>
-              }
-            />
+            <Route path="dashboard">
+              <Route
+                  index
+                  element={
+                    <RequireAuth requiredRole={['admin', 'office']}>
+                      <DashboardPage />
+                    </RequireAuth>
+                  }
+                />
             <Route path="report">
               <Route
                 index
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin', 'office']}>
                     <DashReportPage />
                   </RequireAuth>
                 }
@@ -70,7 +96,7 @@ const App = () => {
               <Route
                 path="detail/:id"
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin', 'office']}>
                     <DashDetailReportPage />
                   </RequireAuth>
                 }
@@ -80,7 +106,7 @@ const App = () => {
               <Route
                 index
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin', 'office']}>
                     <DashReviewPage />
                   </RequireAuth>
                 }
@@ -90,7 +116,7 @@ const App = () => {
               <Route
                 index
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin']}>
                     <DashAdminPage />
                   </RequireAuth>
                 }
@@ -100,7 +126,7 @@ const App = () => {
               <Route
                 index
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin']}>
                     <DashOfficePage />
                   </RequireAuth>
                 }
@@ -110,7 +136,7 @@ const App = () => {
               <Route
                 index
                 element={
-                  <RequireAuth requiredRole="admin">
+                  <RequireAuth requiredRole={['admin']}>
                     <DashUserPage />
                   </RequireAuth>
                 }
