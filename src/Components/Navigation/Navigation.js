@@ -60,7 +60,7 @@ function Navigation() {
              <NavDropdown.Divider />
              <NavDropdown.Item href='/profile/list'>List Reports</NavDropdown.Item>
              <NavDropdown.Divider />
-             <NavDropdown.Item href='/' onClick={handleLogout}>Logout</NavDropdown.Item>
+             <NavDropdown.Item href='/login' onClick={handleLogout}>Logout</NavDropdown.Item>
            </NavDropdown>
             ) : (
               <span>

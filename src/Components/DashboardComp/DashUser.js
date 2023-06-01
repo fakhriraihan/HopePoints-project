@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Nav from './Nav';
 import { Table, Button, Card, Form } from 'react-bootstrap';
-import { GetUserWhereRole, handleDeleteUser } from '../../Config/crudData';
+import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashUser = ({ Toggle }) => {
   const [users, setUsers] = useState([]);

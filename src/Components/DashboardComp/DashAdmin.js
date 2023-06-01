@@ -3,7 +3,7 @@ import Nav from './Nav';
 import { Table, Button, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
-import { GetUserWhereRole, handleDeleteUser } from '../../Config/crudData';
+import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashAdmin = ({ Toggle }) => {
   const Navigate = useNavigate();

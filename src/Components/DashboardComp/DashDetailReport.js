@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import Nav from '../../Components/DashboardComp/Nav';
+import Map, {
+  Marker,
+  NavigationControl,
+  ScaleControl,
+  GeolocateControl,
+} from 'react-map-gl';
 import { Button, Card, Form, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DashDetailReport = ({ Toggle }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [report, setReport] = useState(null);
+  const [viewport, setViewPort] = useState({
+    width: '100%',
+    height: '25rem',
+    latitude: 0,
+    longitude: 0,
+    zoom: 15,
+  });
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -18,6 +32,11 @@ const DashDetailReport = ({ Toggle }) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setReport(data);
+          setViewPort((prevViewport) => ({
+            ...prevViewport,
+            latitude: data.location.latitude,
+            longitude: data.location.longitude,
+          }));
         } else {
           console.log('No such document!');
         }
@@ -57,9 +76,13 @@ const DashDetailReport = ({ Toggle }) => {
     <div className='px-3'>
       <Nav Toggle={Toggle} />
       <h2 className='text-white my-3'>Detail Report</h2>
-      <Card>
+      <Card className='mb-5'>
         <Card.Header>
-          <Button variant='danger' type='cancel' onClick={() => navigate('/dashboard/report')}>
+          <Button
+            variant='danger'
+            type='cancel'
+            onClick={() => navigate('/dashboard/report')}
+          >
             Cancel
           </Button>
         </Card.Header>
@@ -68,36 +91,113 @@ const DashDetailReport = ({ Toggle }) => {
             <div className='col-md-6'>
               <label className='mb-2'>Maps</label>
               <Card className='mb-3' style={{ width: '100%', height: '25rem' }}>
-                <Card.Body>Ini untuk maps</Card.Body>
+                <Card.Body>
+                  <Map
+                    initialViewState={viewport}
+                    mapboxAccessToken={token}
+                    mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+                    width='100%'
+                    height='100%'
+                    onViewportChange={setViewPort}
+                  >
+                    <Marker
+                      key={report.idReport}
+                      latitude={report.location.latitude}
+                      longitude={report.location.longitude}
+                      offsetleft={-3.5 * viewport.zoom}
+                      offsetTop={-7 * viewport.zoom}
+                      draggable={false}
+                      style={{ zIndex: 999 }}
+                    >
+                      <i
+                        className='fa-solid fa-location-dot'
+                        style={{
+                          fontSize: 2 * viewport.zoom,
+                          color: 'tomato',
+                          cursor: 'pointer',
+                        }}
+                      ></i>
+                    </Marker>
+                    <GeolocateControl position='bottom-right' />
+                    <NavigationControl position='bottom-right' />
+                    <ScaleControl />
+                  </Map>
+                </Card.Body>
               </Card>
             </div>
             <div className='col-md-6'>
+              <label className='mb-2'>Detail Kejadian</label>
               <Form onSubmit={handleProcessSubmit}>
                 <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control type='email' placeholder='' defaultValue={report.name} readOnly />
+                  <Form.Label>Nama :</Form.Label>
+                  <Form.Control
+                    type='email'
+                    placeholder=''
+                    defaultValue={report.name}
+                    readOnly
+                  />
                 </Form.Group>
 
-                <Row className='mb-3'>
-                  <Form.Group as={Col} controlId='formGridLatitude'>
-                    <Form.Label>Latitude</Form.Label>
-                    <Form.Control type='latitude' placeholder='' defaultValue={report.latitude} readOnly />
-                  </Form.Group>
+                <Form.Group className='mb-3' controlId='formGroupName'>
+                  <Form.Label>Email :</Form.Label>
+                  <Form.Control
+                    type='phone'
+                    placeholder=''
+                    defaultValue={report.email}
+                    readOnly
+                  />
+                </Form.Group>
 
-                  <Form.Group as={Col} controlId='formGridLongitude'>
-                    <Form.Label>Longitude</Form.Label>
-                    <Form.Control type='longitude' placeholder='' defaultValue={report.longitude} readOnly />
-                  </Form.Group>
-                </Row>
+                <Form.Group className='mb-3' controlId='formGroupName'>
+                  <Form.Label>No Telfon :</Form.Label>
+                  <Form.Control
+                    type='phone'
+                    placeholder=''
+                    defaultValue={report.tlfn}
+                    readOnly
+                  />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='formGroupName'>
+                  <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
+                  <Form.Control
+                    type='dateandtime'
+                    placeholder=''
+                    defaultValue={report.tglkejadian}
+                    readOnly
+                  />
+                </Form.Group>
 
                 <Form.Group className='mb-3' controlId='formGridAddress'>
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control placeholder='1234 Main St' value={report.address} readOnly />
+                  <Form.Label>Jenis Kekerasan</Form.Label>
+                  <Form.Control
+                    placeholder='1234 Main St'
+                    value={
+                      (report.kekerasanFisik ? 'Fisik ' : '') +
+                      (report.kekerasanPsikis ? 'Psikis ' : '') +
+                      (report.kekerasanSeksual ? 'Seksual' : '')
+                    }
+                    readOnly
+                  />
+                </Form.Group>
+
+                <Form.Group className='mb-3' controlId='formGridAddress'>
+                  <Form.Label>Kantor Terdekat</Form.Label>
+                  <Form.Control
+                    placeholder='1234 Main St'
+                    value={report.province}
+                    readOnly
+                  />
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='formGridDescription'>
                   <Form.Label>Description</Form.Label>
-                  <Form.Control as='textarea' rows={3} value={report.description} readOnly />
+                  <Form.Control
+                    as='textarea'
+                    rows={3}
+                    value={report.description}
+                    readOnly
+                  />
                 </Form.Group>
 
                 {report.status === 'Diproses' ? (
