@@ -1,0 +1,32 @@
+.card {
+  max-width: 800px;
+  margin: auto;
+}
+button {
+  padding: 10px;
+  background-color: pink;
+  border: 1px solid pink;
+}
+
+.newsUpdate {
+  margin-top: 6.5rem;
+  text-align: center;
+}
+
+.newsUpdate li {
+  display: flex;
+  list-style: none;
+  background-color: antiquewhite;
+  padding: 10px;
+  border-radius: 45px;
+}
+
+.newsUpdate ul {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.newsUpdate a {
+  text-decoration: none;
+}

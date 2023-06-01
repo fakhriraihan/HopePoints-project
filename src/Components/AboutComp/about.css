@@ -45,3 +45,21 @@
 .aboutUs > h1 {
   margin-bottom: 48px;
 }
+<<<<<<< Updated upstream
+=======
+.aboutUs > p {
+  font-size: 20px;
+}
+.cardItem {
+  margin-top: 3rem;
+  align-items: center;
+  margin-left: 20px;
+}
+.cardItem button {
+  background-color: #fc6aa7;
+  border: 2px solid #f5619f;
+}
+.cardItemTeam {
+  margin: 10px;
+}
+>>>>>>> Stashed changes

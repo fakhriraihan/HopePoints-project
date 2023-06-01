@@ -4,6 +4,7 @@ import { AuthContext } from './Context/AuthContext';
 import HomePage from './Pages/HomePage/HomePage';
 import AboutPage from './Pages/AboutPage/AboutPage';
 import FormPage from './Pages/FormPage/FormPage';
+<<<<<<< Updated upstream
 import DashboardPage from './Pages/DashboardPage/DashboardPage';
 import DashReportPage from './Pages/DashboardPage/DashReportPage';
 import DashDetailReportPage from './Pages/DashboardPage/DashDetailReportPage';
@@ -15,6 +16,10 @@ import News from './Pages/HomePage/News';
 import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
+=======
+// import NewsPage from './Pages/NewsPage/NewsPage';
+import OfficePage from './Pages/OfficePage/OfficePage';
+>>>>>>> Stashed changes
 
 const App = () => {
 
@@ -29,6 +34,7 @@ const App = () => {
   };
 
   return (
+<<<<<<< Updated upstream
     <>
       <Router>
         <Routes>
@@ -70,6 +76,17 @@ const App = () => {
         </Routes>
       </Router>
     </>
+=======
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/form" element={<FormPage />} />
+        <Route path="/office" element={<OfficePage />} />
+      </Routes>
+    </Router>
+>>>>>>> Stashed changes
   );
 };
 

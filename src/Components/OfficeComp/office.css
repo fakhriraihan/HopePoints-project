@@ -1,0 +1,20 @@
+form {
+  margin-top: 7rem;
+  margin-left: 200px;
+  margin-right: 200px;
+}
+.card {
+  margin-top: 5rem;
+}
+.card img {
+  width: 50%;
+}
+
+.card img {
+  width: 50%;
+}
+
+.detail .detail-kantor > h1 {
+  background-color: aqua;
+  pad: 50px;
+}

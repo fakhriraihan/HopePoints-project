@@ -2,8 +2,9 @@ import React from 'react';
 // import { Container } from 'react-bootstrap';
 // import { useNavigate } from 'react-router-dom';
 import './about.css';
-import BasicExample from './card';
 // import AboutPage from '../../Pages/AboutPage/AboutPage';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 const About = () => {
   return (
@@ -23,23 +24,58 @@ const About = () => {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt quos corrupti quis blanditiis aut ab illo, nisi voluptates minus tenetur quia ratione non error odit numquam perferendis quasi molestias velit pariatur dolores
           dolore?
         </p>
-        <div className="row justify-content-center">
-          <div className="col">
-            <BasicExample />
-          </div>
-          <div className="col">
-            <BasicExample />
-          </div>
-          <div className="col">
-            <BasicExample />
-          </div>
-          <div className="col">
-            <BasicExample />
+        <div className="cardItem">
+          <div className="row justify-content-center">
+            <Card className="cardItemTeam" style={{ width: '18rem' }}>
+              <Card.Img variant="top" src="/assets/hero/hero.png" />
+              <Card.Body>
+                <Card.Title>Fakhri Raihan</Card.Title>
+                <Card.Text>Front-End</Card.Text>
+                <Button variant="success">Connect</Button>
+              </Card.Body>
+            </Card>
+            <Card className="cardItemTeam" style={{ width: '18rem' }}>
+              <Card.Img variant="top" src="/assets/hero/hero.png" />
+              <Card.Body>
+                <Card.Title>Ramji Renanda Sitorus</Card.Title>
+                <Card.Text>Front-End</Card.Text>
+                <Button variant="success">Connect</Button>
+              </Card.Body>
+            </Card>
+            <Card className="cardItemTeam" style={{ width: '18rem' }}>
+              <Card.Img variant="top" src="/assets/hero/hero.png" />
+              <Card.Body>
+                <Card.Title>Muhammad Taufik</Card.Title>
+                <Card.Text>Front-End</Card.Text>
+                <Button variant="success">Connect</Button>
+              </Card.Body>
+            </Card>
+            <Card className="cardItemTeam" style={{ width: '18rem' }}>
+              <Card.Img variant="top" src="/assets/hero/hero.png" />
+              <Card.Body>
+                <Card.Title>Daffa Rizky</Card.Title>
+                <Card.Text>Front-End</Card.Text>
+                <Button variant="success">Connect</Button>
+              </Card.Body>
+            </Card>
           </div>
         </div>
+        {/* 
+          <div className="col">
+            <BasicExample />
+          </div>
+          <div className="col">
+            <BasicExample />
+          </div>
+          <div className="col">
+            <BasicExample />
+          </div>
+          <div className="col">
+            <BasicExample />
+          </div>
+        </div> */}
       </section>
     </>
   );
 };
-
 export default About;
