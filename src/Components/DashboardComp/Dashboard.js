@@ -21,7 +21,7 @@ const Dashboard = ({ Toggle }) => {
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
-    zoom: 4.3,
+    zoom: 3.9,
   });
 
   return (
@@ -34,23 +34,25 @@ const Dashboard = ({ Toggle }) => {
             <Card>
               <Card.Body className='text-center'>
                 <Card.Title as='h3'>Pelaporan</Card.Title>
-                <Card.Text className='fs-4'>50</Card.Text>
+                <Card.Text className='fs-4'>{reports.length}</Card.Text>
               </Card.Body>
             </Card>
           </div>
           <div className='col-md-4'>
             <Card>
               <Card.Body className='text-center'>
-                <Card.Title as='h3'>Pelaporan</Card.Title>
-                <Card.Text className='fs-4'>50</Card.Text>
+                <Card.Title as='h3'>Proses</Card.Title>
+                <Card.Text className='fs-4'>
+                  {getProcessedReportsCount()}
+                </Card.Text>
               </Card.Body>
             </Card>
           </div>
           <div className='col-md-4'>
             <Card>
               <Card.Body className='text-center'>
-                <Card.Title as='h3'>Pelaporan</Card.Title>
-                <Card.Text className='fs-4'>50</Card.Text>
+                <Card.Title as='h3'>Selesai</Card.Title>
+                <Card.Text className='fs-4'>{getDoneReportsCount()}</Card.Text>
               </Card.Body>
             </Card>
           </div>
@@ -78,7 +80,7 @@ const Dashboard = ({ Toggle }) => {
                   <i
                     className='fa-solid fa-location-dot'
                     style={{
-                      fontSize: 7 * viewport.zoom,
+                      fontSize: 5 * viewport.zoom,
                       color: 'tomato',
                       cursor: 'pointer',
                     }}
