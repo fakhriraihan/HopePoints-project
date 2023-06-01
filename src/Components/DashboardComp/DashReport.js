@@ -32,7 +32,7 @@ const DashReport = ({ Toggle }) => {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
       };
-
+      
   return (
     <div className='px-3'>
       <Nav Toggle={Toggle} />
@@ -54,17 +54,19 @@ const DashReport = ({ Toggle }) => {
             </thead>
             <tbody>
               {reports.map((report, index) => (
-                <tr key={report.id}>
+                <tr key={report.idReport}>
                   <td>{index + 1}</td>
-                  <td>{formatDate(report.date)}</td>
+                  <td>{formatDate()}</td>
                   <td>{report.name}</td>
-                  <td>{report.categories}</td>
+                  <td>{report.kekerasanFisik && <small>Fisik </small>}
+                      {report.kekerasanPsikis && <small>Psikis </small>}
+                      {report.kekerasanSeksual && <small>Seksual</small>}</td>
                   <td>{report.province}</td>
                   <td>{report.status}</td>
                   <td>
                     <Button
                       variant='info'
-                      onClick={() => Navigate(`/dashboard/report/detail/${report.id}`)} >
+                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)} >
                       <i className='fa-solid fa-eye'></i>
                     </Button>{' '}
                   </td>

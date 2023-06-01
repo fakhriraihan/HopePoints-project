@@ -3,7 +3,7 @@ import Nav from './Nav';
 import { Table, Button, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
-import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, deleteDoc, query, where } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 
 const DashAdmin = ({ Toggle }) => {
@@ -12,7 +12,7 @@ const DashAdmin = ({ Toggle }) => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, 'users'),
+      query(collection(db, 'users'), where('role', '==', 'admin')), 
       (snapshot) => {
         const userList = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -30,6 +30,7 @@ const DashAdmin = ({ Toggle }) => {
       unsubscribe();
     };
   }, []);
+  
 
   const handleDeleteUser = async (userId) => {
     try {
@@ -47,7 +48,9 @@ const DashAdmin = ({ Toggle }) => {
       <h2 className='text-white mb-3'>Table Data Admin</h2>
       <Card>
         <Card.Header className='d-flex align-items-center justify-content-between'>
-          <h5>Admin</h5>
+        <Button variant='primary' onClick={() => Navigate('/dashboard/office/add')}>
+            Add Admin
+          </Button>
           <Form className='d-flex'>
             <Form.Control
               type='search'
@@ -65,7 +68,7 @@ const DashAdmin = ({ Toggle }) => {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Action</th>
               </tr>
