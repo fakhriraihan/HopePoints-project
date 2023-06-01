@@ -13,8 +13,11 @@ function MenuProfile() {
                 <ListGroup.Item action href='/profile/list'>
                   List Reports
                 </ListGroup.Item>
+                <ListGroup.Item action href='/profile/change'>
+                  Change Password
+                </ListGroup.Item>
                 <ListGroup.Item action href='/'>
-                  Logout
+                  Delete Account
                 </ListGroup.Item>
               </ListGroup>
             </Nav>

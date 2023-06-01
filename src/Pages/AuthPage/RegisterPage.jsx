@@ -39,7 +39,7 @@ const RegisterPage = () => {
         name: name,
         email: user.email,
         address: address,
-        tlfn: tlfn,
+        phone: tlfn,
       });
 
       dispatch({ type: "LOGIN", payload: user });
@@ -58,7 +58,7 @@ const RegisterPage = () => {
         <input type="text" placeholder="Full Name" required  onChange={(e) => setName(e.target.value)}/>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required/>
         <input type="password" placeholder="Password"  onChange={(e) => setPassword(e.target.value)} required/>
-        <input type="text" placeholder="No Tlfn"  onChange={(e) => setTelfn(e.target.value)} required/>
+        <input type="text" placeholder="No Handphone"  onChange={(e) => setTelfn(e.target.value)} required/>
         <input type="text" placeholder="Address"  onChange={(e) => setAddress(e.target.value)} required/>
         <input type="submit" value="Log In" />
             <div className="links">

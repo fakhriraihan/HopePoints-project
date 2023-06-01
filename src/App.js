@@ -16,6 +16,7 @@ import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
 import ListReportProfile from './Pages/ProfilePage/listReport';
+import UserProfile from './Pages/ProfilePage/userProfile';
 
 const App = () => {
 
@@ -48,7 +49,7 @@ const App = () => {
               index
               element={
                 <RequireAuth requiredRole={['user']}>
-                  <HomePage />
+                  <UserProfile />
                 </RequireAuth>
               }
             />

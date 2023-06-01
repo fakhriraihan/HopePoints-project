@@ -29,6 +29,25 @@ const GetReport = ({ setReports, idOffice }) => {
   return null;
 };
 
+const GetReportByid = ({setReports, uid}) => {
+  useEffect(() => {
+    const getReports = async () => {
+      try {
+        const reportsCollection = collection(db, 'reports');
+        const q = query(reportsCollection, where('uid', '==', uid));
+        const reportsSnapshot = await getDocs(q);
+        const reportsData = reportsSnapshot.docs.map((doc) => doc.data());
+        setReports(reportsData);
+      } catch (error) {
+        console.error('Error getting reports: ', error);
+      }
+    };
+  
+    getReports();
+  }, [setReports, uid]);
+  return null;
+};
+
 const GetUserById = ({setUser, uid}) => {
   useEffect(() => {
     const fetchUserData = async () => {
@@ -108,4 +127,4 @@ const handleDeleteUser = async (userId) => {
   };
   
 
-export {GetReport, GetUserById, GetUserWhereRole, handleDeleteUser, ProvincesSelect};
+export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect};
