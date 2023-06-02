@@ -1,18 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker } from 'react-map-gl';
+import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker, Popup } from 'react-map-gl';
 import { GetReport } from '../../Utils/crudData';
 import * as firestore from 'firebase/firestore';
 import { db } from '../../Config/firebase';
+import { Form, Button, FloatingLabel } from 'react-bootstrap';
+import './popup.css';
+import { FaStar } from 'react-icons/fa';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
   const [reports, setReports] = useState([]);
   const [users, setUsers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [currentValue, setCurrentValue] = useState(0);
+  const [hoverValue, setHoverValue] = useState(undefined);
+  const stars = Array(5).fill(0);
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
     zoom: 4.3,
   });
+
+  const colors = {
+    orange: '#FFBA5A',
+    grey: '#a9a9a9',
+  };
+
+  const handleClick = (value) => {
+    setCurrentValue(value);
+
+    console.log(value);
+  };
+
+  const handleMouseOver = (newHoverValue) => {
+    setHoverValue(newHoverValue);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverValue(undefined);
+  };
 
   const heatmapData = {
     type: 'FeatureCollection',
@@ -83,31 +109,77 @@ const MapComponent = () => {
         />
       </Source>
       {users.map((user) => (
-        <Marker key={user.id} latitude={user.location.latitude} longitude={user.location.longitude} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={false} style={{ zIndex: 999 }}>
-          <i
-            className="fa-solid fa-location-dot"
-            style={{
-              fontSize: 7 * viewport.zoom,
-              color: 'tomato',
-              cursor: 'pointer',
-            }}
-          ></i>
-        </Marker>
+        <React.Fragment key={user.id}>
+          <Marker
+            latitude={user.location.latitude}
+            longitude={user.location.longitude}
+            offsetleft={-3.5 * viewport.zoom}
+            offsetTop={-7 * viewport.zoom}
+            draggable={false}
+            style={{ zIndex: 1 }}
+            onClick={() => setSelectedMarker(user)}
+          ></Marker>
+          {selectedMarker !== null && selectedMarker.id === user.id && (
+            <Popup latitude={selectedMarker.location.latitude} longitude={selectedMarker.location.longitude} closeButton={true} closeOnClick={false} anchor="left" onClose={() => setSelectedMarker(null)} style={{ zIndex: 1 }}>
+              <div className="popup-content">
+                {/* Konten popup */}
+                <h2>Informasi Dinas</h2>
+                <h4 className="nama-dinas">{user.name}</h4>
+                <p>Alamat: {user.adress}</p>
+                <p>Phone: {user.phone}</p>
+
+                {/* Review */}
+                <form>
+                  <FloatingLabel controlId="floatingTextarea" label="Masukkan Review Anda " className="mb-3">
+                    <Form.Control as="textarea" placeholder="Leave a comment here" />
+                  </FloatingLabel>
+                  <div className="stars" style={styles.stars}>
+                    {stars.map((_, index) => {
+                      return (
+                        <FaStar
+                          key={index}
+                          size={24}
+                          onClick={() => handleClick(index + 1)}
+                          onMouseOver={() => handleMouseOver(index + 1)}
+                          onMouseLeave={handleMouseLeave}
+                          color={(hoverValue || currentValue) > index ? colors.orange : colors.grey}
+                          style={{
+                            marginRight: 10,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+
+                  <Button variant="pink" type="submit">
+                    Submit
+                  </Button>
+                </form>
+              </div>
+            </Popup>
+          )}
+        </React.Fragment>
       ))}
+
       <GeolocateControl position="bottom-right" />
       <NavigationControl position="bottom-right" />
       <ScaleControl />
-      {/* <Popup
-        longitude={113.764686933965}
-        latitude={0.6763165071501142}
-        anchor='bottom'
-        onClose={() => setShowPopup(false)}
-      >
-        You are here
-      </Popup> */}
       <GetReport setReports={setReports} />
     </Map>
   );
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  stars: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 };
 
 export default MapComponent;
