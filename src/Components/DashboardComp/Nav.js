@@ -7,9 +7,14 @@ import { AuthContext } from '../../Context/AuthContext';
 const Nav = ({ Toggle }) => {
 
   const { dispatch } = useContext(AuthContext);
+  const usersData = localStorage.getItem("user");
+  const user = JSON.parse(usersData);
+  const userData = user.user;
+  const email = userData.email;
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
+
   };
 
   return (
@@ -39,7 +44,7 @@ const Nav = ({ Toggle }) => {
               aria-haspopup='true'
               aria-expanded='false'
             >
-              Admin
+              {email}
             </button>
             <div
               className='dropdown-menu dropdown-menu-end'

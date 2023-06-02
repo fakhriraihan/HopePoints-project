@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker } from "react-map-gl";
-import * as firestore from "firebase/firestore";
-import { db } from "../../Config/firebase";
+import React, { useState, useEffect } from 'react';
+import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker } from 'react-map-gl';
+import * as firestore from 'firebase/firestore';
+import { db } from '../../Config/firebase';
+import { GetReport } from '../../Utils/crudData';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
@@ -16,12 +17,12 @@ const MapComponent = () => {
   useEffect(() => {
     const getReports = async () => {
       try {
-        const reportsCollection = firestore.collection(db, "reports");
+        const reportsCollection = firestore.collection(db, 'reports');
         const reportsSnapshot = await firestore.getDocs(reportsCollection);
         const reportsData = reportsSnapshot.docs.map((doc) => doc.data());
         setReports(reportsData);
       } catch (error) {
-        console.error("Error getting reports: ", error);
+        console.error('Error getting reports: ', error);
       }
     };
 
@@ -30,10 +31,10 @@ const MapComponent = () => {
 
   useEffect(() => {
     const unsubscribe = firestore.onSnapshot(
-      firestore.query(firestore.collection(db, "users"), firestore.where("role", "==", "office")),
+      firestore.query(firestore.collection(db, 'users'), firestore.where('role', '==', 'office')),
       (snapshot) => {
         const userList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        console.log("Retrieved data:", userList);
+        console.log('Retrieved data:', userList);
         setUsers(userList);
       },
       (error) => {
@@ -47,10 +48,10 @@ const MapComponent = () => {
   }, []);
 
   const heatmapData = {
-    type: "FeatureCollection",
+    type: 'FeatureCollection',
     features: reports.map((report) => ({
       geometry: {
-        type: "Point",
+        type: 'Point',
         coordinates: [report.location.longitude, report.location.latitude],
       },
     })),
@@ -65,28 +66,28 @@ const MapComponent = () => {
           source="heatmapData"
           maxzoom={15}
           paint={{
-            "heatmap-weight": {
-              property: "weight",
-              type: "exponential",
+            'heatmap-weight': {
+              property: 'weight',
+              type: 'exponential',
               stops: [
                 [1, 0],
                 [62, 1],
               ],
             },
-            "heatmap-intensity": {
+            'heatmap-intensity': {
               stops: [
                 [11, 1],
                 [15, 3],
               ],
             },
-            "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"], 0, "rgba(236,222,239,0)", 0.2, "rgb(208,209,230)", 0.4, "yellow", 0.6, "orange", 0.8, "red"],
-            "heatmap-radius": {
+            'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(236,222,239,0)', 0.2, 'rgb(208,209,230)', 0.4, 'yellow', 0.6, 'orange', 0.8, 'red'],
+            'heatmap-radius': {
               stops: [
                 [11, 15],
                 [15, 20],
               ],
             },
-            "heatmap-opacity": {
+            'heatmap-opacity': {
               default: 1,
               stops: [
                 [14, 1],
@@ -102,8 +103,8 @@ const MapComponent = () => {
             className="fa-solid fa-location-dot"
             style={{
               fontSize: 7 * viewport.zoom,
-              color: "tomato",
-              cursor: "pointer",
+              color: 'tomato',
+              cursor: 'pointer',
             }}
           ></i>
         </Marker>
@@ -120,6 +121,7 @@ const MapComponent = () => {
       >
         You are here
       </Popup> */}
+      <GetReport setReports={setReports} />
     </Map>
   );
 };
