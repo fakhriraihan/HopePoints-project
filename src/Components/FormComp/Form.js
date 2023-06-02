@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Form, Button, Dropdown, Card } from "react-bootstrap";
-import PhoneInput from "react-phone-number-input";
-import Dropdownlist from "./Dropdown";
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Dropdown, Card } from 'react-bootstrap';
+import PhoneInput from 'react-phone-number-input';
+import Dropdownlist from './Dropdown';
 import { doc, getDoc, collection, addDoc, GeoPoint } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
-import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from "react-map-gl";
+import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from 'react-map-gl';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -55,10 +55,9 @@ const FormComp = () => {
     }
   }, [newPlace]);
 
-
   const [users, setUser] = useState(null);
-  const [name, setName] = useState("");
-  const [tlfn, setValue] = useState("");
+  const [name, setName] = useState('');
+  const [tlfn, setValue] = useState('');
   const [kekerasanSeksual, setSeksual] = useState(false);
   const [kekerasanFisik, setFisik] = useState(false);
   const [kekerasanPsikis, setPsikis] = useState(false);
@@ -66,17 +65,17 @@ const FormComp = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const usersData = localStorage.getItem("user");
-  
+        const usersData = localStorage.getItem('user');
+
         if (usersData) {
           // Convert data to JavaScript object if found
           const user = JSON.parse(usersData);
-  
+
           // Access user data within the user object
           if (user && user.user) {
             const userData = user.user;
             const uid = userData.uid;
-  
+
             // Call Firebase Firestore to fetch user data
             const docRef = doc(db, 'users', uid);
             const docSnap = await getDoc(docRef);
@@ -84,25 +83,25 @@ const FormComp = () => {
               const userData = docSnap.data();
               setUser(userData); // Set user data to state
             } else {
-              console.log("User data not found in Firestore.");
+              console.log('User data not found in Firestore.');
             }
           } else {
-            console.log("User data not found in localStorage.");
+            console.log('User data not found in localStorage.');
           }
         } else {
-          console.log("User data not found in localStorage.");
+          console.log('User data not found in localStorage.');
         }
       } catch (error) {
-        console.log("Error fetching user data:", error);
+        console.log('Error fetching user data:', error);
       }
     };
-  
+
     fetchUserData();
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       // Buat objek data laporan berdasarkan nilai-nilai dari formulir
       const reportData = {
@@ -114,35 +113,34 @@ const FormComp = () => {
         location: new GeoPoint(newPlace.lat, newPlace.long),
         // tambahkan properti lainnya sesuai dengan data yang ingin disimpan
       };
-  
+
       // Mengakses koleksi 'reports' di Firestore
       const reportsRef = collection(db, 'reports');
-  
+
       // Menyimpan data laporan ke Firestore
       await addDoc(reportsRef, reportData);
-  
+
       console.log('Data laporan berhasil disimpan ke Firestore');
-  
+
       // Lakukan tindakan lainnya setelah berhasil menyimpan data, misalnya, mengosongkan formulir atau menavigasi ke halaman lain
       console.log('Data laporan berhasil disimpan');
-  
     } catch (error) {
       console.error('Error menyimpan data laporan:', error);
       throw new Error('Gagal menyimpan data laporan');
     }
   };
-  
+
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
 
     switch (name) {
-      case "kekerasanSeksual":
+      case 'kekerasanSeksual':
         setSeksual(checked);
         break;
-      case "kekerasanFisik":
+      case 'kekerasanFisik':
         setFisik(checked);
         break;
-      case "kekerasanPsikis":
+      case 'kekerasanPsikis':
         setPsikis(checked);
         break;
       default:
@@ -172,7 +170,7 @@ const FormComp = () => {
           Kekerasan Psikis
         </div>
         <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Control type="text" placeholder="Nama Pelapor" onChange={(e) => setName(e.target.value)}/>
+          <Form.Control type="text" placeholder="Nama Pelapor" onChange={(e) => setName(e.target.value)} />
         </Form.Group>
         <PhoneInput className="phone" defaultCountry="ID" placeholder="Masukkan nomor handphone Anda!" onChange={(e) => setValue(e.target.value)} />
         <Dropdownlist></Dropdownlist>
@@ -187,7 +185,7 @@ const FormComp = () => {
           <Card>
             <Card.Body>
               <p>Lokasi Kejadian:</p>
-              <div className="map-comp" style={{ width: "1320px", height: "100vh" }}>
+              <div className="map-comp" style={{ width: '1320px', height: '100vh' }}>
                 <MapGL initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
                   {newPlace && (
                     <>
@@ -196,8 +194,8 @@ const FormComp = () => {
                           className="fa-solid fa-location-dot"
                           style={{
                             fontSize: 7 * viewport.zoom,
-                            color: "tomato",
-                            cursor: "pointer",
+                            color: 'tomato',
+                            cursor: 'pointer',
                           }}
                         ></i>
                       </Marker>
