@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from '../../Components/Navigation/Navigation';
 import './Login.css';
 import { useContext, useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../Config/firebase";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
@@ -40,6 +40,9 @@ const RegisterPage = () => {
         email: user.email,
         address: address,
         phone: tlfn,
+      });
+      await updateProfile(user, {
+        displayName: name
       });
 
       dispatch({ type: "LOGIN", payload: user });

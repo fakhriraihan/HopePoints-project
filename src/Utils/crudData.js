@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
+import { collectionGroup,collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '../Config/firebase';
 
 
@@ -125,6 +125,37 @@ const handleDeleteUser = async (userId) => {
   
     return null;
   };
+
+  const GetReviewWhereRole = ({ setReviews, idOffice }) => {
+    useEffect(() => {
+      const getReviews = async () => {
+        try {
+          let reviewsQuery;
+  
+          if (idOffice) {
+            reviewsQuery = query(
+              collectionGroup(db, 'reviews'),
+              where('idOffice', '==', idOffice)
+            );
+          } else {
+            reviewsQuery = query(collectionGroup(db, 'reviews'));
+          }
+  
+          const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+          const reviewsData = reviewsQuerySnapshot.docs.map((doc) => doc.data());
+          setReviews(reviewsData);
+        } catch (error) {
+          console.error('Error getting reviews:', error);
+          setReviews([]);
+        }
+      };
+  
+      getReviews();
+    }, [setReviews, idOffice]);
+  
+    return null;
+  };
+  
   
 
-export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect};
+export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect, GetReviewWhereRole};

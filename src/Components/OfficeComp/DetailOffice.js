@@ -5,9 +5,10 @@ import Map, {
   ScaleControl,
   GeolocateControl,
 } from 'react-map-gl';
-import { Button, Card, Form, Row, Col, FloatingLabel } from 'react-bootstrap';
+import { Modal, Button, Card, Form, Row, Col, FloatingLabel } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
+import { getAuth } from '@firebase/auth';
 import { db } from '../../Config/firebase';
 import { FaStar } from 'react-icons/fa';
 
@@ -15,7 +16,9 @@ const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DetailOffice = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [error, setError] = useState(false);
   const [users, setUsers] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [viewport, setViewPort] = useState({
     width: '100%',
     height: '25rem',
@@ -23,6 +26,7 @@ const DetailOffice = () => {
     longitude: 0,
     zoom: 15,
   });
+  const [showModal, setShowModal] = useState(false);
   const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
@@ -30,10 +34,9 @@ const DetailOffice = () => {
     orange: '#FFBA5A',
     grey: '#a9a9a9',
   };
+
   const handleClick = (value) => {
     setCurrentValue(value);
-
-    console.log(value);
   };
 
   const handleMouseOver = (newHoverValue) => {
@@ -43,32 +46,67 @@ const DetailOffice = () => {
   const handleMouseLeave = () => {
     setHoverValue(undefined);
   };
+  const handleModalCancel = () => {
+    setShowModal(false);
+  };
 
-  const styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    stars: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+  
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      // Pengguna belum login, tampilkan pesan atau lakukan langkah yang sesuai
+      setError(true);
+      setShowModal(true);
+      return;
+    }
+  
+    const reviewContent = event.target.elements.comment.value;
+  
+    const reviewData = {
+      uid: user.uid,
+      name: user.displayName,
+      comment: reviewContent,
+      rating: currentValue,
+      idOffice: id,
+    };
+  
+    try {
+      const userDocRef = doc(db, 'users', id);
+      await addDoc(collection(userDocRef, 'reviews'), reviewData);
+      console.log('Review berhasil ditambahkan');
+  
+      // Reset form setelah submit
+      event.target.reset();
+      setCurrentValue(0);
+  
+      // Memperbarui daftar ulasan dengan ulasan yang baru
+      setReviews((prevReviews) => [...prevReviews, reviewData]);
+    } catch (error) {
+      setError(true);
+    }
   };
 
   useEffect(() => {
     const fetchOffice = async () => {
       try {
-        const docRef = doc(db, 'users', id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setUsers([data]);
+        const userDocRef = doc(db, 'users', id);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setUsers([userData]);
           setViewPort((prevViewport) => ({
             ...prevViewport,
-            latitude: data.location.latitude,
-            longitude: data.location.longitude,
+            latitude: userData.location.latitude,
+            longitude: userData.location.longitude,
           }));
+
+          const reviewsCollectionRef = collection(userDocRef, 'reviews');
+          const reviewsQuerySnapshot = await getDocs(reviewsCollectionRef);
+          const reviewsData = reviewsQuerySnapshot.docs.map((doc) => doc.data());
+          setReviews(reviewsData);
         } else {
           console.log('No such document!');
         }
@@ -165,25 +203,8 @@ const DetailOffice = () => {
               <Card>
                 <Card.Header>Review and Rating</Card.Header>
                 <Card.Body>
-                  <form>
-                    <FloatingLabel
-                      controlId='floatingName'
-                      label='Masukkan Nama Anda '
-                      className='mb-3'
-                    >
-                      <Form.Control type='text' placeholder='Name' />
-                    </FloatingLabel>
-                    <FloatingLabel
-                      controlId='floatingTextarea'
-                      label='Masukkan Review Anda '
-                      className='mb-3'
-                    >
-                      <Form.Control
-                        as='textarea'
-                        placeholder='Leave a comment here'
-                      />
-                    </FloatingLabel>
-                    <div className='stars' style={styles.stars}>
+                  <form onSubmit={handleSubmitReview}>
+                  <div className='stars'>
                       {stars.map((_, index) => {
                         return (
                           <FaStar
@@ -205,36 +226,68 @@ const DetailOffice = () => {
                         );
                       })}
                     </div>
+                    
+                    <FloatingLabel
+                      controlId='floatingTextarea'
+                      label='Masukkan Review Anda '
+                      className='mb-3'
+                    >
+                     <Form.Control
+                        as='textarea'
+                        style={{ height: '170px' }}
+                        placeholder='Leave a comment here'
+                        name='comment'
+                      />
+                    </FloatingLabel>
+                    
 
                     <Button variant='pink' type='submit'>
                       Submit
                     </Button>
                   </form>
                 </Card.Body>
+                      {/* Modal */}
+                <Modal show={showModal} onHide={handleModalCancel}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Error</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>Silahkan login terlebih dahulu.</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant='secondary'  onClick={() => navigate('/login')} >
+                      Login
+                    </Button>
+                    <Button variant='primary' onClick={handleModalCancel}>
+                      Cancel
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </Card>
 
               <hr />
               <div className='cardReview mb-3'>
-                <Card>
-                  <Card.Body>
-                    <h6>John Cena</h6>
-                    <p>bacot suu, laporane lek ditanggepi nyok</p>
-                    <div className='stars mx-0' style={styles.stars}>
-                      {stars.map((_, index) => {
-                        return (
-                          <FaStar
-                            key={index}
-                            size={24}
-                            style={{
-                              marginRight: 10,
-                              cursor: 'pointer',
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                  </Card.Body>
-                </Card>
+                {reviews.map((review, index) => (
+                  <Card key={index} style={{marginTop: '1rem'}}>
+                    <Card.Body key={review.id}>
+                      <h6>{review.name}</h6>
+                      <p>{review.comment}</p>
+                      <div className='stars mx-0'>
+                        {stars.map((_, index) => {
+                          return (
+                            <FaStar
+                              key={index}
+                              size={24}
+                              style={{
+                                marginRight: 10,
+                                cursor: 'pointer',
+                                color: (review.rating || hoverValue) > index ? colors.orange : colors.grey,
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>

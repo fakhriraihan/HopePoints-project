@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import * as firestore from 'firebase/firestore';
+import { collection, query, where, orderBy, startAt, endAt, onSnapshot } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 import { useNavigate } from 'react-router-dom';
+import Fuse from 'fuse.js';
 import './office.css';
 
 const Office = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
-    const unsubscribe = firestore.onSnapshot(
-      firestore.query(
-        firestore.collection(db, 'users'),
-        firestore.where('role', '==', 'office')
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'users'),
+        where('role', '==', 'office'),
+        orderBy('name')
       ),
       (snapshot) => {
         const userList = snapshot.docs.map((doc) => ({
@@ -31,11 +35,50 @@ const Office = () => {
     };
   }, []);
 
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const searchInput = document.getElementById('searchOffice');
+    setSearchValue(searchInput.value);
+  };
+
+  useEffect(() => {
+    if (searchValue !== '') {
+      const fuse = new Fuse(users, {
+        keys: ['name'],
+      });
+      const results = fuse.search(searchValue);
+      const filteredUsers = results.map((result) => result.item);
+      setUsers(filteredUsers);
+    } else {
+      const unsubscribe = onSnapshot(
+        query(
+          collection(db, 'users'),
+          where('role', '==', 'office'),
+          orderBy('name')
+        ),
+        (snapshot) => {
+          const userList = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setUsers(userList);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [searchValue, users]);
+
   return (
     <div className='office-container'>
       <div className='py-3'>
         <h1 className='text-center mb-3'>Office</h1>
-        <form className='form-search' action='#' id='form-search'>
+        <form className='form-search' onSubmit={handleSearch} id='form-search'>
           <input
             className='rounded'
             id='searchOffice'

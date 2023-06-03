@@ -4,14 +4,15 @@ import { NavLink } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
 import logo from '../../assets/logo.png';
 import './navigation.css';
+
 import { AuthContext } from '../../Context/AuthContext';
+import useLogout from '../../Utils/auth';
 
 function Navigation() {
   const { dispatch } = useContext(AuthContext);
   const isUserLoggedIn = localStorage.getItem('user');
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
-  };
+ 
+  const handleLogout = useLogout();
 
   return (
     <Navbar bg='light' expand='lg' fixed='top'>

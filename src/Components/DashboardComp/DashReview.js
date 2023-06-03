@@ -3,13 +3,18 @@ import Nav from './Nav';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import './dashboardcomp.css';
+import { GetReviewWhereRole } from '../../Utils/crudData';
+import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage, } from "../../Utils/UserData";
 
 const DashReview = ({ Toggle }) => {
+  const userRole = getUserRoleFromLocalStorage();
+  const idOffice = getIdOfficeFromLocalStorage();
   const [show, setShow] = useState(false);
-
+  const [reviews, setReviews] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  console.log(reviews)
   return (
     <div className='px-3'>
       <Modal show={show} onHide={handleClose}>
@@ -60,43 +65,28 @@ const DashReview = ({ Toggle }) => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>Otto</td>
-                <td>
-                  <Button variant='secondary' onClick={handleShow}>
-                    Reply
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>Otto</td>
-                <td>
-                  <Button variant='secondary' onClick={handleShow}>
-                    Reply
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-                <td>@mdo</td>
-                <td>
-                  <Button variant='secondary' onClick={handleShow}>
-                    Reply
-                  </Button>
-                </td>
-              </tr>
+              {reviews && reviews.map((review, index) => (
+                <tr key={review.uid}>
+                  <td>{index + 1}</td>
+                  <td>{review.name}</td>
+                  <td>{review.comment}</td>
+                  <td>{review.rating}</td>
+                  <td>
+                    <Button variant='secondary' onClick={handleShow}>
+                      Reply
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Card.Body>
       </Card>
+      {userRole === 'admin' ? (
+        <GetReviewWhereRole setReviews={setReviews} />
+      ) : (
+        <GetReviewWhereRole setReviews={setReviews} idOffice={idOffice} />
+      )}
     </div>
   );
 };
