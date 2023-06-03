@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
+import logo from '../../assets/logo.png';
 import './navigation.css';
 import { AuthContext } from '../../Context/AuthContext';
 
@@ -17,11 +18,7 @@ function Navigation() {
       <Container>
         <Navbar.Brand href='/'>
           {' '}
-          <img
-            src='/assets/logo.png'
-            className='rounded'
-            alt='Logo HopePoints'
-          />{' '}
+          <img src={logo} className='rounded' alt='Logo HopePoints' />{' '}
           HopePoints
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
