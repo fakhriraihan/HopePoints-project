@@ -1,0 +1,28 @@
+.mapboxgl-popup-content {
+  border-radius: 12px;
+}
+
+.popup-content {
+  width: 300px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.popup-content h2 {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #ff88ba;
+}
+
+.popup-content p {
+  margin: 0px;
+}
+.nama-dinas {
+  font-size: 1rem;
+}
+
+.stars {
+  margin: 10px;
+}

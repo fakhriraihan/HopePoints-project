@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './Context/AuthContext';
 import HomePage from './Pages/HomePage/HomePage';
@@ -11,7 +16,8 @@ import DashReviewPage from './Pages/DashboardPage/DashReviewPage';
 import DashAdminPage from './Pages/DashboardPage/DashAdminPage';
 import DashOfficePage from './Pages/DashboardPage/DashOfficePage';
 import DashUserPage from './Pages/DashboardPage/DashUserPage';
-import News from './Pages/HomePage/News';
+import OfficePage from './Pages/OfficePage/OfficePage';
+import DetailOfficePage from './Pages/OfficePage/DetailOfficePage';
 import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
@@ -19,18 +25,17 @@ import ListReportProfile from './Pages/ProfilePage/listReport';
 import UserProfile from './Pages/ProfilePage/userProfile';
 
 const App = () => {
-
   const RequireAuth = ({ children, requiredRole }) => {
-    
     const { currentUser } = useContext(AuthContext);
-  
+
     // Check if the user role matches any of the required roles
-    const isAuthorized = Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
-  
+    const isAuthorized =
+      Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
+
     if (isAuthorized) {
       return children;
     } else {
-      return <Navigate to="/login" />;
+      return <Navigate to='/login' />;
     }
   };
 
@@ -43,8 +48,10 @@ const App = () => {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/maps' element={<MapPage />} />
+          <Route path='/office' element={<OfficePage />} />
+          <Route path='/detailoffice/:id' element={<DetailOfficePage />} />
 
-          <Route path="profile">
+          <Route path='profile'>
             <Route
               index
               element={
@@ -53,7 +60,7 @@ const App = () => {
                 </RequireAuth>
               }
             />
-              <Route path="list">
+            <Route path='list'>
               <Route
                 index
                 element={
@@ -62,10 +69,10 @@ const App = () => {
                   </RequireAuth>
                 }
               />
-             </Route>
             </Route>
+          </Route>
 
-          <Route path="form">
+          <Route path='form'>
             <Route
               index
               element={
@@ -74,18 +81,18 @@ const App = () => {
                 </RequireAuth>
               }
             />
-            </Route>
+          </Route>
 
-            <Route path="dashboard">
-              <Route
-                  index
-                  element={
-                    <RequireAuth requiredRole={['admin', 'office']}>
-                      <DashboardPage />
-                    </RequireAuth>
-                  }
-                />
-            <Route path="report">
+          <Route path='dashboard'>
+            <Route
+              index
+              element={
+                <RequireAuth requiredRole={['admin', 'office']}>
+                  <DashboardPage />
+                </RequireAuth>
+              }
+            />
+            <Route path='report'>
               <Route
                 index
                 element={
@@ -95,7 +102,7 @@ const App = () => {
                 }
               />
               <Route
-                path="detail/:id"
+                path='detail/:id'
                 element={
                   <RequireAuth requiredRole={['admin', 'office']}>
                     <DashDetailReportPage />
@@ -103,7 +110,7 @@ const App = () => {
                 }
               />
             </Route>
-            <Route path="review">
+            <Route path='review'>
               <Route
                 index
                 element={
@@ -113,7 +120,7 @@ const App = () => {
                 }
               />
             </Route>
-            <Route path="admin">
+            <Route path='admin'>
               <Route
                 index
                 element={
@@ -123,7 +130,7 @@ const App = () => {
                 }
               />
             </Route>
-            <Route path="office">
+            <Route path='office'>
               <Route
                 index
                 element={
@@ -133,7 +140,7 @@ const App = () => {
                 }
               />
             </Route>
-            <Route path="user">
+            <Route path='user'>
               <Route
                 index
                 element={
@@ -144,7 +151,6 @@ const App = () => {
               />
             </Route>
           </Route>
-
         </Routes>
       </Router>
     </>

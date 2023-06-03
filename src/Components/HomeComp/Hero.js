@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import hero from '../../assets/hero/hero.png';
 import './home.css';
 
 const Hero = () => {
@@ -20,7 +21,7 @@ const Hero = () => {
             <button onClick={() => navigate('/form')}>Laporkan!</button>
           </div>
           <div className='image'>
-            <img src='/assets/hero/hero.png' alt='hero HopePoints' />
+            <img src={hero} alt='hero HopePoints' />
           </div>
         </div>
       </Container>
