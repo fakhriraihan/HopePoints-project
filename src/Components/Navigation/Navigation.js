@@ -7,7 +7,7 @@ import { AuthContext } from '../../Context/AuthContext';
 
 function Navigation() {
   const { dispatch } = useContext(AuthContext);
-  const isUserLoggedIn = localStorage.getItem('user'); 
+  const isUserLoggedIn = localStorage.getItem('user');
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
   };
@@ -30,38 +30,33 @@ function Navigation() {
             <Nav.Link className='navbar-link' href='/'>
               Home
             </Nav.Link>
-            <NavDropdown title='Features' id='basic-nav-dropdown'>
-              <NavDropdown.Item className='navbar-dropdown' href='/form'>
-                Form
-              </NavDropdown.Item>
-              <NavDropdown.Item className='navbar-dropdown' href='/maps'>
-                Maps
-              </NavDropdown.Item>
-            </NavDropdown>
-            {/* <Nav.Link className='navbar-link' href='#link'>
+            <Nav.Link className='navbar-link' href='/form'>
               Form
             </Nav.Link>
-            <Nav.Link className='navbar-link' href='#link'>
+            <Nav.Link className='navbar-link' href='/maps'>
               Maps
-            </Nav.Link> */}
-            <Nav.Link className='navbar-link' href='#link'>
-              News
+            </Nav.Link>
+            <Nav.Link className='navbar-link' href='/office'>
+              Office
             </Nav.Link>
             <Nav.Link className='navbar-link' href='/about'>
               About Us
             </Nav.Link>
             {isUserLoggedIn && isUserLoggedIn !== 'null' ? (
-             <NavDropdown
-             title={
-                 <i className="fa-solid fa-user"></i>
-             }
-             id='basic-nav-dropdown' >
-             <NavDropdown.Item href='/profile'>Profile</NavDropdown.Item>
-             <NavDropdown.Divider />
-             <NavDropdown.Item href='/profile/list'>List Reports</NavDropdown.Item>
-             <NavDropdown.Divider />
-             <NavDropdown.Item href='/login' onClick={handleLogout}>Logout</NavDropdown.Item>
-           </NavDropdown>
+              <NavDropdown
+                title={<i className='fa-solid fa-user'></i>}
+                id='basic-nav-dropdown'
+              >
+                <NavDropdown.Item href='/profile'>Profile</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href='/profile/list'>
+                  List Reports
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href='/login' onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
             ) : (
               <span>
                 <NavLink to='/login'>
