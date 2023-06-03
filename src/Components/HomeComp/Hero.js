@@ -10,25 +10,12 @@ const Hero = () => {
 
   return (
     <>
-<<<<<<< Updated upstream
-      <Container className='hero'>
-        <div className='d-flex'>
-          <div className='wrap-text'>
-            <h1 className='title'>HopePoints</h1>
-            <p className='subtitle'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero,
-              eius? Obcaecati perferendis voluptas temporibus. Eius neque qui
-              quam quidem alias.
-            </p>
-            <button onClick={() => navigate('/form')}>Laporkan!</button>
-=======
       <Container className="hero">
         <div className="d-flex">
           <div className="wrap-text">
             <h1 className="title">HopePoints</h1>
             <p className="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, eius? Obcaecati perferendis voluptas temporibus. Eius neque qui quam quidem alias.</p>
             <button onClick={() => navigate('form')}>Laporkan!</button>
->>>>>>> Stashed changes
           </div>
           <div className="image">
             <img src="/assets/hero/hero.png" alt="hero HopePoints" />

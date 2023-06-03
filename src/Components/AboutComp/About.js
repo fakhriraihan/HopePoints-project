@@ -1,8 +1,5 @@
 import React from 'react';
-// import { Container } from 'react-bootstrap';
-// import { useNavigate } from 'react-router-dom';
 import './about.css';
-// import AboutPage from '../../Pages/AboutPage/AboutPage';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
@@ -31,7 +28,7 @@ const About = () => {
               <Card.Body>
                 <Card.Title>Fakhri Raihan</Card.Title>
                 <Card.Text>Front-End</Card.Text>
-                <Button variant="success">Connect</Button>
+                <Button>Connect</Button>
               </Card.Body>
             </Card>
             <Card className="cardItemTeam" style={{ width: '18rem' }}>
@@ -39,7 +36,7 @@ const About = () => {
               <Card.Body>
                 <Card.Title>Ramji Renanda Sitorus</Card.Title>
                 <Card.Text>Front-End</Card.Text>
-                <Button variant="success">Connect</Button>
+                <Button>Connect</Button>
               </Card.Body>
             </Card>
             <Card className="cardItemTeam" style={{ width: '18rem' }}>
@@ -47,7 +44,7 @@ const About = () => {
               <Card.Body>
                 <Card.Title>Muhammad Taufik</Card.Title>
                 <Card.Text>Front-End</Card.Text>
-                <Button variant="success">Connect</Button>
+                <Button>Connect</Button>
               </Card.Body>
             </Card>
             <Card className="cardItemTeam" style={{ width: '18rem' }}>
@@ -55,9 +52,32 @@ const About = () => {
               <Card.Body>
                 <Card.Title>Daffa Rizky</Card.Title>
                 <Card.Text>Front-End</Card.Text>
-                <Button variant="success">Connect</Button>
+                <Button>Connect</Button>
               </Card.Body>
             </Card>
+            <div class="card">
+              <img src="foto1.jpg" alt="Foto Profil"></img>
+              <h2>Nama Lengkap</h2>
+              <button class="connect-button">Connect</button>
+            </div>
+
+            <div class="card">
+              <img src="foto2.jpg" alt="Foto Profil"></img>
+              <h2>Nama Lengkap</h2>
+              <button class="connect-button">Connect</button>
+            </div>
+
+            <div class="card">
+              <img src="foto3.jpg" alt="Foto Profil"></img>
+              <h2>Nama Lengkap</h2>
+              <button class="connect-button">Connect</button>
+            </div>
+
+            <div class="card">
+              <img src="foto4.jpg" alt="Foto Profil"></img>
+              <h2>Nama Lengkap</h2>
+              <button class="connect-button">Connect</button>
+            </div>
           </div>
         </div>
         {/* 
