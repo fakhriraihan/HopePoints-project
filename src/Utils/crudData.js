@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { collectionGroup,collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
+import { collectionGroup,collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc, updateDoc  } from 'firebase/firestore';
+import { getAuth, updateProfile, reauthenticateWithCredential, updatePassword,  EmailAuthProvider } from 'firebase/auth';
 import { db } from '../Config/firebase';
 
 
@@ -156,6 +157,58 @@ const handleDeleteUser = async (userId) => {
     return null;
   };
   
+
+  const updateUserProfile = async (uid, newData) => {
+    const auth = getAuth();
+  
+    try {
+      await updateProfile(auth.currentUser, {
+        displayName: newData.name,
+      });
+      const userRef = doc(db, 'users', uid);
+  
+      await updateDoc(userRef, newData);
+  
+      const updatedUser = {
+        ...newData,
+      };
+      return updatedUser;
+    } catch (error) {
+      throw new Error('Failed to update profile: ' + error.message);
+    }
+  };
+
+  const updatePasswordProfile = (currentPassword, newPassword) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  
+    return reauthenticateWithCredential(user, credential)
+      .then(() => {
+        return updatePassword(user, newPassword);
+      })
+      .catch((error) => {
+        throw new Error('Failed to update password: ' + error.message);
+      });
+  };
+
+  const handleDeleteAkun = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      user
+        .delete()
+        .then(() => {
+          console.log('User account deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Failed to delete user account:', error);
+        });
+    } else {
+      console.log('No user is currently signed in');
+    }
+  };
   
 
-export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect, GetReviewWhereRole};
+export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect, GetReviewWhereRole, updateUserProfile, updatePasswordProfile, handleDeleteAkun};

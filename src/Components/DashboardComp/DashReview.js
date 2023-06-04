@@ -66,7 +66,7 @@ const DashReview = ({ Toggle }) => {
             </thead>
             <tbody>
               {reviews && reviews.map((review, index) => (
-                <tr key={review.uid}>
+                <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{review.name}</td>
                   <td>{review.comment}</td>

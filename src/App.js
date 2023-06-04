@@ -23,6 +23,7 @@ import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
 import ListReportProfile from './Pages/ProfilePage/listReport';
 import UserProfile from './Pages/ProfilePage/userProfile';
+import ChangePasswordProfile from './Pages/ProfilePage/changePassword';
 
 const App = () => {
   const RequireAuth = ({ children, requiredRole }) => {
@@ -66,6 +67,16 @@ const App = () => {
                 element={
                   <RequireAuth requiredRole={['user']}>
                     <ListReportProfile />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path='change'>
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole={['user']}>
+                    <ChangePasswordProfile />
                   </RequireAuth>
                 }
               />

@@ -11,7 +11,6 @@ import {
 import { db, storage } from '../../Config/firebase';
 import MapGL, {
   Marker,
-  Popup,
   NavigationControl,
   ScaleControl,
   GeolocateControl,
@@ -24,7 +23,6 @@ const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const FormReportComp = () => {
   //maps
   const [newPlace, setNewPlace] = useState(null); // [longitude, latitude
-  const [showPopup, setShowPopup] = React.useState(true);
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
@@ -125,17 +123,23 @@ const FormReportComp = () => {
     }
   }, [file]);
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const timestamp = Timestamp.fromDate(new Date());
-    const date = timestamp.toDate();
-    const dateString = date.toLocaleString('id-ID', {
-      timeZone: 'Asia/Jakarta',
-      dateStyle: 'long',
-      timeStyle: 'medium',
-    });
+  
     try {
+      const timestamp = Timestamp.fromDate(new Date());
+      const date = timestamp.toDate();
+      const dateString = date.toLocaleString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        dateStyle: 'long',
+        timeStyle: 'medium',
+      });
       const idReport = 'report' + new Date().getTime();
+      
+      // Memeriksa apakah URL gambar tersedia
+      const img = data.img ? data.img : null;
+  
       const reportData = {
         uid: uid,
         idReport: idReport,
@@ -144,28 +148,29 @@ const FormReportComp = () => {
         kekerasanFisik: kekerasanFisik,
         kekerasanPsikis: kekerasanPsikis,
         name: users.name,
-        tlfn: users.tlfn,
+        tlfn: users.phone,
         email: users.email,
         title: title,
         tglkejadian: tglkejadian,
         idOffice: selectedProvince.value,
         nameOffice: selectedProvince.label,
         description: description,
-        img: data.img,
+        img: img, // Menggunakan null jika URL tidak tersedia
         status: 'pending',
         location: new GeoPoint(newPlace.lat, newPlace.long),
       };
-
+  
       const reportsRef = collection(db, 'reports');
       const reportDocRef = doc(reportsRef, idReport);
       await setDoc(reportDocRef, reportData);
-
+  
       console.log('Data laporan berhasil disimpan ke Firestore');
     } catch (error) {
       console.error('Error menyimpan data laporan:', error);
       throw new Error('Gagal menyimpan data laporan');
     }
   };
+  
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -261,7 +266,7 @@ const FormReportComp = () => {
                           <br />
                           <strong>Email:</strong> {users?.email}
                           <br />
-                          <strong>Telephone:</strong> {users?.tlfn}
+                          <strong>Telephone:</strong> {users?.phone}
                         </Card.Text>
                       </div>
                       <Button variant='primary'>Change</Button>
@@ -310,8 +315,9 @@ const FormReportComp = () => {
                   />
                 </Form.Group>
                 <Form.Group id='province'>
-                  <Form.Label>Provinsi</Form.Label>
+                  <Form.Label>Office</Form.Label>
                   <Select
+                  placeholder="Pilih Kantor"
                     options={provinces}
                     onChange={(selectedOption) =>
                       setSelectedProvince(selectedOption)

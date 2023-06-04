@@ -6,7 +6,7 @@ import './dashboardcomp.css';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashOffice = ({ Toggle }) => {
-
+  const mapRef = React.useRef(null);
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
