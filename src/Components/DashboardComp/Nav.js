@@ -13,8 +13,8 @@ const Nav = ({ Toggle }) => {
   const email = userData.email;
 
   const handleLogout = () => {
+    window.location.href = '/login';
     dispatch({ type: 'LOGOUT' });
-
   };
 
   return (

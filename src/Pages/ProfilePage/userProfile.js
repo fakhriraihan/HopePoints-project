@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import Navigation from '../../Components/Navigation/Navigation';
 import MenuProfile from '../../Components/DashboardProfileComp/Menu';
@@ -8,19 +9,22 @@ import { GetUserById, updateUserProfile } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
 function UserProfile() {
+  const navigate = useNavigate();
   const uid = getIdOfficeFromLocalStorage();
   const [users, setUser] = useState(null);
+
+  const handleCancel = () => {
+    navigate(-1); 
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Mengambil nilai input dari form
     const name = event.target.elements.name.value;
     const phone = event.target.elements.phone.value;
     const address = event.target.elements.address.value;
     const email = event.target.elements.email.value;
 
-    // Membuat objek dengan data yang akan diperbarui
     const newData = {
       name: name,
       phone: phone,
@@ -41,15 +45,12 @@ function UserProfile() {
         // Memanggil fungsi untuk memperbarui profil pengguna
         updateUserProfile(uid, newData)
           .then((updatedUser) => {
-            // Jika pembaruan berhasil, update state pengguna dengan data yang diperbarui
             setUser(updatedUser);
             Swal.fire('Updated!', 'Your profile has been updated.', 'success');
-            console.log('Profile updated successfully!');
+            // navigate(-1);
           })
           .catch((error) => {
-            // Jika terjadi kesalahan, tangani error
             Swal.fire('Error!', 'Failed to update profile.', 'error');
-            console.error('Failed to update profile:', error.message);
           });
       }
     });
@@ -108,6 +109,9 @@ function UserProfile() {
                       name='address'
                     />
                   </Form.Group>
+                  <Button variant='danger' style={{ marginRight: '5px' }} onClick={handleCancel}>
+                    Back
+                  </Button>
 
                   <Button variant='warning' type='submit'>
                     Update
