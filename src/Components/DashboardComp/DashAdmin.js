@@ -44,8 +44,8 @@ const DashAdmin = ({ Toggle }) => {
               {users.map((user, index) => (
                 <tr key={user.id}>
                   <td>{index + 1}</td>
-                  <td>{user.id}</td>
                   <td>{user.name}</td>
+                  <td>{user.email}</td>
                   <td>
                     <Button
                       variant='danger'

@@ -215,20 +215,25 @@ const DashDetailReport = ({ Toggle }) => {
                 )}
               </Form.Group>
               </Form>
-              {report?.status === 'proses' ? (
-                <>
-                  <Button variant='danger' onClick={handleSelesaiSubmit}>
-                    Cancel
-                  </Button>
-                  <Button variant='success' style={{marginLeft: '5px'}}>
-                    Laporan Sudah Selesai
-                  </Button>
-                </>
-              ) : (
-                <Button variant='warning' onClick={handleProcessSubmit}>
-                  Diproses
-                </Button>
-              )}
+              {report?.status === 'pending' ? (
+                  <>
+                  
+                      <Button variant='warning' onClick={handleProcessSubmit}>
+                      Diproses
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                   <Button variant='danger'>
+                        Cancel
+                      </Button>
+                    {report?.status === 'proses' && (
+                      <Button variant='success' style={{marginLeft: '5px'}} onClick={handleSelesaiSubmit}>
+                      Laporan Sudah Selesai
+                    </Button>
+                    )}
+                  </>
+                )}
             </div>
           </div>
         </Card.Body>

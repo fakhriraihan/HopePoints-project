@@ -1,12 +1,10 @@
 import React, { useState, useRef } from 'react';
 import Nav from './Nav';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashOffice = ({ Toggle }) => {
-  const mapRef = React.useRef(null);
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -42,7 +40,7 @@ const DashOffice = ({ Toggle }) => {
                 <th>No</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Province</th>
+                <th>No Kantor</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -52,7 +50,7 @@ const DashOffice = ({ Toggle }) => {
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>{user.province}</td>
+                  <td>{user.phone}</td>
                   <td>
                     <Button
                       variant='danger'

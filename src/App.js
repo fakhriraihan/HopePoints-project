@@ -24,6 +24,7 @@ import MapPage from './Pages/MapPage/MapPage';
 import ListReportProfile from './Pages/ProfilePage/listReport';
 import UserProfile from './Pages/ProfilePage/userProfile';
 import ChangePasswordProfile from './Pages/ProfilePage/changePassword';
+import ForgotPage from './Pages/AuthPage/forgotPage';
 
 const App = () => {
   const RequireAuth = ({ children, requiredRole }) => {
@@ -47,6 +48,7 @@ const App = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/forgot' element={<ForgotPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/maps' element={<MapPage />} />
           <Route path='/office' element={<OfficePage />} />

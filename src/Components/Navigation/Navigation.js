@@ -6,7 +6,7 @@ import logo from '../../assets/logo.png';
 import './navigation.css';
 
 import { AuthContext } from '../../Context/AuthContext';
-import useLogout from '../../Utils/auth';
+import { useLogout } from '../../Utils/auth';
 import Swal from 'sweetalert2';
 
 function Navigation() {
