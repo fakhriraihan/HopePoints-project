@@ -30,6 +30,35 @@ const GetReport = ({ setReports, idOffice }) => {
   return null;
 };
 
+
+const GetDetailReport = ({ setReport, setViewPort, id }) => {
+  useEffect(() => {
+    const fetchReport = async () => {
+      try {
+        const docRef = doc(db, 'reports', id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setReport(data);
+          setViewPort((prevViewport) => ({
+            ...prevViewport,
+            latitude: data.location.latitude,
+            longitude: data.location.longitude,
+          }));
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.log('Error getting document:', error);
+      }
+    };
+
+    fetchReport();
+  }, [setReport, setViewPort, id]);
+
+  return null; // Komponen tidak merender apa pun, sehingga mengembalikan null
+};
+
 const GetReportByid = ({setReports, uid}) => {
   useEffect(() => {
     const getReports = async () => {
@@ -209,6 +238,28 @@ const handleDeleteUser = async (userId) => {
       console.log('No user is currently signed in');
     }
   };
+
+  const handelChangeStatus = async (setReport, setStatus, id) => {
+    await updateDoc(doc(db, 'reports', id), { status: setStatus });
+
+        // Perbarui status secara lokal
+        setReport((prevReport) => ({
+          ...prevReport,
+          status: setStatus,
+        }));
+  }
   
 
-export {GetReport, GetUserById, GetReportByid, GetUserWhereRole, handleDeleteUser, ProvincesSelect, GetReviewWhereRole, updateUserProfile, updatePasswordProfile, handleDeleteAkun};
+export {
+  GetReport, 
+  GetUserById, 
+  GetReportByid, 
+  GetDetailReport,
+  GetUserWhereRole, 
+  handleDeleteUser, 
+  ProvincesSelect, 
+  GetReviewWhereRole, 
+  updateUserProfile, 
+  updatePasswordProfile, 
+  handleDeleteAkun,
+  handelChangeStatus};

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Nav from '../../Components/DashboardComp/Nav';
 import Map, {
   Marker,
@@ -6,10 +6,10 @@ import Map, {
   ScaleControl,
   GeolocateControl,
 } from 'react-map-gl';
-import { Button, Card, Form, Row, Col } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../Config/firebase';
+import { GetDetailReport, handelChangeStatus } from '../../Utils/crudData';
+import Swal from 'sweetalert2';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DashDetailReport = ({ Toggle }) => {
@@ -24,56 +24,59 @@ const DashDetailReport = ({ Toggle }) => {
     zoom: 15,
   });
 
-  useEffect(() => {
-    const fetchReport = async () => {
-      try {
-        const docRef = doc(db, 'reports', id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setReport(data);
-          setViewPort((prevViewport) => ({
-            ...prevViewport,
-            latitude: data.location.latitude,
-            longitude: data.location.longitude,
-          }));
-        } else {
-          console.log('No such document!');
-        }
-      } catch (error) {
-        console.log('Error getting document:', error);
-      }
-    };
-
-    fetchReport();
-  }, [id]);
-
   const handleProcessSubmit = async () => {
     try {
-      // Perbarui status menjadi "Diproses"
-      await updateDoc(doc(db, 'reports', id), { status: 'Diproses' });
-      console.log('Status updated to "Diproses"');
+      const { isConfirmed } = await Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah Anda yakin ingin memproses laporan ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal',
+      });
+
+      if (isConfirmed) {
+        // Perbarui status menjadi "Diproses" di database
+        const setStatus = 'proses';
+        handelChangeStatus(setReport, setStatus, id)
+
+        Swal.fire('Berhasil', 'Status laporan berhasil diperbarui!', 'success');
+      }
     } catch (error) {
       console.log('Error updating status:', error);
     }
   };
 
-  const handleCompleteSubmit = async () => {
+  const handleSelesaiSubmit = async () => {
     try {
-      // Perbarui status menjadi "Selesai"
-      await updateDoc(doc(db, 'reports', id), { status: 'Selesai' });
-      console.log('Status updated to "Selesai"');
+      const { isConfirmed } = await Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah Anda yakin ingin menyelesaikan laporan ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal',
+      });
+
+      if (isConfirmed) {
+        const setStatus = 'selesai';
+        handelChangeStatus(setReport, setStatus, id)
+
+        Swal.fire('Berhasil', 'Status laporan berhasil diperbarui!', 'success');
+      }
     } catch (error) {
       console.log('Error updating status:', error);
     }
   };
 
-  if (!report) {
-    return <p>Loading report...</p>;
-  }
 
   return (
     <div className='px-3'>
+      <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
       <Nav Toggle={Toggle} />
       <h2 className='text-white my-3'>Detail Report</h2>
       <Card className='mb-5'>
@@ -91,7 +94,9 @@ const DashDetailReport = ({ Toggle }) => {
             <div className='col-md-6'>
               <label className='mb-2'>Maps</label>
               <Card className='mb-3' style={{ width: '100%', height: '25rem' }}>
+                
                 <Card.Body>
+                {report && report.location && (
                   <Map
                     initialViewState={viewport}
                     mapboxAccessToken={token}
@@ -100,120 +105,135 @@ const DashDetailReport = ({ Toggle }) => {
                     height='100%'
                     onViewportChange={setViewPort}
                   >
-                    <Marker
-                      key={report.idReport}
-                      latitude={report.location.latitude}
-                      longitude={report.location.longitude}
-                      offsetleft={-3.5 * viewport.zoom}
-                      offsetTop={-7 * viewport.zoom}
-                      draggable={false}
-                      style={{ zIndex: 999 }}
-                    >
-                      <i
-                        className='fa-solid fa-location-dot'
-                        style={{
-                          fontSize: 2 * viewport.zoom,
-                          color: 'tomato',
-                          cursor: 'pointer',
-                        }}
-                      ></i>
-                    </Marker>
+                      <Marker
+                        key={report?.idReport}
+                        latitude={report?.location.latitude }
+                        longitude={report?.location.longitude}
+                        offsetleft={-3.5 * viewport.zoom}
+                        offsetTop={-7 * viewport.zoom}
+                        draggable={false}
+                        style={{ zIndex: 999 }}
+                      >
+                        <i
+                          className='fa-solid fa-location-dot'
+                          style={{
+                            fontSize: 2 * viewport.zoom,
+                            color: 'tomato',
+                            cursor: 'pointer',
+                          }}
+                        ></i>
+                      </Marker>
                     <GeolocateControl position='bottom-right' />
                     <NavigationControl position='bottom-right' />
                     <ScaleControl />
                   </Map>
+                )}
                 </Card.Body>
               </Card>
             </div>
             <div className='col-md-6'>
               <label className='mb-2'>Detail Kejadian</label>
-              <Form onSubmit={handleProcessSubmit}>
-                <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Nama :</Form.Label>
-                  <Form.Control
-                    type='email'
-                    placeholder=''
-                    defaultValue={report.name}
-                    readOnly
-                  />
-                </Form.Group>
+              <Form>
+              <Form.Group className='mb-3' controlId='formGroupName'>
+                <Form.Label>Infromasi Pelapor</Form.Label>
+                <Card>
+                  <Card.Body
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div>
+                      <Card.Text>
+                        <strong>Name:</strong> {report?.name}
+                        <br />
+                        <strong>Email:</strong> {report?.email}
+                        <br />
+                        <strong>Telephone:</strong> {report?.tlfn}
+                      </Card.Text>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Form.Group>
+              <Form.Group className='mb-3' controlId='formGroupTitle'>
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type='text'
+                  defaultValue={report?.title}
+                  readOnly
+                />
+              </Form.Group>
 
-                <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Email :</Form.Label>
-                  <Form.Control
-                    type='phone'
-                    placeholder=''
-                    defaultValue={report.email}
-                    readOnly
-                  />
-                </Form.Group>
+              <Form.Group className='mb-3' controlId='formGroupName'>
+                <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
+                <Form.Control
+                  type='dateandtime'
+                  placeholder=''
+                  defaultValue={report?.tglkejadian}
+                  readOnly
+                />
+              </Form.Group>
 
-                <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>No Telfon :</Form.Label>
-                  <Form.Control
-                    type='phone'
-                    placeholder=''
-                    defaultValue={report.tlfn}
-                    readOnly
-                  />
-                </Form.Group>
+              <Form.Group className='mb-3' controlId='formGridAddress'>
+                <Form.Label>Jenis Kekerasan</Form.Label>
+                <Form.Control
+                  placeholder='1234 Main St'
+                  defaultValue={
+                    (report?.kekerasanFisik ? 'Fisik ' : '') +
+                    (report?.kekerasanPsikis ? 'Psikis ' : '') +
+                    (report?.kekerasanSeksual ? 'Seksual' : '')
+                  }
+                  readOnly
+                />
+              </Form.Group>
 
-                <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
-                  <Form.Control
-                    type='dateandtime'
-                    placeholder=''
-                    defaultValue={report.tglkejadian}
-                    readOnly
-                  />
-                </Form.Group>
+              <Form.Group className='mb-3' controlId='formGridAddress'>
+                <Form.Label>Kantor Terdekat</Form.Label>
+                <Form.Control
+                  placeholder='1234 Main St'
+                  defaultValue={report?.nameOffice}
+                  readOnly
+                />
+              </Form.Group>
 
-                <Form.Group className='mb-3' controlId='formGridAddress'>
-                  <Form.Label>Jenis Kekerasan</Form.Label>
-                  <Form.Control
-                    placeholder='1234 Main St'
-                    value={
-                      (report.kekerasanFisik ? 'Fisik ' : '') +
-                      (report.kekerasanPsikis ? 'Psikis ' : '') +
-                      (report.kekerasanSeksual ? 'Seksual' : '')
-                    }
-                    readOnly
-                  />
-                </Form.Group>
-
-                <Form.Group className='mb-3' controlId='formGridAddress'>
-                  <Form.Label>Kantor Terdekat</Form.Label>
-                  <Form.Control
-                    placeholder='1234 Main St'
-                    value={report.province}
-                    readOnly
-                  />
-                </Form.Group>
-
-                <Form.Group className='mb-3' controlId='formGridDescription'>
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    as='textarea'
-                    rows={3}
-                    value={report.description}
-                    readOnly
-                  />
-                </Form.Group>
-
-                {report.status === 'Diproses' ? (
-                  <Button variant='success' type='submit'>
-                    Selesai
-                  </Button>
+              <Form.Group className='mb-3' controlId='formGridDescription'>
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as='textarea'
+                  rows={3}
+                  defaultValue={report?.description}
+                  readOnly
+                />
+              </Form.Group>
+              <Form.Group controlId="formGridImg">
+                <Form.Label>Gambar</Form.Label>
+                <br />
+                {report?.img ? (
+                  <img src={report.img} alt="Gambar" />
                 ) : (
-                  <Button variant='warning' type='submit'>
-                    Diproses
-                  </Button>
+                  <p>Gambar tidak tersedia</p>
                 )}
+              </Form.Group>
               </Form>
+              {report?.status === 'proses' ? (
+                <>
+                  <Button variant='danger' onClick={handleSelesaiSubmit}>
+                    Cancel
+                  </Button>
+                  <Button variant='success' style={{marginLeft: '5px'}}>
+                    Laporan Sudah Selesai
+                  </Button>
+                </>
+              ) : (
+                <Button variant='warning' onClick={handleProcessSubmit}>
+                  Diproses
+                </Button>
+              )}
             </div>
           </div>
         </Card.Body>
       </Card>
+
     </div>
   );
 };
