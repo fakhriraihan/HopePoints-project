@@ -19,11 +19,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { GetUserById, ProvincesSelect } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const FormReportComp = () => {
-  
   //maps
   const [newPlace, setNewPlace] = useState(null); // [longitude, latitude
   const [viewport, setViewPort] = useState({
@@ -124,10 +122,9 @@ const FormReportComp = () => {
     }
   }, [file]);
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const result = await Swal.fire({
         title: 'Are you sure?',
@@ -138,9 +135,8 @@ const FormReportComp = () => {
         cancelButtonText: 'Cancel',
         reverseButtons: true,
       });
-  
+
       if (result.isConfirmed) {
-  
         const timestamp = Timestamp.fromDate(new Date());
         const date = timestamp.toDate();
         const dateString = date.toLocaleString('id-ID', {
@@ -150,7 +146,7 @@ const FormReportComp = () => {
         });
         const idReport = 'report' + new Date().getTime();
         const img = data.img ? data.img : null;
-  
+
         const reportData = {
           uid: uid,
           idReport: idReport,
@@ -170,11 +166,11 @@ const FormReportComp = () => {
           status: 'pending',
           location: new GeoPoint(newPlace.lat, newPlace.long),
         };
-  
+
         const reportsRef = collection(db, 'reports');
         const reportDocRef = doc(reportsRef, idReport);
         await setDoc(reportDocRef, reportData);
-  
+
         Swal.fire({
           title: 'Berhasil',
           text: 'Data laporan berhasil disubmit, Klik OK untuk melihat status laporan',
@@ -195,7 +191,6 @@ const FormReportComp = () => {
       });
     }
   };
-  
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -216,7 +211,7 @@ const FormReportComp = () => {
   };
 
   return (
-    <div className='px-5 mt-5'>
+    <div className='px-3 mt-5 mb-5'>
       <h2 className='text-white my-3'> D</h2>
       <Card>
         <Card.Header>
@@ -294,7 +289,15 @@ const FormReportComp = () => {
                           <strong>Telephone:</strong> {users?.phone}
                         </Card.Text>
                       </div>
-                      <Button variant="primary" onClick={() => { window.location.href = '/profile'; }}> Change</Button>
+                      <Button
+                        variant='primary'
+                        onClick={() => {
+                          window.location.href = '/profile';
+                        }}
+                      >
+                        {' '}
+                        Change
+                      </Button>
                     </Card.Body>
                   </Card>
                 </Form.Group>
@@ -342,7 +345,7 @@ const FormReportComp = () => {
                 <Form.Group id='province'>
                   <Form.Label>Office</Form.Label>
                   <Select
-                  placeholder="Pilih Kantor"
+                    placeholder='Pilih Kantor'
                     options={provinces}
                     onChange={(selectedOption) =>
                       setSelectedProvince(selectedOption)

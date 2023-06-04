@@ -5,7 +5,7 @@ import Map, {
   ScaleControl,
   GeolocateControl,
 } from 'react-map-gl';
-import { Modal, Button, Card, Form, Row, Col, FloatingLabel } from 'react-bootstrap';
+import { Modal, Button, Card, Form, FloatingLabel } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { getAuth } from '@firebase/auth';
@@ -52,19 +52,19 @@ const DetailOffice = () => {
 
   const handleSubmitReview = async (event) => {
     event.preventDefault();
-  
+
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       // Pengguna belum login, tampilkan pesan atau lakukan langkah yang sesuai
       setError(true);
       setShowModal(true);
       return;
     }
-  
+
     const reviewContent = event.target.elements.comment.value;
-  
+
     const reviewData = {
       uid: user.uid,
       name: user.displayName,
@@ -72,16 +72,16 @@ const DetailOffice = () => {
       rating: currentValue,
       idOffice: id,
     };
-  
+
     try {
       const userDocRef = doc(db, 'users', id);
       await addDoc(collection(userDocRef, 'reviews'), reviewData);
       console.log('Review berhasil ditambahkan');
-  
+
       // Reset form setelah submit
       event.target.reset();
       setCurrentValue(0);
-  
+
       // Memperbarui daftar ulasan dengan ulasan yang baru
       setReviews((prevReviews) => [...prevReviews, reviewData]);
     } catch (error) {
@@ -105,7 +105,9 @@ const DetailOffice = () => {
 
           const reviewsCollectionRef = collection(userDocRef, 'reviews');
           const reviewsQuerySnapshot = await getDocs(reviewsCollectionRef);
-          const reviewsData = reviewsQuerySnapshot.docs.map((doc) => doc.data());
+          const reviewsData = reviewsQuerySnapshot.docs.map((doc) =>
+            doc.data()
+          );
           setReviews(reviewsData);
         } else {
           console.log('No such document!');
@@ -119,7 +121,7 @@ const DetailOffice = () => {
   }, [id]);
 
   return (
-    <div className='px-3'>
+    <div className='px-3 mb-3'>
       {users.map((user) => (
         <div key={id}>
           <h2 className='text-center my-5 pt-5 px-3'>{user.name}</h2>
@@ -204,7 +206,7 @@ const DetailOffice = () => {
                 <Card.Header>Review and Rating</Card.Header>
                 <Card.Body>
                   <form onSubmit={handleSubmitReview}>
-                  <div className='stars'>
+                    <div className='stars'>
                       {stars.map((_, index) => {
                         return (
                           <FaStar
@@ -226,34 +228,36 @@ const DetailOffice = () => {
                         );
                       })}
                     </div>
-                    
+
                     <FloatingLabel
                       controlId='floatingTextarea'
                       label='Masukkan Review Anda '
                       className='mb-3'
                     >
-                     <Form.Control
+                      <Form.Control
                         as='textarea'
                         style={{ height: '170px' }}
                         placeholder='Leave a comment here'
                         name='comment'
                       />
                     </FloatingLabel>
-                    
 
                     <Button variant='pink' type='submit'>
                       Submit
                     </Button>
                   </form>
                 </Card.Body>
-                      {/* Modal */}
+                {/* Modal */}
                 <Modal show={showModal} onHide={handleModalCancel}>
                   <Modal.Header closeButton>
                     <Modal.Title>Error</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>Silahkan login terlebih dahulu.</Modal.Body>
                   <Modal.Footer>
-                    <Button variant='secondary'  onClick={() => navigate('/login')} >
+                    <Button
+                      variant='secondary'
+                      onClick={() => navigate('/login')}
+                    >
                       Login
                     </Button>
                     <Button variant='primary' onClick={handleModalCancel}>
@@ -266,7 +270,7 @@ const DetailOffice = () => {
               <hr />
               <div className='cardReview mb-3'>
                 {reviews.map((review, index) => (
-                  <Card key={index} style={{marginTop: '1rem'}}>
+                  <Card key={index} style={{ marginTop: '1rem' }}>
                     <Card.Body key={review.id}>
                       <h6>{review.name}</h6>
                       <p>{review.comment}</p>
@@ -279,7 +283,10 @@ const DetailOffice = () => {
                               style={{
                                 marginRight: 10,
                                 cursor: 'pointer',
-                                color: (review.rating || hoverValue) > index ? colors.orange : colors.grey,
+                                color:
+                                  (review.rating || hoverValue) > index
+                                    ? colors.orange
+                                    : colors.grey,
                               }}
                             />
                           );
