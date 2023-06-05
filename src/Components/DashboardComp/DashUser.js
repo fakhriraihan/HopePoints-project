@@ -43,7 +43,7 @@ const DashUser = ({ Toggle }) => {
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>{user.tlfn}</td>
+                  <td>{user.phone}</td>
                   <td>
                     <Button
                       variant='danger'

@@ -29,13 +29,13 @@ const Dashboard = ({ Toggle }) => {
 
   const getProcessedReportsCount = () => {
     const processedReports = reports.filter(
-      (report) => report.status === 'Diproses'
+      (report) => report.status === 'proses'
     );
     return processedReports.length;
   };
 
   const getDoneReportsCount = () => {
-    const doneReports = reports.filter((report) => report.status === 'Selesai');
+    const doneReports = reports.filter((report) => report.status === 'selesai');
     return doneReports.length;
   };
 

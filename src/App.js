@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './Context/AuthContext';
@@ -22,19 +22,23 @@ import LoginPage from './Pages/AuthPage/LoginPage';
 import RegisterPage from './Pages/AuthPage/RegisterPage';
 import MapPage from './Pages/MapPage/MapPage';
 import ListReportProfile from './Pages/ProfilePage/listReport';
+import UserProfile from './Pages/ProfilePage/userProfile';
+import ChangePasswordProfile from './Pages/ProfilePage/changePassword';
+import ForgotPage from './Pages/AuthPage/forgotPage';
 
 const App = () => {
+  
   const RequireAuth = ({ children, requiredRole }) => {
+    
     const { currentUser } = useContext(AuthContext);
-
+  
     // Check if the user role matches any of the required roles
-    const isAuthorized =
-      Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
-
+    const isAuthorized = Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
+  
     if (isAuthorized) {
       return children;
     } else {
-      return <Navigate to='/login' />;
+      return <Navigate to="/login" />;
     }
   };
 
@@ -45,6 +49,7 @@ const App = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/forgot' element={<ForgotPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/maps' element={<MapPage />} />
           <Route path='/office' element={<OfficePage />} />
@@ -55,7 +60,7 @@ const App = () => {
               index
               element={
                 <RequireAuth requiredRole={['user']}>
-                  <HomePage />
+                  <UserProfile />
                 </RequireAuth>
               }
             />
@@ -65,6 +70,16 @@ const App = () => {
                 element={
                   <RequireAuth requiredRole={['user']}>
                     <ListReportProfile />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path='change'>
+              <Route
+                index
+                element={
+                  <RequireAuth requiredRole={['user']}>
+                    <ChangePasswordProfile />
                   </RequireAuth>
                 }
               />

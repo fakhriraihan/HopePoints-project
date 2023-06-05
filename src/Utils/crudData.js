@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
+import { collectionGroup,collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc, updateDoc  } from 'firebase/firestore';
+import { getAuth, updateProfile, reauthenticateWithCredential, updatePassword,  EmailAuthProvider } from 'firebase/auth';
 import { db } from '../Config/firebase';
 
 
@@ -26,6 +27,54 @@ const GetReport = ({ setReports, idOffice }) => {
     getReports();
   }, [setReports, idOffice]);
 
+  return null;
+};
+
+
+const GetDetailReport = ({ setReport, setViewPort, id }) => {
+  useEffect(() => {
+    const fetchReport = async () => {
+      try {
+        const docRef = doc(db, 'reports', id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setReport(data);
+          setViewPort((prevViewport) => ({
+            ...prevViewport,
+            latitude: data.location.latitude,
+            longitude: data.location.longitude,
+          }));
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.log('Error getting document:', error);
+      }
+    };
+
+    fetchReport();
+  }, [setReport, setViewPort, id]);
+
+  return null; // Komponen tidak merender apa pun, sehingga mengembalikan null
+};
+
+const GetReportByid = ({setReports, uid}) => {
+  useEffect(() => {
+    const getReports = async () => {
+      try {
+        const reportsCollection = collection(db, 'reports');
+        const q = query(reportsCollection, where('uid', '==', uid));
+        const reportsSnapshot = await getDocs(q);
+        const reportsData = reportsSnapshot.docs.map((doc) => doc.data());
+        setReports(reportsData);
+      } catch (error) {
+        console.error('Error getting reports: ', error);
+      }
+    };
+  
+    getReports();
+  }, [setReports, uid]);
   return null;
 };
 
@@ -106,6 +155,111 @@ const handleDeleteUser = async (userId) => {
   
     return null;
   };
+
+  const GetReviewWhereRole = ({ setReviews, idOffice }) => {
+    useEffect(() => {
+      const getReviews = async () => {
+        try {
+          let reviewsQuery;
+  
+          if (idOffice) {
+            reviewsQuery = query(
+              collectionGroup(db, 'reviews'),
+              where('idOffice', '==', idOffice)
+            );
+          } else {
+            reviewsQuery = query(collectionGroup(db, 'reviews'));
+          }
+  
+          const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+          const reviewsData = reviewsQuerySnapshot.docs.map((doc) => doc.data());
+          setReviews(reviewsData);
+        } catch (error) {
+          console.error('Error getting reviews:', error);
+          setReviews([]);
+        }
+      };
+  
+      getReviews();
+    }, [setReviews, idOffice]);
+  
+    return null;
+  };
   
 
-export {GetReport, GetUserById, GetUserWhereRole, handleDeleteUser, ProvincesSelect};
+  const updateUserProfile = async (uid, newData) => {
+    const auth = getAuth();
+  
+    try {
+      await updateProfile(auth.currentUser, {
+        displayName: newData.name,
+      });
+      const userRef = doc(db, 'users', uid);
+  
+      await updateDoc(userRef, newData);
+  
+      const updatedUser = {
+        ...newData,
+      };
+      return updatedUser;
+    } catch (error) {
+      throw new Error('Failed to update profile: ' + error.message);
+    }
+  };
+
+  const updatePasswordProfile = (currentPassword, newPassword) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  
+    return reauthenticateWithCredential(user, credential)
+      .then(() => {
+        return updatePassword(user, newPassword);
+      })
+      .catch((error) => {
+        throw new Error('Failed to update password: ' + error.message);
+      });
+  };
+
+  const handleDeleteAkun = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      user
+        .delete()
+        .then(() => {
+          console.log('User account deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Failed to delete user account:', error);
+        });
+    } else {
+      console.log('No user is currently signed in');
+    }
+  };
+
+  const handelChangeStatus = async (setReport, setStatus, id) => {
+    await updateDoc(doc(db, 'reports', id), { status: setStatus });
+
+        // Perbarui status secara lokal
+        setReport((prevReport) => ({
+          ...prevReport,
+          status: setStatus,
+        }));
+  }
+  
+
+export {
+  GetReport, 
+  GetUserById, 
+  GetReportByid, 
+  GetDetailReport,
+  GetUserWhereRole, 
+  handleDeleteUser, 
+  ProvincesSelect, 
+  GetReviewWhereRole, 
+  updateUserProfile, 
+  updatePasswordProfile, 
+  handleDeleteAkun,
+  handelChangeStatus};
