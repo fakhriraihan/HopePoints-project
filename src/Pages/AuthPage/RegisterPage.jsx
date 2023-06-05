@@ -34,8 +34,10 @@ const RegisterPage = () => {
 
       // Set user role in Firestore
       await setDoc(doc(collection(db, 'users'), user.uid), {
-        role: 'user', // Set the desired role here
+        uid: user.uid,
+        role: 'user', 
         name: name,
+        email: user.email,
         address: address,
         tlfn: tlfn,
       });

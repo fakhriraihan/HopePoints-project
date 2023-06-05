@@ -7,9 +7,9 @@ const MapPage = () => {
       <>
         <Navigation />
       </>
-      <>
+      <div className="map-comp" style={{ width: "100vw", height: "100vh" }}>
         <MapComponent/>
-      </>
+      </div>
     </>
   );
 };

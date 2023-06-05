@@ -1,83 +1,241 @@
-import React, { useState, useEffect } from "react";
-import MapGL, { Marker, Popup, NavigationControl, ScaleControl, GeolocateControl } from "react-map-gl";
+import React, { useState, useEffect } from 'react';
+import Map, {
+  NavigationControl,
+  ScaleControl,
+  GeolocateControl,
+  Source,
+  Layer,
+  Marker,
+  Popup,
+} from 'react-map-gl';
+import { useNavigate } from 'react-router-dom';
+import { GetReport } from '../../Utils/crudData';
+import * as firestore from 'firebase/firestore';
+import { db } from '../../Config/firebase';
+import { Form, Button, FloatingLabel } from 'react-bootstrap';
+import './popup.css';
+import { FaStar } from 'react-icons/fa';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
-  const [newPlace, setNewPlace] = useState(null); // [longitude, latitude
-  const [showPopup, setShowPopup] = React.useState(true);
+  const navigate = useNavigate();
+  const [reports, setReports] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [currentValue, setCurrentValue] = useState(0);
+  const [hoverValue, setHoverValue] = useState(undefined);
+  const stars = Array(5).fill(0);
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
     zoom: 4.3,
   });
 
-  const handleMarkerDragEnd = (event) => {
-    const { lngLat } = event;
-    const { lng, lat } = lngLat;
-    setNewPlace({ lat, long: lng });
+  const colors = {
+    orange: '#FFBA5A',
+    grey: '#a9a9a9',
+  };
+
+  const handleClick = (value) => {
+    setCurrentValue(value);
+
+    console.log(value);
+  };
+
+  const handleMouseOver = (newHoverValue) => {
+    setHoverValue(newHoverValue);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverValue(undefined);
+  };
+
+  const heatmapData = {
+    type: 'FeatureCollection',
+    features: reports.map((report) => ({
+      geometry: {
+        type: 'Point',
+        coordinates: [report.location.longitude, report.location.latitude],
+      },
+    })),
   };
 
   useEffect(() => {
-    // Set initial marker on map load
-    setNewPlace({
-      lat: viewport.latitude,
-      long: viewport.longitude,
-    });
-  }, []);
-
-  const handleGeolocateClick = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setViewPort((prevViewport) => ({
-          ...prevViewport,
-          longitude,
-          latitude,
+    const unsubscribe = firestore.onSnapshot(
+      firestore.query(
+        firestore.collection(db, 'users'),
+        firestore.where('role', '==', 'office')
+      ),
+      (snapshot) => {
+        const userList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
         }));
-        setNewPlace({ lat: latitude, long: longitude });
+        console.log('Retrieved data:', userList);
+        setUsers(userList);
       },
       (error) => {
-        console.error(error);
+        console.log(error);
       }
     );
-  };
 
-  useEffect(() => {
-    if (newPlace) {
-      console.log(newPlace);
-    }
-  }, [newPlace]);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
-    <div className="map-comp" style={{ width: "100vw", height: "100vh" }}>
-      <MapGL initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
-        {newPlace && (
-          <>
-            <Marker latitude={newPlace?.lat} longitude={newPlace?.long} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={true} onDragEnd={handleMarkerDragEnd} style={{ zIndex: 999 }}>
-              <i
-                className="fa-solid fa-location-dot"
-                style={{
-                  fontSize: 7 * viewport.zoom,
-                  color: "tomato",
-                  cursor: "pointer",
-                }}
-              ></i>
-            </Marker>
-          </>
-        )}
-        <GeolocateControl position="bottom-right" onGeolocate={handleGeolocateClick} />
-        <NavigationControl position="bottom-right" />
-        <ScaleControl />
-        {/* <Popup
-          longitude={113.764686933965}
-          latitude={0.6763165071501142}
-          anchor='bottom'
-          onClose={() => setShowPopup(false)}
-        >
-          You are here
-        </Popup> */}
-      </MapGL>
-    </div>
+    <Map
+      initialViewState={viewport}
+      mapboxAccessToken={token}
+      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+      width='100%'
+      height='100%'
+      onViewportChange={setViewPort}
+    >
+      <Source id='heatmapData' type='geojson' data={heatmapData}>
+        <Layer
+          id='heatmapLayer'
+          type='heatmap'
+          source='heatmapData'
+          maxzoom={15}
+          paint={{
+            'heatmap-weight': {
+              property: 'weight',
+              type: 'exponential',
+              stops: [
+                [1, 0],
+                [62, 1],
+              ],
+            },
+            'heatmap-intensity': {
+              stops: [
+                [11, 1],
+                [15, 3],
+              ],
+            },
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(236,222,239,0)',
+              0.2,
+              'rgb(208,209,230)',
+              0.4,
+              'yellow',
+              0.6,
+              'orange',
+              0.8,
+              'red',
+            ],
+            'heatmap-radius': {
+              stops: [
+                [11, 15],
+                [15, 20],
+              ],
+            },
+            'heatmap-opacity': {
+              default: 1,
+              stops: [
+                [14, 1],
+                [15, 0],
+              ],
+            },
+          }}
+        />
+      </Source>
+      {users.map((user) => (
+        <React.Fragment key={user.id}>
+          <Marker
+            latitude={user.location.latitude}
+            longitude={user.location.longitude}
+            offsetleft={-3.5 * viewport.zoom}
+            offsetTop={-7 * viewport.zoom}
+            draggable={false}
+            style={{ zIndex: 1 }}
+            onClick={() => setSelectedMarker(user)}
+          >
+            <i
+              className='fa-solid fa-building'
+              style={{
+                fontSize: 5 * viewport.zoom,
+                color: '#f94892',
+                cursor: 'pointer',
+              }}
+            ></i>
+          </Marker>
+          {selectedMarker !== null && selectedMarker.id === user.id && (
+            <Popup
+              latitude={selectedMarker.location.latitude}
+              longitude={selectedMarker.location.longitude}
+              closeButton={true}
+              closeOnClick={false}
+              anchor='left'
+              onClose={() => setSelectedMarker(null)}
+              style={{ zIndex: 1 }}
+            >
+              <div className='popup-content'>
+                {/* Konten popup */}
+                <h2>Informasi Dinas</h2>
+                <h4 className='nama-dinas'>{user.name}</h4>
+                <p>Alamat: {user.adress}</p>
+                <p>Phone: {user.phone}</p>
+
+                {/* Review */}
+                <div className='stars' style={styles.stars}>
+                  {stars.map((_, index) => {
+                    return (
+                      <FaStar
+                        key={index}
+                        size={24}
+                        onClick={() => handleClick(index + 1)}
+                        onMouseOver={() => handleMouseOver(index + 1)}
+                        onMouseLeave={handleMouseLeave}
+                        color={
+                          (hoverValue || currentValue) > index
+                            ? colors.orange
+                            : colors.grey
+                        }
+                        style={{
+                          marginRight: 10,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant='pink'
+                  onClick={() => navigate(`/detailoffice/${user.id}`)}
+                >
+                  Detail Office
+                </Button>
+              </div>
+            </Popup>
+          )}
+        </React.Fragment>
+      ))}
+
+      <GeolocateControl position='bottom-right' />
+      <NavigationControl position='bottom-right' />
+      <ScaleControl />
+      <GetReport setReports={setReports} />
+    </Map>
   );
 };
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  stars: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+};
+
 export default MapComponent;
