@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../Config/firebase";
@@ -23,7 +22,6 @@ export const useLogout = () => {
 
 export const useLogin = () => {
   const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const loginUser = async (email, password) => {
     try {
@@ -44,7 +42,7 @@ export const useLogin = () => {
       if (role === "admin" || role === "office") {
         window.location.href = '/dashboard';
       } else if (role === "user") {
-        navigate(-1);
+        window.location.href = '/';
       } else {
         console.log('error');
       }

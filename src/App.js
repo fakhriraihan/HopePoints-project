@@ -2,12 +2,10 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
-  useLocation
+  Navigate
 } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './Context/AuthContext';
-import Swal from 'sweetalert2';
 import HomePage from './Pages/HomePage/HomePage';
 import AboutPage from './Pages/AboutPage/AboutPage';
 import FormPage from './Pages/FormPage/FormPage';
@@ -30,40 +28,19 @@ import ForgotPage from './Pages/AuthPage/forgotPage';
 
 const App = () => {
   
-const RequireAuth = ({ children, requiredRole }) => {
-  const { currentUser } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Check if the user role matches any of the required roles
-  const isAuthorized =
-    Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
-
-  const isFormPage = location.pathname === '/form';
-
-  if (isAuthorized) {
-    return children;
-  } else {
-    if (isFormPage) {
-      Swal.fire({
-        title: 'Konfirmasi',
-        text: 'Anda harus login untuk mengakses halaman ini',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Batal',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/login');
-        } else {
-          navigate(-1);
-        }
-      });
+  const RequireAuth = ({ children, requiredRole }) => {
+    
+    const { currentUser } = useContext(AuthContext);
+  
+    // Check if the user role matches any of the required roles
+    const isAuthorized = Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
+  
+    if (isAuthorized) {
+      return children;
+    } else {
+      return <Navigate to="/login" />;
     }
-
-    return null;
-  }
-};
+  };
 
   return (
     <>
