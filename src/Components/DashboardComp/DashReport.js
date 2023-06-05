@@ -2,15 +2,35 @@ import React, { useState } from 'react';
 import Nav from '../../Components/DashboardComp/Nav';
 import { Table, Button, Card} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { GetReport } from '../../Utils/crudData';
+import { GetReport, handleDeleteReport } from '../../Utils/crudData';
 import './dashboardcomp.css';
-import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage, } from "../../Utils/UserData";
+import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage} from "../../Utils/UserData";
+import Swal from 'sweetalert2';
 
 const DashReport = ({ Toggle }) => {
   const Navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
+
+  const handleDelete = (reportId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to delete this report. This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteReport(reportId);
+        Swal.fire('Deleted!', 'The report has been deleted.', 'success');
+      }
+    });
+  };
+  
       
   return (
     <div className='px-3'>
@@ -44,10 +64,17 @@ const DashReport = ({ Toggle }) => {
                   <td>
                     <Button
                       variant='info'
-                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)} >
+                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)}
+                    >
                       <i className='fa-solid fa-eye'></i>
-                    </Button>{' '}
+                    </Button>
+                    {userRole === 'admin' && (
+                      <Button variant='danger' style={{marginTop: '5px'}} onClick={() => handleDelete(report.idReport)}>
+                        <i className='fa-solid fa-trash-can'></i>
+                      </Button>
+                    )}
                   </td>
+
                 </tr>
               ))}
             </tbody>
