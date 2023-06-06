@@ -1,48 +1,21 @@
 import React from 'react';
 import Navigation from '../../Components/Navigation/Navigation';
 import './Login.css';
-import { useContext, useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../Config/firebase";
-import { AuthContext } from "../../Context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
+import { useState } from "react";
+import { useLogin } from '../../Utils/auth';
 
 const LoginPage = () => {
     const [error, setError] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-  
-  
-    const { dispatch } = useContext(AuthContext);
+
+    const loginUser = useLogin();
   
     const handleLogin = async (e) => {
       e.preventDefault();
     
       try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-    
-        const user = userCredential.user;
-    
-        // Retrieve user role from Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userData = userDoc.data();
-        const role = userData.role;
-    
-        dispatch({ type: "LOGIN", payload: { user, role } });
-    
-        if (role === "admin" || role === "office") {
-          window.location.href = "/dashboard";
-        } else if (role === "user") {
-          window.location.href = "/";
-        } else {
-          setError(true);
-        }
-    
-        console.log(user);
+       await loginUser(email, password)
       } catch (error) {
         setError(true);
       }
@@ -58,7 +31,7 @@ const LoginPage = () => {
         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
         <input type="submit" value="Log In" />
             <div className="links">
-                <a href="/">Forgot password</a>
+                <a href="/forgot">Forgot password</a>
                 <a href="/register">Register</a>
             </div>
         {error && <span className='wrong-login'>Wrong email or password!</span>}

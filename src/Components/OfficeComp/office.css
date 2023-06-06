@@ -1,0 +1,22 @@
+.office-container {
+  margin-top: 5rem;
+  padding: 0 7%;
+}
+
+.cari {
+  border: none;
+  background-color: transparent;
+}
+
+.cari:hover {
+  color: #f94892;
+}
+
+.lihat-detail {
+  border: none;
+  background-color: transparent;
+}
+
+.lihat-detail:hover {
+  color: #f94892;
+}

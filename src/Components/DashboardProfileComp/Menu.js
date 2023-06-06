@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Nav, ListGroup } from 'react-bootstrap';
+import { handleDeleteAkun } from '../../Utils/crudData';
 
 function MenuProfile() {
   return (
@@ -13,8 +14,11 @@ function MenuProfile() {
                 <ListGroup.Item action href='/profile/list'>
                   List Reports
                 </ListGroup.Item>
-                <ListGroup.Item action href='/'>
-                  Logout
+                <ListGroup.Item action href='/profile/change'>
+                  Change Password
+                </ListGroup.Item>
+                <ListGroup.Item action onClick={handleDeleteAkun}>
+                  Delete Account
                 </ListGroup.Item>
               </ListGroup>
             </Nav>

@@ -14,7 +14,6 @@ const Nav = ({ Toggle }) => {
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
-
   };
 
   return (

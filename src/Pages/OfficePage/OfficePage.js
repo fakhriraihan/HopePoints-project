@@ -1,16 +1,16 @@
 import React from 'react';
 import Navigation from '../../Components/Navigation/Navigation';
-import About from '../../Components/AboutComp/About';
+import Office from '../../Components/OfficeComp/Office';
 import Footer from '../../Components/Footer/Footer';
 
-const AboutPage = () => {
+const OfficePage = () => {
   return (
     <>
       <Navigation />
-      <About />
+      <Office />
       <Footer />
     </>
   );
 };
 
-export default AboutPage;
+export default OfficePage;

@@ -1,38 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Container, Row, Col, Table, Button, Card } from 'react-bootstrap';
 import Navigation from '../../Components/Navigation/Navigation';
 import MenuProfile from '../../Components/DashboardProfileComp/Menu';
-import { collection, getDocs, query, where} from 'firebase/firestore';
-import { db } from '../../Config/firebase';
+import { getIdOfficeFromLocalStorage } from '../../Utils/UserData';
+import {GetReportByid} from '../../Utils/crudData';
+import './profile.css';
 
 function ListReportProfile() {
-    
 
   const [reports, setReports] = useState([]);
-  const usersData = localStorage.getItem("user");
-  const user = JSON.parse(usersData);
-  const userData = user.user;
-  const uid = userData.uid;
+  const uid = getIdOfficeFromLocalStorage();
 
-  useEffect(() => {
-    const getReports = async () => {
-      try {
-        const reportsCollection = collection(db, 'reports');
-        const q = query(reportsCollection, where('uid', '==', uid));
-        const reportsSnapshot = await getDocs(q);
-        const reportsData = reportsSnapshot.docs.map((doc) => doc.data());
-        setReports(reportsData);
-      } catch (error) {
-        console.error('Error getting reports: ', error);
-      }
-    };
-  
-    getReports();
-  }, [uid]);
   return (
     <>
       <Navigation />
-      <Container fluid style={{ marginTop: '5rem' }}>
+      <Container className='profile-container'>
         <Row>
           <MenuProfile />
           <Col sm={9}>
@@ -46,8 +28,7 @@ function ListReportProfile() {
                         <tr>
                             <th>No</th>
                             <th>Date</th>
-                            <th>Name</th>
-                            <th>Categories</th>
+                            <th>Title</th>
                             <th>Office</th>
                             <th>Status</th>
                         </tr>
@@ -56,12 +37,9 @@ function ListReportProfile() {
                         {reports.map((report, index) => (
                             <tr key={report.idReport}>
                             <td>{index + 1}</td>
-                            <td></td>
-                            <td>{report.name}</td>
-                            <td>{report.kekerasanFisik && <small>Fisik </small>}
-                                {report.kekerasanPsikis && <small>Psikis </small>}
-                                {report.kekerasanSeksual && <small>Seksual</small>}</td>
-                            <td>{report.province}</td>
+                            <td>{report.tgl}</td>
+                            <td>{report.title}</td>
+                            <td>{report.nameOffice}</td>
                             <td>{report.status}</td>
                             </tr>
                         ))}
@@ -71,6 +49,7 @@ function ListReportProfile() {
             </Card>
           </Col>
         </Row>
+        <GetReportByid setReports={setReports} uid={uid}/>
       </Container>
     </>
   );

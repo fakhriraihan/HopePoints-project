@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker, Popup } from 'react-map-gl';
+import Map, {
+  NavigationControl,
+  ScaleControl,
+  GeolocateControl,
+  Source,
+  Layer,
+  Marker,
+  Popup,
+} from 'react-map-gl';
+import { useNavigate } from 'react-router-dom';
 import { GetReport } from '../../Utils/crudData';
 import * as firestore from 'firebase/firestore';
 import { db } from '../../Config/firebase';
@@ -9,6 +18,7 @@ import { FaStar } from 'react-icons/fa';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -52,9 +62,15 @@ const MapComponent = () => {
 
   useEffect(() => {
     const unsubscribe = firestore.onSnapshot(
-      firestore.query(firestore.collection(db, 'users'), firestore.where('role', '==', 'office')),
+      firestore.query(
+        firestore.collection(db, 'users'),
+        firestore.where('role', '==', 'office')
+      ),
       (snapshot) => {
-        const userList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const userList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         console.log('Retrieved data:', userList);
         setUsers(userList);
       },
@@ -69,12 +85,19 @@ const MapComponent = () => {
   }, []);
 
   return (
-    <Map initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
-      <Source id="heatmapData" type="geojson" data={heatmapData}>
+    <Map
+      initialViewState={viewport}
+      mapboxAccessToken={token}
+      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+      width='100%'
+      height='100%'
+      onViewportChange={setViewPort}
+    >
+      <Source id='heatmapData' type='geojson' data={heatmapData}>
         <Layer
-          id="heatmapLayer"
-          type="heatmap"
-          source="heatmapData"
+          id='heatmapLayer'
+          type='heatmap'
+          source='heatmapData'
           maxzoom={15}
           paint={{
             'heatmap-weight': {
@@ -91,7 +114,21 @@ const MapComponent = () => {
                 [15, 3],
               ],
             },
-            'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(236,222,239,0)', 0.2, 'rgb(208,209,230)', 0.4, 'yellow', 0.6, 'orange', 0.8, 'red'],
+            'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0,
+              'rgba(236,222,239,0)',
+              0.2,
+              'rgb(208,209,230)',
+              0.4,
+              'yellow',
+              0.6,
+              'orange',
+              0.8,
+              'red',
+            ],
             'heatmap-radius': {
               stops: [
                 [11, 15],
@@ -118,52 +155,71 @@ const MapComponent = () => {
             draggable={false}
             style={{ zIndex: 1 }}
             onClick={() => setSelectedMarker(user)}
-          ></Marker>
+          >
+            <i
+              className='fa-solid fa-building'
+              style={{
+                fontSize: 5 * viewport.zoom,
+                color: '#f94892',
+                cursor: 'pointer',
+              }}
+            ></i>
+          </Marker>
           {selectedMarker !== null && selectedMarker.id === user.id && (
-            <Popup latitude={selectedMarker.location.latitude} longitude={selectedMarker.location.longitude} closeButton={true} closeOnClick={false} anchor="left" onClose={() => setSelectedMarker(null)} style={{ zIndex: 1 }}>
-              <div className="popup-content">
+            <Popup
+              latitude={selectedMarker.location.latitude}
+              longitude={selectedMarker.location.longitude}
+              closeButton={true}
+              closeOnClick={false}
+              anchor='left'
+              onClose={() => setSelectedMarker(null)}
+              style={{ zIndex: 1 }}
+            >
+              <div className='popup-content'>
                 {/* Konten popup */}
                 <h2>Informasi Dinas</h2>
-                <h4 className="nama-dinas">{user.name}</h4>
+                <h4 className='nama-dinas'>{user.name}</h4>
                 <p>Alamat: {user.adress}</p>
                 <p>Phone: {user.phone}</p>
 
                 {/* Review */}
-                <form>
-                  <FloatingLabel controlId="floatingTextarea" label="Masukkan Review Anda " className="mb-3">
-                    <Form.Control as="textarea" placeholder="Leave a comment here" />
-                  </FloatingLabel>
-                  <div className="stars" style={styles.stars}>
-                    {stars.map((_, index) => {
-                      return (
-                        <FaStar
-                          key={index}
-                          size={24}
-                          onClick={() => handleClick(index + 1)}
-                          onMouseOver={() => handleMouseOver(index + 1)}
-                          onMouseLeave={handleMouseLeave}
-                          color={(hoverValue || currentValue) > index ? colors.orange : colors.grey}
-                          style={{
-                            marginRight: 10,
-                            cursor: 'pointer',
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
+                <div className='stars' style={styles.stars}>
+                  {stars.map((_, index) => {
+                    return (
+                      <FaStar
+                        key={index}
+                        size={24}
+                        onClick={() => handleClick(index + 1)}
+                        onMouseOver={() => handleMouseOver(index + 1)}
+                        onMouseLeave={handleMouseLeave}
+                        color={
+                          (hoverValue || currentValue) > index
+                            ? colors.orange
+                            : colors.grey
+                        }
+                        style={{
+                          marginRight: 10,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    );
+                  })}
+                </div>
 
-                  <Button variant="pink" type="submit">
-                    Submit
-                  </Button>
-                </form>
+                <Button
+                  variant='pink'
+                  onClick={() => navigate(`/detailoffice/${user.id}`)}
+                >
+                  Detail Office
+                </Button>
               </div>
             </Popup>
           )}
         </React.Fragment>
       ))}
 
-      <GeolocateControl position="bottom-right" />
-      <NavigationControl position="bottom-right" />
+      <GeolocateControl position='bottom-right' />
+      <NavigationControl position='bottom-right' />
       <ScaleControl />
       <GetReport setReports={setReports} />
     </Map>
