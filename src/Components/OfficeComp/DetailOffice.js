@@ -247,6 +247,7 @@ const DetailOffice = () => {
                         style={{ height: '170px' }}
                         placeholder='Leave a comment here'
                         name='comment'
+                        required
                       />
                     </FloatingLabel>
 

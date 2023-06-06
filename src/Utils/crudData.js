@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { collectionGroup, collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc, updateDoc } from 'firebase/firestore';
-import { getAuth, updateProfile, reauthenticateWithCredential, updatePassword, EmailAuthProvider } from 'firebase/auth';
+import { getAuth, updateProfile, reauthenticateWithCredential, updatePassword, EmailAuthProvider, deleteUser } from 'firebase/auth';
 import { db } from '../Config/firebase';
 
 const GetReport = ({ setReports, idOffice }) => {
@@ -244,21 +244,18 @@ const updatePasswordProfile = (currentPassword, newPassword) => {
     });
 };
 
-const handleDeleteAkun = () => {
+const handleDeleteAkun = async () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
   if (user) {
-    user
-      .delete()
-      .then(() => {
-        console.log('User account deleted successfully');
-      })
-      .catch((error) => {
-        console.error('Failed to delete user account:', error);
-      });
+      const userId = user.uid;
+      const userRef = doc(db, 'users', userId);
+      await deleteDoc(userRef);
+      await deleteUser(user);
+      console.log('Akun pengguna berhasil dihapus');
   } else {
-    console.log('No user is currently signed in');
+    console.log('Tidak ada pengguna yang saat ini masuk');
   }
 };
 

@@ -45,6 +45,7 @@ const DashReport = ({ Toggle }) => {
                 <th>Date</th>
                 <th>Name</th>
                 <th>Categories</th>
+                <th>Title</th>
                 <th>Office</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -59,6 +60,7 @@ const DashReport = ({ Toggle }) => {
                   <td>{report.kekerasanFisik && <small>Fisik </small>}
                       {report.kekerasanPsikis && <small>Psikis </small>}
                       {report.kekerasanSeksual && <small>Seksual</small>}</td>
+                      <td>{report.title}</td>
                   <td>{report.nameOffice}</td>
                   <td>{report.status}</td>
                   <td>

@@ -30,9 +30,13 @@
 }
 
 .tgl-comment {
-  font-size: .75rem;
+  font-size: .7rem;
 }
 
 .comment-office {
-  font-size: 1.2rem;
+  font-size: .9rem;
+}
+
+.reply-comment {
+  font-size: .9rem;
 }
