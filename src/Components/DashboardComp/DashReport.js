@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import Nav from '../../Components/DashboardComp/Nav';
-import { Table, Button, Card} from 'react-bootstrap';
+import { Table, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { GetReport } from '../../Utils/crudData';
 import './dashboardcomp.css';
-import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage, } from "../../Utils/UserData";
+import {
+  getUserRoleFromLocalStorage,
+  getIdOfficeFromLocalStorage,
+} from '../../Utils/UserData';
 
-const DashReport = ({ Toggle }) => {
+const DashReport = () => {
   const Navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
-      
+
   return (
-    <div className='px-3'>
-      <Nav Toggle={Toggle} />
-      <h2 className='text-white mb-3'>Table Report</h2>
+    <div className='container-dashboard'>
+      <h2 className='text-white text-center mb-3'>Table Report</h2>
       <Card>
         <Card.Body>
-          <Table responsive bordered hover className='bg-white'>
+          <Table responsive bordered hover className='table bg-white'>
             <thead>
               <tr>
                 <th>No</th>
@@ -36,15 +37,20 @@ const DashReport = ({ Toggle }) => {
                   <td>{index + 1}</td>
                   <td>{report.tgl}</td>
                   <td>{report.name}</td>
-                  <td>{report.kekerasanFisik && <small>Fisik </small>}
-                      {report.kekerasanPsikis && <small>Psikis </small>}
-                      {report.kekerasanSeksual && <small>Seksual</small>}</td>
+                  <td>
+                    {report.kekerasanFisik && <small>Fisik </small>}
+                    {report.kekerasanPsikis && <small>Psikis </small>}
+                    {report.kekerasanSeksual && <small>Seksual</small>}
+                  </td>
                   <td>{report.nameOffice}</td>
                   <td>{report.status}</td>
                   <td>
                     <Button
                       variant='info'
-                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)} >
+                      onClick={() =>
+                        Navigate(`/dashboard/report/detail/${report.idReport}`)
+                      }
+                    >
                       <i className='fa-solid fa-eye'></i>
                     </Button>{' '}
                   </td>
@@ -59,7 +65,6 @@ const DashReport = ({ Toggle }) => {
       ) : (
         <GetReport setReports={setReports} idOffice={idOffice} />
       )}
-      
     </div>
   );
 };

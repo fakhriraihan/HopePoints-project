@@ -2,6 +2,15 @@
   min-height: 100vh;
 }
 
+.logo-dashboard {
+  margin-right: 10px;
+  width: 44px;
+}
+
+.brand-name {
+  font-weight: 600;
+}
+
 .list-group a:hover {
   background-color: #f94892;
   border-radius: 10px;
@@ -33,4 +42,59 @@
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
+}
+
+.icon-sidebar {
+  margin-right: 10px;
+}
+
+.container-dashboard {
+  margin: 45px 15px 0 15px;
+}
+
+@media screen and (max-width: 1025px) {
+  .logo-dashboard {
+    margin-right: 0;
+  }
+  .brand-name {
+    display: none;
+  }
+  .text-sidebar {
+    display: none;
+  }
+  .icon-sidebar {
+    font-size: 1.2rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 915px) {
+  .logo-dashboard {
+    margin-right: 0;
+  }
+  .brand-name {
+    display: none;
+  }
+  .text-sidebar {
+    display: none;
+  }
+  .icon-sidebar {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon-dropdown {
+    display: none;
+  }
+  .button-account {
+    display: flex;
+    justify-content: center;
+  }
+  .container-dashboard {
+    margin: 45px 5px 0 5px;
+  }
 }
