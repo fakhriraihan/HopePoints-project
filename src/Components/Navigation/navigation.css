@@ -1,21 +1,9 @@
-/* nav.navbar {
-  padding: 18px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 999;
-  transition: 0.3s ease-in-out;
-  -webkit-transition: 0.3s ease-in-out;
-  -moz-transition: 0.3s ease-in-out;
-  -ms-transition: 0.3s ease-in-out;
-  -o-transition: 0.3s ease-in-out;
-} */
-
 nav.navbar a.navbar-brand {
   font-size: 1.5rem;
   font-weight: 600;
   color: black;
   text-decoration: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 nav.navbar a.navbar-brand > img {
@@ -51,8 +39,10 @@ nav.navbar .navbar-nav .navbar-dropdown:hover {
 nav.navbar .navbar-nav .nav-link.navbar-link:hover,
 nav.navbar .navbar-nav #basic-nav-dropdown:hover,
 nav.navbar .navbar-nav .navbar-dropdown:hover,
-nav.navbar .navbar-nav .nav-link.navbar-link.active {
+nav.navbar .navbar-nav .nav-link.navbar-link.active,
+nav.navbar .navbar-nav #basic-nav-dropdown.active {
   color: #f94892;
+  border-bottom: 2px solid #f94892;
 }
 
 nav.navbar span {

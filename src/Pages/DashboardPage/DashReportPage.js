@@ -7,7 +7,7 @@ import './dashboardpage.css';
 import DashFooter from '../../Components/DashboardComp/DashFooter';
 
 const DashReportPage = () => {
-  const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(false);
   const Toggle = () => {
     setToggle(!toggle);
   };
