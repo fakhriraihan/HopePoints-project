@@ -1,5 +1,4 @@
 import React from 'react';
-import Nav from '../../Components/DashboardComp/Nav';
 import Map, {
   Marker,
   NavigationControl,
@@ -7,6 +6,7 @@ import Map, {
   GeolocateControl,
 } from 'react-map-gl';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import './dashboardcomp.css';
 import { GetReport } from '../../Utils/crudData';
@@ -19,7 +19,8 @@ const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const userRole = getUserRoleFromLocalStorage();
 const idOffice = getIdOfficeFromLocalStorage();
 
-const Dashboard = ({ Toggle }) => {
+const Dashboard = () => {
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
@@ -39,21 +40,27 @@ const Dashboard = ({ Toggle }) => {
     return doneReports.length;
   };
 
+  const getCanceledReportsCount = () => {
+    const canceledReports = reports.filter(
+      (report) => report.status === 'tolak'
+    );
+    return canceledReports.length;
+  };
+
   return (
-    <div className='px-3'>
-      <Nav Toggle={Toggle} />
-      <h2 className='text-white mb-3'>Dashboard</h2>
+    <div className='container-dashboard'>
+      <h2 className='text-white text-center mb-3'>Dashboard</h2>
       <div className='container-fluid px-0'>
         <div className='row g-3 d-flex justify-content-between'>
-          <div className='col-md-4'>
+          <div className='col-md-3'>
             <Card>
               <Card.Body className='text-center'>
-                <Card.Title as='h3'>Pelaporan</Card.Title>
+                <Card.Title as='h3'>Laporan</Card.Title>
                 <Card.Text className='fs-4'>{reports.length}</Card.Text>
               </Card.Body>
             </Card>
           </div>
-          <div className='col-md-4'>
+          <div className='col-md-3'>
             <Card>
               <Card.Body className='text-center'>
                 <Card.Title as='h3'>Proses</Card.Title>
@@ -63,7 +70,7 @@ const Dashboard = ({ Toggle }) => {
               </Card.Body>
             </Card>
           </div>
-          <div className='col-md-4'>
+          <div className='col-md-3'>
             <Card>
               <Card.Body className='text-center'>
                 <Card.Title as='h3'>Selesai</Card.Title>
@@ -71,8 +78,18 @@ const Dashboard = ({ Toggle }) => {
               </Card.Body>
             </Card>
           </div>
+          <div className='col-md-3'>
+            <Card>
+              <Card.Body className='text-center'>
+                <Card.Title as='h3'>Ditolak</Card.Title>
+                <Card.Text className='fs-4'>
+                  {getCanceledReportsCount()}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </div>
         </div>
-        <Card className='my-3' style={{ width: '100%', height: '28rem' }}>
+        <Card className='my-3' style={{ width: '100wh', height: '30.5rem' }}>
           <Card.Body>
             <Map
               initialViewState={viewport}
@@ -91,6 +108,9 @@ const Dashboard = ({ Toggle }) => {
                   offsetTop={-7 * viewport.zoom}
                   draggable={false}
                   style={{ zIndex: 999 }}
+                  onClick={() =>
+                    navigate(`/dashboard/report/detail/${report.idReport}`)
+                  }
                 >
                   <i
                     className='fa-solid fa-location-dot'

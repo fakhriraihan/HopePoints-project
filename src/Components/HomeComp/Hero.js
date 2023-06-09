@@ -27,7 +27,7 @@ const Hero = () => {
           </div>
         </div>
       </Container>
-      <section className='feature'>
+      <section className='feature min-vh-100'>
         <h1 className='fiturTitle'>Explore Our Feature</h1>
         <div className='overlay'>
           <div className='featureForm'>
@@ -43,7 +43,7 @@ const Hero = () => {
             <h2 className='featureFormTitle'>Office</h2>
           </div>
         </div>
-        <button onClick={() => navigate('')}>Registrasi</button>
+        <button onClick={() => navigate('/register')}>Registrasi</button>
       </section>
       <section className='faq'>
         <div className='container'>
