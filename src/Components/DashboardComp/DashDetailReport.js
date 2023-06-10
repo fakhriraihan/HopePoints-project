@@ -100,7 +100,6 @@ const DashDetailReport = () => {
   return (
     <div className='container-dashboard'>
       <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
-      <Nav Toggle={Toggle} />
       <h2 className='text-white my-3'>Detail Report</h2>
       <Card className='mb-5'>
       <Card.Header>
