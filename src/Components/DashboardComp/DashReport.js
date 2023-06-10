@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import Nav from '../../Components/DashboardComp/Nav';
-import { Table, Button, Card} from 'react-bootstrap';
+import { Table, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { GetReport, handleDeleteReport } from '../../Utils/crudData';
 import './dashboardcomp.css';
 import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage} from "../../Utils/UserData";
 import Swal from 'sweetalert2';
 
-const DashReport = ({ Toggle }) => {
+const DashReport = () => {
   const Navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const userRole = getUserRoleFromLocalStorage();
@@ -31,14 +30,13 @@ const DashReport = ({ Toggle }) => {
     });
   };
   
-      
+     
   return (
-    <div className='px-3'>
-      <Nav Toggle={Toggle} />
-      <h2 className='text-white mb-3'>Table Report</h2>
+    <div className='container-dashboard'>
+      <h2 className='text-white text-center mb-3'>Table Report</h2>
       <Card>
         <Card.Body>
-          <Table responsive bordered hover className='bg-white'>
+          <Table responsive bordered hover className='table bg-white'>
             <thead>
               <tr>
                 <th>No</th>
@@ -88,7 +86,6 @@ const DashReport = ({ Toggle }) => {
       ) : (
         <GetReport setReports={setReports} idOffice={idOffice} />
       )}
-      
     </div>
   );
 };

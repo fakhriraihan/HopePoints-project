@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Nav from '../../Components/DashboardComp/Nav';
 import Map, {
   Marker,
   NavigationControl,
@@ -12,7 +11,7 @@ import { GetDetailReport, handelChangeStatus } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
-const DashDetailReport = ({ Toggle }) => {
+const DashDetailReport = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [report, setReport] = useState(null);
@@ -40,7 +39,7 @@ const DashDetailReport = ({ Toggle }) => {
       if (isConfirmed) {
         // Perbarui status menjadi "Diproses" di database
         const setStatus = 'proses';
-        handelChangeStatus(setReport, setStatus, id)
+        handelChangeStatus(setReport, setStatus, id);
 
         Swal.fire('Berhasil', 'Status laporan berhasil diperbarui!', 'success');
       }
@@ -64,7 +63,7 @@ const DashDetailReport = ({ Toggle }) => {
 
       if (isConfirmed) {
         const setStatus = 'selesai';
-        handelChangeStatus(setReport, setStatus, id)
+        handelChangeStatus(setReport, setStatus, id);
 
         Swal.fire('Berhasil', 'Status laporan berhasil diperbarui!', 'success');
       }
@@ -99,7 +98,7 @@ const DashDetailReport = ({ Toggle }) => {
 
 
   return (
-    <div className='px-3'>
+    <div className='container-dashboard'>
       <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
       <Nav Toggle={Toggle} />
       <h2 className='text-white my-3'>Detail Report</h2>
@@ -130,20 +129,19 @@ const DashDetailReport = ({ Toggle }) => {
             <div className='col-md-6'>
               <label className='mb-2'><b>LOKASI KEJADIAN</b></label>
               <Card className='mb-3' style={{ width: '100%', height: '25rem' }}>
-                
                 <Card.Body>
-                {report && report.location && (
-                  <Map
-                    initialViewState={viewport}
-                    mapboxAccessToken={token}
-                    mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
-                    width='100%'
-                    height='100%'
-                    onViewportChange={setViewPort}
-                  >
+                  {report && report.location && (
+                    <Map
+                      initialViewState={viewport}
+                      mapboxAccessToken={token}
+                      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+                      width='100%'
+                      height='100%'
+                      onViewportChange={setViewPort}
+                    >
                       <Marker
                         key={report?.idReport}
-                        latitude={report?.location.latitude }
+                        latitude={report?.location.latitude}
                         longitude={report?.location.longitude}
                         offsetleft={-3.5 * viewport.zoom}
                         offsetTop={-7 * viewport.zoom}
@@ -159,79 +157,78 @@ const DashDetailReport = ({ Toggle }) => {
                           }}
                         ></i>
                       </Marker>
-                    <GeolocateControl position='bottom-right' />
-                    <NavigationControl position='bottom-right' />
-                    <ScaleControl />
-                  </Map>
-                )}
+                      <GeolocateControl position='bottom-right' />
+                      <NavigationControl position='bottom-right' />
+                      <ScaleControl />
+                    </Map>
+                  )}
                 </Card.Body>
               </Card>
             </div>
             <div className='col-md-6'>
               <label className='mb-2'><b>DETAIL KEJADIAN</b></label>
               <Form>
-              <Form.Group className='mb-3' controlId='formGroupName'>
-                <Form.Label>Infromasi Pelapor</Form.Label>
-                <Card>
-                  <Card.Body
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <div>
-                      <Card.Text>
-                        <strong>Name:</strong> {report?.name}
-                        <br />
-                        <strong>Email:</strong> {report?.email}
-                        <br />
-                        <strong>Telephone:</strong> {report?.tlfn}
-                      </Card.Text>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Form.Group>
-              <Form.Group className='mb-3' controlId='formGroupTitle'>
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  type='text'
-                  defaultValue={report?.title}
-                  readOnly
-                />
-              </Form.Group>
+                <Form.Group className='mb-3' controlId='formGroupName'>
+                  <Form.Label>Infromasi Pelapor</Form.Label>
+                  <Card>
+                    <Card.Body
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div>
+                        <Card.Text>
+                          <strong>Name:</strong> {report?.name}
+                          <br />
+                          <strong>Email:</strong> {report?.email}
+                          <br />
+                          <strong>Telephone:</strong> {report?.tlfn}
+                        </Card.Text>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='formGroupTitle'>
+                  <Form.Label>Title</Form.Label>
+                  <Form.Control
+                    type='text'
+                    defaultValue={report?.title}
+                    readOnly
+                  />
+                </Form.Group>
 
-              <Form.Group className='mb-3' controlId='formGroupName'>
-                <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
-                <Form.Control
-                  type='dateandtime'
-                  placeholder=''
-                  defaultValue={report?.tglkejadian}
-                  readOnly
-                />
-              </Form.Group>
+                <Form.Group className='mb-3' controlId='formGroupName'>
+                  <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
+                  <Form.Control
+                    type='dateandtime'
+                    placeholder=''
+                    defaultValue={report?.tglkejadian}
+                    readOnly
+                  />
+                </Form.Group>
 
-              <Form.Group className='mb-3' controlId='formGridAddress'>
-                <Form.Label>Jenis Kekerasan</Form.Label>
-                <Form.Control
-                  placeholder='1234 Main St'
-                  defaultValue={
-                    (report?.kekerasanFisik ? 'Fisik ' : '') +
-                    (report?.kekerasanPsikis ? 'Psikis ' : '') +
-                    (report?.kekerasanSeksual ? 'Seksual' : '')
-                  }
-                  readOnly
-                />
-              </Form.Group>
+                <Form.Group className='mb-3' controlId='formGridAddress'>
+                  <Form.Label>Jenis Kekerasan</Form.Label>
+                  <Form.Control
+                    placeholder='1234 Main St'
+                    defaultValue={
+                      (report?.kekerasanFisik ? 'Fisik ' : '') +
+                      (report?.kekerasanPsikis ? 'Psikis ' : '') +
+                      (report?.kekerasanSeksual ? 'Seksual' : '')
+                    }
+                    readOnly
+                  />
+                </Form.Group>
 
-              <Form.Group className='mb-3' controlId='formGridAddress'>
-                <Form.Label>Kantor Terdekat</Form.Label>
-                <Form.Control
-                  placeholder='1234 Main St'
-                  defaultValue={report?.nameOffice}
-                  readOnly
-                />
-              </Form.Group>
-
+                <Form.Group className='mb-3' controlId='formGridAddress'>
+                  <Form.Label>Kantor Terdekat</Form.Label>
+                  <Form.Control
+                    placeholder='1234 Main St'
+                    defaultValue={report?.nameOffice}
+                    readOnly
+                  />
+                </Form.Group>
               <Form.Group className='mb-3' controlId='formGridDescription'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control
@@ -271,12 +268,10 @@ const DashDetailReport = ({ Toggle }) => {
                   </>
                 )}
               </Form>
-              
             </div>
           </div>
         </Card.Body>
       </Card>
-
     </div>
   );
 };

@@ -60,7 +60,7 @@ const DashReview = ({ Toggle }) => {
   };
 
   return (
-    <div className='px-3'>
+    <div className='container-dashboard'>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Reply to {selectedReview?.name}</Modal.Title>
@@ -86,22 +86,8 @@ const DashReview = ({ Toggle }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Nav Toggle={Toggle} />
-      <h2 className='text-white mb-3'>Table Review</h2>
+      <h2 className='text-white text-center mb-3'>Table Review</h2>
       <Card>
-        <Card.Header className='d-flex align-items-center justify-content-end'>
-          <Form className='d-flex'>
-            <Form.Control
-              type='search'
-              placeholder='Search'
-              className='me-2'
-              aria-label='Search'
-            />
-            <Button variant='outline-success'>
-              <i className='fa-solid fa-magnifying-glass'></i>
-            </Button>
-          </Form>
-        </Card.Header>
         <Card.Body>
           <Table responsive bordered hover className='bg-white'>
             <thead>
