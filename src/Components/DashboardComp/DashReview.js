@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import Nav from './Nav';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
-import { GetReviewWhereRole, handleReplyReview, handleDeleteReview } from '../../Utils/crudData';
-import { getUserRoleFromLocalStorage, getIdOfficeFromLocalStorage } from "../../Utils/UserData";
+import {
+  GetReviewWhereRole,
+  handleReplyReview,
+  handleDeleteReview,
+} from '../../Utils/crudData';
+import {
+  getUserRoleFromLocalStorage,
+  getIdOfficeFromLocalStorage,
+} from '../../Utils/UserData';
 import Swal from 'sweetalert2';
 
 const DashReview = ({ Toggle }) => {
-
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
   const [show, setShow] = useState(false);
@@ -30,10 +35,10 @@ const DashReview = ({ Toggle }) => {
       const reviewId = selectedReview.id;
       const reply = replyValue;
       const userId = selectedReview.idOffice;
-  
+
       await handleReplyReview(userId, reviewId, reply, setReviews);
       handleClose();
-  
+
       Swal.fire({
         title: 'Success',
         text: 'Reply submitted successfully',
@@ -123,7 +128,10 @@ const DashReview = ({ Toggle }) => {
                                 style={{
                                   marginRight: 2,
                                   cursor: 'pointer',
-                                  color: review.rating > index ? colors.orange : colors.grey,
+                                  color:
+                                    review.rating > index
+                                      ? colors.orange
+                                      : colors.grey,
                                 }}
                               />
                             );
@@ -133,14 +141,22 @@ const DashReview = ({ Toggle }) => {
                     )}
                     {userRole === 'admin' ? (
                       <td>
-                        <Button variant='danger' onClick={() => handleHapusReview(review.id, review.idOffice)}>
+                        <Button
+                          variant='danger'
+                          onClick={() =>
+                            handleHapusReview(review.id, review.idOffice)
+                          }
+                        >
                           <i className='fa-solid fa-trash-can'></i>
                         </Button>
                       </td>
                     ) : (
                       <td>
                         {review.reply === null ? (
-                          <Button variant='secondary' onClick={() => handleShow(review)}>
+                          <Button
+                            variant='secondary'
+                            onClick={() => handleShow(review)}
+                          >
                             Reply
                           </Button>
                         ) : (
