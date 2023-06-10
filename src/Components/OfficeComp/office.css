@@ -20,3 +20,23 @@
 .lihat-detail:hover {
   color: #f94892;
 }
+
+.name-comment {
+  font-size: 1rem;
+}
+.stars-comment {
+  width: 100px;
+  margin-top: 0;
+}
+
+.tgl-comment {
+  font-size: .7rem;
+}
+
+.comment-office {
+  font-size: .9rem;
+}
+
+.reply-comment {
+  font-size: .9rem;
+}

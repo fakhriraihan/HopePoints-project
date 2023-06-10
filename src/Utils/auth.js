@@ -24,7 +24,6 @@ export const useLogin = () => {
   const { dispatch } = useContext(AuthContext);
 
   const loginUser = async (email, password) => {
-    try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -46,9 +45,6 @@ export const useLogin = () => {
       } else {
         console.log('error');
       }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return loginUser;
@@ -78,7 +74,6 @@ export const useRegister = () => {
       });
 
       dispatch({ type: 'LOGIN', payload: user });
-      console.log(user);
     } catch (error) {
       console.log(error);
     }

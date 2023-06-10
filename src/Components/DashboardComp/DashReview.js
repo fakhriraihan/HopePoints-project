@@ -1,32 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Nav from './Nav';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
-import { useState } from 'react';
-import './dashboardcomp.css';
-import { GetReviewWhereRole } from '../../Utils/crudData';
-import {
-  getUserRoleFromLocalStorage,
-  getIdOfficeFromLocalStorage,
-} from '../../Utils/UserData';
+import { FaStar } from 'react-icons/fa';
+import { GetReviewWhereRole, handleReplyReview, handleDeleteReview } from '../../Utils/crudData';
+import { getUserRoleFromLocalStorage, getIdOfficeFromLocalStorage } from "../../Utils/UserData";
+import Swal from 'sweetalert2';
 
-const DashReview = () => {
+const DashReview = ({ Toggle }) => {
+
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
   const [show, setShow] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [selectedReview, setSelectedReview] = useState(null);
+  const [replyValue, setReplyValue] = useState('');
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (review) => {
+    setSelectedReview(review);
+    setShow(true);
+  };
+  const stars = Array(5).fill(0);
+  const colors = {
+    orange: '#FFBA5A',
+    grey: '#a9a9a9',
+  };
 
-  console.log(reviews);
+  const handleReply = async () => {
+    if (selectedReview) {
+      const reviewId = selectedReview.id;
+      const reply = replyValue;
+      const userId = selectedReview.idOffice;
+  
+      await handleReplyReview(userId, reviewId, reply, setReviews);
+      handleClose();
+  
+      Swal.fire({
+        title: 'Success',
+        text: 'Reply submitted successfully',
+        icon: 'success',
+      });
+    }
+  };
+
+  const handleHapusReview = async (reviewId, officeId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this review!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await handleDeleteReview(reviewId, officeId);
+        Swal.fire('Deleted!', 'The review has been deleted.', 'success');
+      }
+    });
+  };
+
   return (
     <div className='container-dashboard'>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Reply</Modal.Title>
+          <Modal.Title>Reply to {selectedReview?.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className='mb-3' controlId='formGridReply'>
-              <Form.Control as='textarea' rows={3} />
+              <Form.Control
+                as='textarea'
+                rows={3}
+                value={replyValue}
+                onChange={(e) => setReplyValue(e.target.value)}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -34,8 +81,8 @@ const DashReview = () => {
           <Button variant='secondary' onClick={handleClose}>
             Close
           </Button>
-          <Button variant='primary' onClick={handleClose}>
-            Save Changes
+          <Button variant='primary' onClick={handleReply}>
+            Reply
           </Button>
         </Modal.Footer>
       </Modal>
@@ -45,11 +92,15 @@ const DashReview = () => {
           <Table responsive bordered hover className='bg-white'>
             <thead>
               <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Comment</th>
-                <th>Rating</th>
-                <th>Action</th>
+                <th style={{ width: '5%' }}>No</th>
+                <th style={{ width: '23%' }}>Name</th>
+                <th style={{ width: '35%' }}>Comment</th>
+                {userRole === 'admin' ? (
+                  <th style={{ width: '15%' }}>Id Office</th>
+                ) : (
+                  <th style={{ width: '15%' }}>Rating</th>
+                )}
+                <th style={{ width: '27%' }}>Reply</th>
               </tr>
             </thead>
             <tbody>
@@ -59,12 +110,44 @@ const DashReview = () => {
                     <td>{index + 1}</td>
                     <td>{review.name}</td>
                     <td>{review.comment}</td>
-                    <td>{review.rating}</td>
-                    <td>
-                      <Button variant='secondary' onClick={handleShow}>
-                        Reply
-                      </Button>
-                    </td>
+                    {userRole === 'admin' ? (
+                      <td>{review.idOffice}</td>
+                    ) : (
+                      <td>
+                        <div className='stars-comment'>
+                          {stars.map((_, index) => {
+                            return (
+                              <FaStar
+                                key={index}
+                                size={15}
+                                style={{
+                                  marginRight: 2,
+                                  cursor: 'pointer',
+                                  color: review.rating > index ? colors.orange : colors.grey,
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+                      </td>
+                    )}
+                    {userRole === 'admin' ? (
+                      <td>
+                        <Button variant='danger' onClick={() => handleHapusReview(review.id, review.idOffice)}>
+                          <i className='fa-solid fa-trash-can'></i>
+                        </Button>
+                      </td>
+                    ) : (
+                      <td>
+                        {review.reply === null ? (
+                          <Button variant='secondary' onClick={() => handleShow(review)}>
+                            Reply
+                          </Button>
+                        ) : (
+                          review.reply
+                        )}
+                      </td>
+                    )}
                   </tr>
                 ))}
             </tbody>
