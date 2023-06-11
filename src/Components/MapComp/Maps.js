@@ -15,6 +15,7 @@ import { db } from '../../Config/firebase';
 import { Form, Button, FloatingLabel } from 'react-bootstrap';
 import './popup.css';
 import { FaStar } from 'react-icons/fa';
+import HeatmapLegend from './Legend';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
@@ -123,11 +124,13 @@ const MapComponent = () => {
               0.2,
               'rgb(208,209,230)',
               0.4,
-              'yellow',
+              'rgb(0,255,0)', // Hijau
               0.6,
-              'orange',
+              'rgb(255,255,0)', // Kuning
               0.8,
-              'red',
+              'rgb(255,165,0)', // Jingga
+              1,
+              'rgb(255,0,0)', // Merah
             ],
             'heatmap-radius': {
               stops: [
@@ -142,6 +145,7 @@ const MapComponent = () => {
                 [15, 0],
               ],
             },
+            
           }}
         />
       </Source>
@@ -217,7 +221,7 @@ const MapComponent = () => {
           )}
         </React.Fragment>
       ))}
-
+      <HeatmapLegend/>
       <GeolocateControl position='bottom-right' />
       <NavigationControl position='bottom-right' />
       <ScaleControl />
