@@ -17,7 +17,7 @@ const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DetailOffice = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [error, setError] = useState(false);
+  const [ setError] = useState(false);
   const [users, setUsers] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [viewport, setViewPort] = useState({
@@ -191,7 +191,7 @@ const DetailOffice = () => {
                       <Form.Control
                         type='address'
                         placeholder=''
-                        value={user.adress}
+                        value={user.address}
                         readOnly
                       />
                     </Form.Group>

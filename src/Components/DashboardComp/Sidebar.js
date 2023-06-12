@@ -10,7 +10,10 @@ const Sidebar = () => {
   const isUserRole = localStorage.getItem('user');
   const roleParse = JSON.parse(isUserRole);
   const role = roleParse.role;
+  const uidPrase = roleParse.user;
+  const uid = uidPrase.uid;
 
+  console.log(uid);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };

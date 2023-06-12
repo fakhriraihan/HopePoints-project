@@ -2,14 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
 import './dashboardcomp.css';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
+import { useRegisterOffice } from '../../Utils/auth';
 import { Map, Marker, NavigationControl, ScaleControl, GeolocateControl } from 'react-map-gl';
+import Swal from 'sweetalert2';
 
 const DashOffice = () => {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [province, setProvince] = useState('');
+  const [tlfn, setPhone] = useState('');
   const formRef = useRef(null);
   const [newPlace, setNewPlace] = useState(null);
   const token = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -18,6 +20,49 @@ const DashOffice = () => {
     latitude: 0.09273370918533735,
     zoom: 4.3,
   });
+
+  const registerUser = useRegisterOffice();
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !tlfn || !newPlace) {
+      Swal.fire('Error', 'Please fill in all the fields', 'error');
+      return;
+    }
+
+    try {
+      await registerUser(email, '123123', name, tlfn, 'null', 'office', newPlace.lat, newPlace.long);
+      Swal.fire({
+        icon: 'success',
+        title: 'Registration Success',
+        text: 'Default Password: 123123',
+      });
+    } catch (error) {
+      Swal.fire('Error', 'Registration failed', 'error');
+    }
+    setShowModal(false);
+  };
+
+  const confirmDeleteUser = (userId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await handleDeleteUser(userId);
+          Swal.fire('Deleted!', 'The user has been deleted.', 'success');
+        } catch (error) {
+          Swal.fire('Error', 'Failed to delete the user.', 'error');
+        }
+      }
+    });
+  };
 
   const handleMarkerDragEnd = (event) => {
     const { lngLat } = event;
@@ -31,7 +76,7 @@ const DashOffice = () => {
       lat: viewport.latitude,
       long: viewport.longitude,
     });
-  }, []);
+  }, [viewport.latitude, viewport.longitude]);
 
   const handleGeolocateClick = () => {
     navigator.geolocation.getCurrentPosition(
@@ -49,6 +94,12 @@ const DashOffice = () => {
       }
     );
   };
+
+  useEffect(() => {
+    if (newPlace) {
+      console.log(newPlace);
+    }
+  }, [newPlace]);
 
   return (
     <div className="container-dashboard">
@@ -78,7 +129,7 @@ const DashOffice = () => {
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
                   <td>
-                    <Button variant="danger" onClick={() => handleDeleteUser(user.id)}>
+                    <Button variant="danger" onClick={() => confirmDeleteUser(user.id)}>
                       <i className="fa-solid fa-trash-can"></i>
                     </Button>
                   </td>
@@ -89,11 +140,11 @@ const DashOffice = () => {
         </Card.Body>
       </Card>
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Office</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form ref={formRef}>
+        <Form ref={formRef}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Office</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -102,20 +153,35 @@ const DashOffice = () => {
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </Form.Group>
-            <Form.Group controlId="province">
-              <Form.Label>Province</Form.Label>
-              <Form.Control type="text" name="province" value={province} onChange={(e) => setProvince(e.target.value)} required />
+            <Form.Group controlId="phone">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control type="text" name="phone" value={tlfn} onChange={(e) => setPhone(e.target.value)} required />
             </Form.Group>
-            <Form.Group controlId="province">
+            <Form.Group controlId="location">
               <Form.Label>Location</Form.Label>
               {/* <Form.Control required /> */}
               <Card>
                 <Card.Body>
                   <div className="map-container" style={{ width: '100%', height: '300px' }}>
-                    <Map initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
+                    <Map
+                      initialViewState={viewport}
+                      mapboxAccessToken={token}
+                      mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w"
+                      width="100%"
+                      height="100%"
+                      onViewportChange={setViewPort}
+                    >
                       {newPlace && (
                         <>
-                          <Marker latitude={newPlace?.lat} longitude={newPlace?.long} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={true} onDragEnd={handleMarkerDragEnd} style={{ zIndex: 999 }}>
+                          <Marker
+                            latitude={newPlace?.lat}
+                            longitude={newPlace?.long}
+                            offsetleft={-3.5 * viewport.zoom}
+                            offsetTop={-7 * viewport.zoom}
+                            draggable={true}
+                            onDragEnd={handleMarkerDragEnd}
+                            style={{ zIndex: 999 }}
+                          >
                             <i
                               className="fa-solid fa-location-dot"
                               style={{
@@ -136,14 +202,16 @@ const DashOffice = () => {
                 </Card.Body>
               </Card>
             </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary">Add</Button>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleRegister}>
+              Add
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
       <GetUserWhereRole setUsers={setUsers} setRole={'office'} />
     </div>

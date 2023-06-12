@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Nav from './Nav';
 import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
 import { GetReviewWhereRole, handleReplyReview, handleDeleteReview } from '../../Utils/crudData';

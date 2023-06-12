@@ -94,7 +94,6 @@ const GetUserWhereRole = ({ setUsers, setRole }) => {
       query(collection(db, 'users'), where('role', '==', setRole)),
       (snapshot) => {
         const userList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        console.log('Retrieved data:', userList);
         setUsers(userList);
       },
       (error) => {

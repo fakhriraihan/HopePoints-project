@@ -1,10 +1,34 @@
-// DashUser.js
 import React, { useState } from 'react';
 import { Table, Button, Card } from 'react-bootstrap';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
+import Swal from 'sweetalert2';
 
 const DashUser = () => {
   const [users, setUsers] = useState([]);
+
+  const confirmDeleteUser = (userId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+      dangerMode: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteUser(userId)
+          .then(() => {
+            Swal.fire('Deleted!', 'User has been deleted successfully.', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Oops!', 'An error occurred while deleting the user.', 'error');
+          });
+      }
+    });
+  };
 
   return (
     <div className='container-dashboard'>
@@ -31,7 +55,7 @@ const DashUser = () => {
                   <td>
                     <Button
                       variant='danger'
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => confirmDeleteUser(user.id)}
                     >
                       <i className='fa-solid fa-trash-can'></i>
                     </Button>
