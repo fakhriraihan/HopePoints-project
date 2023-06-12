@@ -135,14 +135,14 @@ const MapComponent = () => {
             'heatmap-radius': {
               stops: [
                 [11, 15],
-                [15, 20],
+                [15, 15],
               ],
             },
             'heatmap-opacity': {
               default: 1,
               stops: [
                 [14, 1],
-                [15, 0],
+                [15, 0.5], // Kurangi opasitas saat level zoom 15 atau lebih tinggi
               ],
             },
             
