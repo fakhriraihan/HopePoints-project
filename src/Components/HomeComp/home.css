@@ -48,17 +48,62 @@
 /* Fitur */
 
 .feature {
+  background-color: #f94892;
+  padding-top: 15px;
+  text-align: center;
+  padding-bottom: 44px;
+}
+
+.overlay {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 30px;
+}
+
+.featureForm {
+  /* Styling untuk setiap card */
+  /* display: flex;
+  flex-direction: column; */
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin: 10px;
+  background-color: #f8f7f7;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 3px 6px 9px #3d3d3d;
+}
+.featureForm:hover {
+  background-color: rgb(228, 224, 224);
+}
+
+.featureForm h2 {
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+.featureForm p {
+  margin-top: 5px;
+  font-size: 16px;
+  text-align: left;
+}
+
+/* .feature {
   padding-top: 5rem;
   padding-bottom: 5rem;
-  background-color: #f5619f;
-}
+  background-color: #ffa1c9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
 .feature > h1 {
   text-align: center;
   color: white;
 }
-
+/* 
 .feature .overlay .featureForm > img {
-  width: 50%;
+  width: 100%;
   margin-bottom: 20px;
 }
 
@@ -66,9 +111,18 @@
   color: white;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
   text-align: center;
   margin-top: 5rem;
+  border: 5px solid white;
+  gap: 100px;
+} */
+.feature .overlay .featureForm {
+  /* padding: 50px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  color: white; */
+
+  cursor: pointer;
 }
 .feature > button {
   min-height: 44px;
@@ -79,60 +133,19 @@
   color: #f5619f;
   border: none;
   border-radius: 5px;
-  padding: 15px;
-  width: 25%;
-  margin-left: 37%;
-  margin-top: 4rem;
+  padding: 15px 35px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
   box-shadow: 0px 5px 6px rgb(211, 36, 94);
 }
-
-.hero .wrap-text > button:hover {
-  opacity: 0.7;
-}
-
-/* tutorial penggunaan */
-
-.tutorials {
-  height: 100vh;
-}
-.tutorials > h1 {
-  text-align: center;
-  margin-top: 5rem;
-}
-.tutorials > p {
-  text-align: center;
-  font-size: 28px;
-  margin-top: 2rem;
+.feature > button:hover {
+  background-color: rgb(238, 234, 234);
 }
 
 /* Dropdown */
-.dropdown {
-  border-radius: 50px;
-}
-.tutorials .dropdown {
-  text-align: center;
-  margin-top: 5rem;
-}
-#dropdown-item-button {
-  padding: 20px 500px;
-  font-size: 1.5rem;
-  border-radius: 50px;
-  background-color: #f5619f;
-  border: 2px solid #f5619f;
-}
-
-#dropdown-item-button:hover {
-  background-color: #e97ca9;
-  border: 2px solid #f5619f;
-}
-
-#dropdown-text {
-  font-size: 28px;
-  /* padding: 20px 100px; */
-  border-radius: 50px;
-}
-
 .faq {
+  height: 100vh;
   padding: 60px 0;
 }
 .faq-title > h2 {
@@ -187,44 +200,8 @@
   color: #f94892;
 }
 
-/* .collapsed i.fas.fa-arrow-up {
-    
-} */
 .collapsed i.fas.fa-arrow-up {
   transform: rotate(180deg);
-}
-
-@media screen and (max-width: 950px) {
-  .hero {
-    padding: 100px 0 100px 0;
-  }
-
-  .hero .d-flex {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .hero .wrap-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin: 30px 10px 0 10px;
-  }
-
-  .hero .image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 10px;
-  }
-
-  .hero .image > img {
-    width: 100%;
-  }
 }
 
 @media screen and (max-width: 950px) {
@@ -263,5 +240,11 @@
 @media screen and (max-width: 320px) {
   .hero .wrap-text > h1 {
     font-size: 2.5rem;
+  }
+}
+@media screen and (max-width: 376px) {
+  .feature .overlay {
+    display: flex;
+    flex-direction: column;
   }
 }
