@@ -27,13 +27,28 @@ const Nav = ({ Toggle }) => {
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
-    zoom: 4.3,
+    zoom: 6,
   });
+
+  useEffect(() => {
+    if (users?.location) {
+      setViewPort({
+        longitude: users.location?.longitude,
+        latitude: users.location?.latitude,
+        zoom: 3.4,
+      });
+    }
+  }, [users?.location]);
 
   const handleMarkerDragEnd = (event) => {
     const { lngLat } = event;
     const { lng, lat } = lngLat;
     setNewPlace({ lat, long: lng });
+    setViewPort((prevViewport) => ({
+      ...prevViewport,
+      longitude: lng,
+      latitude: lat,
+    }));
   };
 
   useEffect(() => {
@@ -61,17 +76,11 @@ const Nav = ({ Toggle }) => {
     );
   };
 
-  useEffect(() => {
-    if (newPlace) {
-      console.log(newPlace);
-    }
-  }, [newPlace]);
-
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
   };
 
-    const handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const name = event.target.elements.name.value;
@@ -147,70 +156,33 @@ const Nav = ({ Toggle }) => {
   };
 
   return (
-    <nav className='navbar navbar-expand-sm bg-white fixed-top px-4'>
-      <i
-        className='navbar-brand fa-solid fa-align-left fs-4'
-        onClick={Toggle}
-        style={{ cursor: 'pointer', color: '#f94892' }}
-      ></i>
-      <button
-        className='navbar-toggler d-lg-none'
-        type='button'
-        data-bs-toggle='collapse'
-        data-bs-target='#collapsibleNavId'
-        aria-controls='collapsibleNavId'
-        aria-expanded='false'
-        aria-label='Toggle navigation'
-      >
-        <i
-          className='fa-solid fa-bars'
-          style={{ cursor: 'pointer', color: '#f94892' }}
-        ></i>
+    <nav className="navbar navbar-expand-sm bg-white fixed-top px-4">
+      <i className="navbar-brand fa-solid fa-align-left fs-4" onClick={Toggle} style={{ cursor: 'pointer', color: '#f94892' }}></i>
+      <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+        <i className="fa-solid fa-bars" style={{ cursor: 'pointer', color: '#f94892' }}></i>
       </button>
-      <div className='collapse navbar-collapse' id='collapsibleNavId'>
-        <ul className='navbar-nav ms-auto mt-2 mt-lg-0'>
-          <li className='nav-item dropdown'>
-            <button
-              className='nav-link fs-6 dropdown-toggle rounded border-0 bg-transparent'
-              id='dropdownId'
-              data-bs-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-              style={{ color: '#f94892' }}
-            >
+      <div className="collapse navbar-collapse" id="collapsibleNavId">
+        <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
+          <li className="nav-item dropdown">
+            <button className="nav-link fs-6 dropdown-toggle rounded border-0 bg-transparent" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={{ color: '#f94892' }}>
               {email}
             </button>
-            <div
-              className='dropdown-menu dropdown-menu-end'
-              aria-labelledby='dropdownId'
-            >
-               {role === 'office' && (
+            <div className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownId">
+              {role === 'office' && (
                 <div>
-                  <button
-                    className='dropdown-item'
-                    style={{ color: '#f94892' }}
-                    onClick={() => setShowModal(true)}
-                  >
-                    <i className='fa-solid fa-user me-2'></i>
+                  <button className="dropdown-item" style={{ color: '#f94892' }} onClick={() => setShowModal(true)}>
+                    <i className="fa-solid fa-user me-2"></i>
                     My Profile
                   </button>
-                  <button
-                    className='dropdown-item'
-                    style={{ color: '#f94892' }}
-                    onClick={() => setShowModalPassword(true)}
-                  >
-                    <i className='fa-solid fa-lock me-2'></i>
+                  <button className="dropdown-item" style={{ color: '#f94892' }} onClick={() => setShowModalPassword(true)}>
+                    <i className="fa-solid fa-lock me-2"></i>
                     Change Password
                   </button>
                 </div>
               )}
 
-              <button
-                className='dropdown-item'
-                onClick={handleLogout}
-                style={{ color: '#f94892' }}
-              >
-                <i className='fa-solid fa-right-from-bracket me-2'></i>
+              <button className="dropdown-item" onClick={handleLogout} style={{ color: '#f94892' }}>
+                <i className="fa-solid fa-right-from-bracket me-2"></i>
                 Logout
               </button>
             </div>
@@ -223,40 +195,24 @@ const Nav = ({ Toggle }) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group className='mb-3' controlId='formGroupName'>
+            <Form.Group className="mb-3" controlId="formGroupName">
               <Form.Label>Nama :</Form.Label>
-              <Form.Control type='text' placeholder='' defaultValue={users?.name} name='name' />
+              <Form.Control type="text" placeholder="" defaultValue={users?.name} name="name" />
             </Form.Group>
 
-            <Form.Group className='mb-3' controlId='formGroupName'>
+            <Form.Group className="mb-3" controlId="formGroupName">
               <Form.Label>Email :</Form.Label>
-              <Form.Control
-                type='email'
-                placeholder=''
-                defaultValue={users?.email}
-                name='email'
-                readOnly
-              />
+              <Form.Control type="email" placeholder="" defaultValue={users?.email} name="email" readOnly />
             </Form.Group>
 
-            <Form.Group className='mb-3' controlId='formGroupName'>
+            <Form.Group className="mb-3" controlId="formGroupName">
               <Form.Label>No Handphone :</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder=''
-                defaultValue={users?.phone}
-                name='phone'
-              />
+              <Form.Control type="text" placeholder="" defaultValue={users?.phone} name="phone" />
             </Form.Group>
 
-            <Form.Group className='mb-3' controlId='formGroupName'>
+            <Form.Group className="mb-3" controlId="formGroupName">
               <Form.Label>Address :</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder=''
-                defaultValue={users?.address}
-                name='address'
-              />
+              <Form.Control type="text" placeholder="" defaultValue={users?.address} name="address" />
             </Form.Group>
             <Form.Group controlId="location">
               <Form.Label>Location</Form.Label>
@@ -264,29 +220,14 @@ const Nav = ({ Toggle }) => {
               <Card>
                 <Card.Body>
                   <div className="map-container" style={{ width: '100%', height: '300px' }}>
-                    <Map
-                      initialViewState={viewport}
-                      mapboxAccessToken={token}
-                      mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w"
-                      width="100%"
-                      height="100%"
-                      onViewportChange={setViewPort}
-                    >
+                    <Map initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
                       {newPlace && (
                         <>
-                          <Marker
-                            latitude={newPlace?.lat}
-                            longitude={newPlace?.long}
-                            offsetleft={-3.5 * viewport.zoom}
-                            offsetTop={-7 * viewport.zoom}
-                            draggable={true}
-                            onDragEnd={handleMarkerDragEnd}
-                            style={{ zIndex: 999 }}
-                          >
+                          <Marker latitude={newPlace?.lat} longitude={newPlace?.long} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={true} onDragEnd={handleMarkerDragEnd} style={{ zIndex: 999 }}>
                             <i
                               className="fa-solid fa-location-dot"
                               style={{
-                                fontSize: 7 * viewport.zoom,
+                                fontSize: 5 * viewport.zoom,
                                 color: 'tomato',
                                 cursor: 'pointer',
                               }}
@@ -303,7 +244,7 @@ const Nav = ({ Toggle }) => {
                 </Card.Body>
               </Card>
             </Form.Group>
-            <Button variant='warning' type='submit' style={{marginTop: '1rem'}}>
+            <Button variant="warning" type="submit" style={{ marginTop: '1rem' }}>
               Update
             </Button>
           </Form>
