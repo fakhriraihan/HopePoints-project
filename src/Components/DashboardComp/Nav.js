@@ -35,7 +35,7 @@ const Nav = ({ Toggle }) => {
       setViewPort({
         longitude: users.location?.longitude,
         latitude: users.location?.latitude,
-        zoom: 3.4,
+        zoom: 3,
       });
     }
   }, [users?.location]);
