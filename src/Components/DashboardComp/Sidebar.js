@@ -3,6 +3,7 @@ import 'bootstrap/js/dist/dropdown';
 import { useState } from 'react';
 import logo from '../../assets/logo.png';
 import './dashboardcomp.css';
+import { Nav } from 'react-bootstrap';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,48 +16,60 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='sidebar p-2'>
-      <div className='header-sidebar d-flex justify-content-center align-items-center'>
-        <img src={logo} className='rounded me-2' alt='logo hopepoints' />
+    <div className='sidebar p-2 pt-5'>
+      <div
+        className='header-sidebar d-flex justify-content-center align-items-center'
+        style={{ cursor: 'pointer' }}
+      >
+        <img
+          src={logo}
+          className='rounded logo-dashboard'
+          alt='logo hopepoints'
+        />
         <span className='brand-name fs-4'>HopePoints</span>
       </div>
       <hr className='text-dark' />
       <div className='list-group list-group-flush'>
         <a href='/dashboard' className='list-group-item py-3'>
-          <i className='fa-solid fa-gauge me-3'></i>
-          <span>Dashboard</span>
+          <i className='fa-solid fa-gauge icon-sidebar'></i>
+          <span className='text-sidebar'>Dashboard</span>
         </a>
         <a href='/dashboard/report' className='list-group-item py-3'>
-          <i className='fa-solid fa-table me-3'></i>
-          <span>Report</span>
+          <i className='fa-solid fa-table icon-sidebar'></i>
+          <span className='text-sidebar'>Report</span>
         </a>
         <a href='/dashboard/review' className='list-group-item py-3'>
-          <i className='fa-solid fa-comment me-3'></i>
-          <span>Review</span>
+          <i className='fa-solid fa-comment icon-sidebar'></i>
+          <span className='text-sidebar'>Review</span>
         </a>
         {role === 'admin' && (
           <>
-            <a
+            <Nav.Link
               className='list-group-item py-3 d-flex align-items-center button-account'
               onClick={toggleDropdown}
             >
-              <i className='fas fa-users me-3'></i>
-              <span>Accounts</span>
+              <i className='fas fa-users icon-sidebar'></i>
+              <span className='text-sidebar'>Accounts</span>
               <i
-                className={`fas fa-chevron-${isOpen ? 'up' : 'down'} ms-auto`}
+                className={`fas fa-chevron-${
+                  isOpen ? 'up' : 'down'
+                } ms-auto icon-dropdown`}
               ></i>
-            </a>
+            </Nav.Link>
 
             {isOpen && (
               <div className='list-group'>
                 <a href='/dashboard/admin' className='list-group-item py-2'>
-                  <span>Admin</span>
+                  <i className='fa-solid fa-lock icon-sidebar'></i>
+                  <span className='text-sidebar'>Admin</span>
                 </a>
                 <a href='/dashboard/office' className='list-group-item py-2'>
-                  <span>Office</span>
+                  <i className='fa-solid fa-building icon-sidebar'></i>
+                  <span className='text-sidebar'>Office</span>
                 </a>
                 <a href='/dashboard/user' className='list-group-item py-2'>
-                  <span>User</span>
+                  <i className='fa-solid fa-user icon-sidebar'></i>
+                  <span className='text-sidebar'>User</span>
                 </a>
               </div>
             )}

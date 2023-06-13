@@ -1,14 +1,16 @@
 .hero {
   height: 100vh;
   top: 0;
-  padding: 180px 0 100px 0;
+  padding: 200px 0 0 0;
+  animation: fadeInAnimation 2s forwards;
+  -webkit-animation: fadeInAnimation 2s forwards;
 }
 
 .hero .wrap-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-right: 8em;
+  margin-right: 8%;
 }
 
 .hero .wrap-text > h1 {
@@ -42,7 +44,8 @@
 }
 
 .hero .image > img {
-  width: 600px;
+  width: 550px;
+  animation: heroAnimation 2s infinite alternate;
 }
 
 /* Fitur */
@@ -200,6 +203,11 @@
   color: #f94892;
 }
 
+/* .collapsed i.fas.fa-arrow-up {
+    
+} */
+
+/* Start Animasi */
 .collapsed i.fas.fa-arrow-up {
   transform: rotate(180deg);
 }
@@ -208,34 +216,28 @@
   .hero {
     padding: 100px 0 100px 0;
   }
-
-  .hero .d-flex {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .hero .wrap-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin: 30px 10px 0 10px;
-  }
-
-  .hero .image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 10px;
-  }
-
-  .hero .image > img {
-    width: 100%;
+  100% {
+    opacity: 1;
   }
 }
+
+@keyframes heroAnimation {
+  0% {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+  }
+  100% {
+    transform: translateY(20px);
+    -webkit-transform: translateY(20px);
+    -moz-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    -o-transform: translateY(20px);
+  }
+}
+/* Stop Animasi */
 
 @media screen and (max-width: 320px) {
   .hero .wrap-text > h1 {

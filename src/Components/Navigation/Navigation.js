@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
 import logo from '../../assets/logo.png';
 import './navigation.css';
@@ -10,10 +10,11 @@ import { useLogout } from '../../Utils/auth';
 import Swal from 'sweetalert2';
 
 function Navigation() {
+  const location = useLocation();
   const { dispatch } = useContext(AuthContext);
   const isUserLoggedIn = localStorage.getItem('user');
   const Logout = useLogout();
- 
+
   const handleLogout = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -43,25 +44,50 @@ function Navigation() {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ms-auto'>
-            <Nav.Link className='navbar-link' href='/'>
+            <Nav.Link
+              className='navbar-link'
+              href='/'
+              active={location.pathname === '/'}
+            >
               Home
             </Nav.Link>
-            <Nav.Link className='navbar-link' href='/form'>
+            <Nav.Link
+              className='navbar-link'
+              href='/form'
+              active={location.pathname === '/form'}
+            >
               Form
             </Nav.Link>
-            <Nav.Link className='navbar-link' href='/maps'>
+            <Nav.Link
+              className='navbar-link'
+              href='/maps'
+              active={location.pathname === '/maps'}
+            >
               Maps
             </Nav.Link>
-            <Nav.Link className='navbar-link' href='/office'>
+            <Nav.Link
+              className='navbar-link'
+              href='/office'
+              active={location.pathname === '/office'}
+            >
               Office
             </Nav.Link>
-            <Nav.Link className='navbar-link' href='/about'>
-              About Us
+            <Nav.Link
+              className='navbar-link'
+              href='/about'
+              active={location.pathname === '/about'}
+            >
+              About
             </Nav.Link>
             {isUserLoggedIn && isUserLoggedIn !== 'null' ? (
               <NavDropdown
                 title={<i className='fa-solid fa-user'></i>}
                 id='basic-nav-dropdown'
+                active={
+                  location.pathname === '/profile' ||
+                  location.pathname === '/profile/list' ||
+                  location.pathname === '/profile/change'
+                }
               >
                 <NavDropdown.Item href='/profile'>Profile</NavDropdown.Item>
                 <NavDropdown.Divider />

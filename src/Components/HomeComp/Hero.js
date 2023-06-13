@@ -43,7 +43,7 @@ const Hero = () => {
             <p>Kamu bisa melihat daftar Kantor terdekat yang terdaftar pada fitur ini </p>
           </div>
         </div>
-        <button onClick={() => navigate('')}>Registrasi</button>
+        <button onClick={() => navigate('/register')}>Registrasi</button>
       </section>
       <section className="faq">
         <div className="container">

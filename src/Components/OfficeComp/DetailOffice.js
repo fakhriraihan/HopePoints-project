@@ -7,10 +7,11 @@ import Map, {
 } from 'react-map-gl';
 import { Modal, Button, Card, Form, FloatingLabel } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
 import { getAuth } from '@firebase/auth';
 import { db } from '../../Config/firebase';
 import { FaStar } from 'react-icons/fa';
+import './office.css';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DetailOffice = () => {
@@ -57,20 +58,27 @@ const DetailOffice = () => {
     const user = auth.currentUser;
 
     if (!user) {
-      // Pengguna belum login, tampilkan pesan atau lakukan langkah yang sesuai
-      setError(true);
+      
       setShowModal(true);
       return;
     }
 
     const reviewContent = event.target.elements.comment.value;
-
+    const timestamp = Timestamp.fromDate(new Date());
+    const date = timestamp.toDate();
+    const dateString = date.toLocaleString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      dateStyle: 'long',
+      timeStyle: 'medium',
+    });
     const reviewData = {
       uid: user.uid,
       name: user.displayName,
       comment: reviewContent,
       rating: currentValue,
       idOffice: id,
+      tgl: dateString,
+      reply: null,
     };
 
     try {
@@ -239,6 +247,7 @@ const DetailOffice = () => {
                         style={{ height: '170px' }}
                         placeholder='Leave a comment here'
                         name='comment'
+                        required
                       />
                     </FloatingLabel>
 
@@ -271,28 +280,35 @@ const DetailOffice = () => {
               <div className='cardReview mb-3'>
                 {reviews.map((review, index) => (
                   <Card key={index} style={{ marginTop: '1rem' }}>
-                    <Card.Body key={review.id}>
-                      <h6>{review.name}</h6>
-                      <p>{review.comment}</p>
-                      <div className='stars mx-0'>
-                        {stars.map((_, index) => {
-                          return (
-                            <FaStar
-                              key={index}
-                              size={24}
-                              style={{
-                                marginRight: 10,
-                                cursor: 'pointer',
-                                color:
-                                  (review.rating || hoverValue) > index
-                                    ? colors.orange
-                                    : colors.grey,
-                              }}
-                            />
-                          );
-                        })}
-                      </div>
-                    </Card.Body>
+                  <Card.Body key={review.id}>
+                    <div className='name-comment'>{review.name}</div>
+                    <div className='stars-comment'>
+                      {stars.map((_, index) => {
+                        return (
+                          <FaStar
+                            key={index}
+                            size={15}
+                            style={{
+                              marginRight: 2,
+                              cursor: 'pointer',
+                              color:
+                                (review.rating || hoverValue) > index
+                                  ? colors.orange
+                                  : colors.grey,
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className='tgl-comment'>{review.tgl}</div>
+                    <div className='comment-office'>{review.comment}</div>
+                  </Card.Body>
+                  {review.reply !== null && (
+                    <Card.Footer>
+                      <div className='name-comment'>Respon Office:</div>
+                      <div className='reply-comment'>{review.reply}</div>
+                    </Card.Footer>
+                  )}
                   </Card>
                 ))}
               </div>

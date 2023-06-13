@@ -1,3 +1,7 @@
 .container-bg {
   background-color: #f94892;
 }
+
+.sidebar-onpage {
+  z-index: 999;
+}
