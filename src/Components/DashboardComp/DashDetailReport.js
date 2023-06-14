@@ -98,11 +98,7 @@ const DashDetailReport = () => {
 
   return (
     <div className='container-dashboard'>
-      <GetDetailReport
-        setReport={setReport}
-        setViewPort={setViewPort}
-        id={id}
-      />
+      <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
       <h2 className='text-white my-3'>Detail Report</h2>
       <Card>
         <Card.Header>

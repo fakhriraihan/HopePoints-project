@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Map, {
-  NavigationControl,
-  ScaleControl,
-  GeolocateControl,
-  Source,
-  Layer,
-  Marker,
-  Popup,
-} from 'react-map-gl';
+import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker, Popup } from 'react-map-gl';
 import { useNavigate } from 'react-router-dom';
 import { GetReport } from '../../Utils/crudData';
 import * as firestore from 'firebase/firestore';
@@ -15,6 +7,7 @@ import { db } from '../../Config/firebase';
 import { Form, Button, FloatingLabel } from 'react-bootstrap';
 import './popup.css';
 import { FaStar } from 'react-icons/fa';
+import HeatmapLegend from './Legend';
 
 const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
@@ -62,10 +55,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     const unsubscribe = firestore.onSnapshot(
-      firestore.query(
-        firestore.collection(db, 'users'),
-        firestore.where('role', '==', 'office')
-      ),
+      firestore.query(firestore.collection(db, 'users'), firestore.where('role', '==', 'office')),
       (snapshot) => {
         const userList = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -85,19 +75,12 @@ const MapComponent = () => {
   }, []);
 
   return (
-    <Map
-      initialViewState={viewport}
-      mapboxAccessToken={token}
-      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
-      width='100%'
-      height='100%'
-      onViewportChange={setViewPort}
-    >
-      <Source id='heatmapData' type='geojson' data={heatmapData}>
+    <Map initialViewState={viewport} mapboxAccessToken={token} mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w" width="100%" height="100%" onViewportChange={setViewPort}>
+      <Source id="heatmapData" type="geojson" data={heatmapData}>
         <Layer
-          id='heatmapLayer'
-          type='heatmap'
-          source='heatmapData'
+          id="heatmapLayer"
+          type="heatmap"
+          source="heatmapData"
           maxzoom={15}
           paint={{
             'heatmap-weight': {
@@ -123,23 +106,25 @@ const MapComponent = () => {
               0.2,
               'rgb(208,209,230)',
               0.4,
-              'yellow',
+              'rgb(0,255,0)', // Hijau
               0.6,
-              'orange',
+              'rgb(255,255,0)', // Kuning
               0.8,
-              'red',
+              'rgb(255,165,0)', // Jingga
+              1,
+              'rgb(255,0,0)', // Merah
             ],
             'heatmap-radius': {
               stops: [
                 [11, 15],
-                [15, 20],
+                [15, 15],
               ],
             },
             'heatmap-opacity': {
               default: 1,
               stops: [
                 [14, 1],
-                [15, 0],
+                [15, 0.5], // Kurangi opasitas saat level zoom 15 atau lebih tinggi
               ],
             },
           }}
@@ -147,17 +132,9 @@ const MapComponent = () => {
       </Source>
       {users.map((user) => (
         <React.Fragment key={user.id}>
-          <Marker
-            latitude={user.location.latitude}
-            longitude={user.location.longitude}
-            offsetleft={-3.5 * viewport.zoom}
-            offsetTop={-7 * viewport.zoom}
-            draggable={false}
-            style={{ zIndex: 1 }}
-            onClick={() => setSelectedMarker(user)}
-          >
+          <Marker latitude={user.location.latitude} longitude={user.location.longitude} offsetleft={-3.5 * viewport.zoom} offsetTop={-7 * viewport.zoom} draggable={false} style={{ zIndex: 1 }} onClick={() => setSelectedMarker(user)}>
             <i
-              className='fa-solid fa-building'
+              className="fa-solid fa-building"
               style={{
                 fontSize: 5 * viewport.zoom,
                 color: '#f94892',
@@ -166,24 +143,16 @@ const MapComponent = () => {
             ></i>
           </Marker>
           {selectedMarker !== null && selectedMarker.id === user.id && (
-            <Popup
-              latitude={selectedMarker.location.latitude}
-              longitude={selectedMarker.location.longitude}
-              closeButton={true}
-              closeOnClick={false}
-              anchor='left'
-              onClose={() => setSelectedMarker(null)}
-              style={{ zIndex: 1 }}
-            >
-              <div className='popup-content'>
+            <Popup latitude={selectedMarker.location.latitude} longitude={selectedMarker.location.longitude} closeButton={true} closeOnClick={false} anchor="left" onClose={() => setSelectedMarker(null)} style={{ zIndex: 1 }}>
+              <div className="popup-content">
                 {/* Konten popup */}
                 <h2>Informasi Dinas</h2>
-                <h4 className='nama-dinas'>{user.name}</h4>
-                <p>Alamat: {user.adress}</p>
+                <h4 className="nama-dinas">{user.name}</h4>
+                <p>Alamat: {user.address}</p>
                 <p>Phone: {user.phone}</p>
 
                 {/* Review */}
-                <div className='stars' style={styles.stars}>
+                <div className="stars" style={styles.stars}>
                   {stars.map((_, index) => {
                     return (
                       <FaStar
@@ -192,11 +161,7 @@ const MapComponent = () => {
                         onClick={() => handleClick(index + 1)}
                         onMouseOver={() => handleMouseOver(index + 1)}
                         onMouseLeave={handleMouseLeave}
-                        color={
-                          (hoverValue || currentValue) > index
-                            ? colors.orange
-                            : colors.grey
-                        }
+                        color={(hoverValue || currentValue) > index ? colors.orange : colors.grey}
                         style={{
                           marginRight: 10,
                           cursor: 'pointer',
@@ -206,10 +171,7 @@ const MapComponent = () => {
                   })}
                 </div>
 
-                <Button
-                  variant='pink'
-                  onClick={() => navigate(`/detailoffice/${user.id}`)}
-                >
+                <Button variant="pink" onClick={() => navigate(`/detailoffice/${user.id}`)}>
                   Detail Office
                 </Button>
               </div>
@@ -217,9 +179,9 @@ const MapComponent = () => {
           )}
         </React.Fragment>
       ))}
-
-      <GeolocateControl position='bottom-right' />
-      <NavigationControl position='bottom-right' />
+      <HeatmapLegend />
+      <GeolocateControl position="bottom-right" />
+      <NavigationControl position="bottom-right" />
       <ScaleControl />
       <GetReport setReports={setReports} />
     </Map>

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { getAuth, signOut, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { collection, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDoc, GeoPoint } from "firebase/firestore";
 import { auth, db } from "../Config/firebase";
 import { AuthContext } from '../Context/AuthContext';
 
@@ -53,7 +53,7 @@ export const useLogin = () => {
 export const useRegister = () => {
   const { dispatch } = useContext(AuthContext);
 
-  const registerUser = async (email, password, name, tlfn, address) => {
+  const registerUser = async (email, password, name, tlfn, address, role) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -61,7 +61,7 @@ export const useRegister = () => {
       // Set user role in Firestore
       await setDoc(doc(collection(db, 'users'), user.uid), {
         uid: user.uid,
-        role: 'user', 
+        role: role, 
         name: name,
         email: user.email,
         address: address,
@@ -74,6 +74,33 @@ export const useRegister = () => {
       });
 
       dispatch({ type: 'LOGIN', payload: user });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return registerUser;
+};
+
+export const useRegisterOffice = () => {
+
+  const registerUser = async (email, password, name, tlfn, address, role, lat, long) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Set user role in Firestore
+      await setDoc(doc(collection(db, 'users'), user.uid), {
+        uid: user.uid,
+        role: role, 
+        name: name,
+        email: user.email,
+        address: address,
+        phone: tlfn,
+        location: new GeoPoint(lat, long),
+      });
+
+      await sendEmailVerification(auth.currentUser);
     } catch (error) {
       console.log(error);
     }

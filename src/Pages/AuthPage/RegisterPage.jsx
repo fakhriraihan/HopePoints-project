@@ -17,7 +17,7 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      await registerUser(email, password, name, tlfn, address);
+      await registerUser(email, password, name, tlfn, address, 'user');
       Swal.fire("Success", "Registration successful", "success")
         .then(() => {
           Swal.fire("Confirmation Email", "Please check your email to confirm your account", "info")
