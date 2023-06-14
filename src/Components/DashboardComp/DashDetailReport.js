@@ -87,7 +87,7 @@ const DashDetailReport = () => {
 
       if (isConfirmed) {
         const setStatus = 'tolak';
-        handelChangeStatus(setReport, setStatus, id)
+        handelChangeStatus(setReport, setStatus, id);
 
         Swal.fire('Berhasil', 'Status laporan berhasil ditolak!', 'success');
       }
@@ -96,37 +96,37 @@ const DashDetailReport = () => {
     }
   };
 
-
   return (
     <div className='container-dashboard'>
       <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
       <h2 className='text-white my-3'>Detail Report</h2>
-      <Card className='mb-5'>
-      <Card.Header>
-        <div>
-          <Button
-            variant='danger'
-            type='cancel'
-            onClick={() => navigate('/dashboard/report')}
-          >
-            Cancel
-          </Button>
-        </div>
-        
-      </Card.Header>
+      <Card>
+        <Card.Header>
+          <div>
+            <Button
+              variant='danger'
+              type='cancel'
+              onClick={() => navigate('/dashboard/report')}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Card.Header>
         <Card.Body className=''>
           <Card className='p-3 mb-3'>
-          <div style={{ textAlign: 'left' }}>
-          <strong>Tanggal Pelaporan</strong> <br />
-          <small>{report?.tgl}</small> <br />
-          <strong>Status : </strong> 
-          <small>{report?.status}</small> 
-        </div>
+            <div style={{ textAlign: 'left' }}>
+              <strong>Tanggal Pelaporan</strong> <br />
+              <small>{report?.tgl}</small> <br />
+              <strong>Status : </strong>
+              <small>{report?.status}</small>
+            </div>
           </Card>
-        
+
           <div className='row'>
             <div className='col-md-6'>
-              <label className='mb-2'><b>LOKASI KEJADIAN</b></label>
+              <label className='mb-2'>
+                <b>LOKASI KEJADIAN</b>
+              </label>
               <Card className='mb-3' style={{ width: '100%', height: '25rem' }}>
                 <Card.Body>
                   {report && report.location && (
@@ -165,7 +165,9 @@ const DashDetailReport = () => {
               </Card>
             </div>
             <div className='col-md-6'>
-              <label className='mb-2'><b>DETAIL KEJADIAN</b></label>
+              <label className='mb-2'>
+                <b>DETAIL KEJADIAN</b>
+              </label>
               <Form>
                 <Form.Group className='mb-3' controlId='formGroupName'>
                   <Form.Label>Infromasi Pelapor</Form.Label>
@@ -228,41 +230,52 @@ const DashDetailReport = () => {
                     readOnly
                   />
                 </Form.Group>
-              <Form.Group className='mb-3' controlId='formGridDescription'>
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as='textarea'
-                  rows={3}
-                  defaultValue={report?.description}
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group controlId="formGridImg" style={{marginBottom: '1rem'}}>
+                <Form.Group className='mb-3' controlId='formGridDescription'>
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as='textarea'
+                    rows={3}
+                    defaultValue={report?.description}
+                    readOnly
+                  />
+                </Form.Group>
+                <Form.Group
+                  controlId='formGridImg'
+                  style={{ marginBottom: '1rem' }}
+                >
                   <Form.Label>Gambar</Form.Label>
                   <br />
                   {report?.img ? (
-                    <img src={report.img} alt="Gambar" className="img-fluid" />
+                    <img src={report.img} alt='Gambar' className='img-fluid' />
                   ) : (
                     <p>Gambar tidak tersedia</p>
                   )}
                 </Form.Group>
                 {report?.status !== 'tolak' && (
-                   <Button variant='danger' onClick={handleBatalSubmit}>
-                        Tolak
-                      </Button>
-                  )}
+                  <Button variant='danger' onClick={handleBatalSubmit}>
+                    Tolak
+                  </Button>
+                )}
                 {report?.status === 'pending' ? (
                   <>
-                      <Button variant='warning' style={{marginLeft: '5px'}} onClick={handleProcessSubmit}>
+                    <Button
+                      variant='warning'
+                      style={{ marginLeft: '5px' }}
+                      onClick={handleProcessSubmit}
+                    >
                       Proses
                     </Button>
                   </>
                 ) : (
                   <>
                     {report?.status === 'proses' && (
-                      <Button variant='success' style={{marginLeft: '5px'}} onClick={handleSelesaiSubmit}>
-                      Laporan Sudah Selesai
-                    </Button>
+                      <Button
+                        variant='success'
+                        style={{ marginLeft: '5px' }}
+                        onClick={handleSelesaiSubmit}
+                      >
+                        Laporan Sudah Selesai
+                      </Button>
                     )}
                   </>
                 )}

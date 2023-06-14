@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+## Capstone Project - Tim C23-M4057
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <img src="src/assets/logo.png" alt="LogoHopePoints" width="150" height="150">
+  <h3 align="center">HopePoints</h3>
+</p>
 
-## Available Scripts
+This is the repository used for the capstone final project for the Program Independent Study (SIB) Kampus Merdeka x Dicoding batch-4
 
-In the project directory, you can run:
+## Get To Know HopePoints
 
-### `npm start`
+HopePoints is a website that provides services for women and children, supporting their rights to be free from all forms of violence.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+In HopePoints, our goal is to raise awareness about violence against women and children in society. By providing comprehensive information and resources, HopePoints aims to educate the community, promote collective action, and provide support to victims and their families.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+In the developed application, there are two user sides: active users and office administrators. We provide office administrators in each region to assist users in their respective areas in handling their cases.
 
-### `npm test`
+## Our Mission
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In HopePoints, our goal is to raise awareness about violence against women and children in society. By providing comprehensive information and resources, HopePoints aims to educate the community, promote collective action, and provide support to victims and their families.
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<a href="https://code.visualstudio.com/">
+ <img src="https://user-images.githubusercontent.com/99185119/167304873-932c06c8-6fa6-49ba-b0ec-fdc4c30cbfd9.svg" alt="Visual Studio Code" width="60" height="70">
+  <br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+ <a href="https://www.javascript.com/">
+    <img src="https://cdn.freebiesupply.com/logos/thumbs/1x/javascript-logo.png" alt="JavaScript" height="70">
+  </a>&nbsp
+  <a href="https://reactjs.org/">
+    <img src="https://cdn.freebiesupply.com/logos/large/2x/react-1-logo-png-transparent.png" alt="React JS" height="70">
+  </a>&nbsp
+  <a href="https://v5.getbootstrap.com/">
+    <img src="https://v5.getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-shadow.png" alt="Bootstrap logo" height="70">
+  </a>&nbsp
+<br>
+  
+  <a href="https://www.javascript.com/">
+    <img src="https://assets.website-files.com/5d3ef00c73102c436bc83996/5d3ef00c73102c1f23c83a2a_logo-reversed.png" alt="Mapbox gl"height="70">
+  </a>&nbsp
+  <a href="https://firebase.google.com/?hl=id">
+  <img src="https://firebase.google.com/downloads/brand-guidelines/SVG/logo-built_white.svg" alt="Firebase" height="70">
+  </a>&nbsp
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Development
 
-### `npm run eject`
+Install dependencies : <br>
+`npm install`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Run server in development mode : <br>
+`npm run start`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Build Production : <br>
+`npm run build`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Our Team
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. F133XB334 - Fakhri Raihan
+2. F133XB302 - Ramji Renanda Sitorus
+3. F061XB089 - Muhammad Taufik Herdyunanto
+4. F165XB450 - Daffa Rizky Maulana Yusuf

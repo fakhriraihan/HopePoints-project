@@ -1,58 +1,50 @@
-body {
-  background-color: #d3d3d3;
-}
-
 .about {
   height: 100vh;
   top: 0;
-  display: grid;
-  grid-template-columns: 700px 1fr;
+  /* padding: 180px 0 100px 0; */
+  margin-top: 8rem;
   align-items: center;
   justify-items: center;
-  background-color: #ffffff;
-  border-bottom: 1px solid #d3d3d3;
 }
 
 .about .about-hopePoints {
-  display: flex;
   flex-direction: column;
-  justify-content: center;
   margin-right: 10em;
-  align-items: center;
   margin-left: 50px;
 }
 
 .about .about-hopePoints > h1 {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 700;
+  margin-left: 55px;
+  margin-top: 55px;
 }
 .about .about-hopePoints > p {
-  display: grid;
   margin-left: 55px;
-  font-size: 24px;
+  font-size: 22px;
 }
 .about .image > img {
-  width: 350px;
-  height: 100%;
+  width: 400px;
   border-radius: 16px;
+  margin-right: 10em;
 }
 .about-team {
   align-items: center;
   width: 100%;
 }
 .aboutUs {
-  height: 100vh;
-  text-align: center;
+  /* height: 113vh; */
   align-items: center;
   background-color: #fc6aa7;
   padding-top: 20px;
 }
 .aboutUs > h1 {
-  margin-bottom: 48px;
+  text-align: center;
   color: white;
   font-weight: 700;
 }
 .aboutUs > p {
+  text-align: center;
   font-size: 20px;
   padding-left: 6rem;
   padding-right: 6rem;
@@ -98,17 +90,108 @@ body {
   margin-bottom: 0;
 }
 
-.connect-button {
-  margin-top: 10px;
-  padding: 10px 50px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
+@media (max-width: 992px) {
+  .about {
+    text-align: center;
+  }
 
-.connect-button:hover {
-  background-color: #45a049;
+  .about .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about .about-hopePoints {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .about .about-hopePoints > h1 {
+    margin-left: 0;
+    margin-top: 2rem;
+  }
+
+  .about .about-hopePoints > p {
+    margin-top: 15px;
+    margin-left: 0;
+  }
+
+  .about .image > img {
+    width: 350px;
+    margin-right: 0;
+    margin-top: 2rem;
+  }
+  .cardItem {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .cardItemTeam {
+    width: 90%;
+    margin: 10px 0;
+  }
+
+  .cardItemTeam .card-img-top {
+    height: 180px;
+    border-radius: 8px;
+  }
+
+  .cardItemTeam .card-body {
+    padding: 10px;
+  }
+
+  .cardItemTeam h2 {
+    font-size: 18px;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  .cardItemTeam p {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .cardItemTeam .connect-button {
+    margin-top: 10px;
+    padding: 6px 15px;
+    font-size: 14px;
+  }
+  .aboutUs > p {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+/* @media screen and (max-width: 992px) {
+  .about .image > img {
+    width: 250px;
+  }
+} */
+/* @media screen and (min-width: 633px) {
+  .about .image > img {
+    height: 70%;
+  }
+  .about .about-hopePoints > h1 {
+    font-size: 2.5rem;
+  }
+  .about .about-hopePoints > p {
+    margin-left: 0;
+  }
+} */
+
+@media screen and (max-width: 375px) {
+  .about .about-hopePoints > h1 {
+    font-size: 2.5rem;
+  }
+  .about .about-hopePoints > h1 {
+    font-size: 2.5rem;
+  }
+  .about {
+    height: 150vh;
+  }
+  .about .image > img {
+    width: 270px;
+    margin-right: 0;
+  }
 }
