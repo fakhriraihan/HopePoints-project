@@ -1,7 +1,7 @@
 .login {
     margin: 20px auto;
     padding: 40px 50px;
-    max-width: 400px;
+    max-width: 500px;
     border-radius: 5px;
     background: #fff;
     margin-top: 80px;
@@ -52,12 +52,31 @@
     margin-bottom: 40px;
   }
   
-  .links {
+  .links-register {
     display: table;
     width: 100%;  
     box-sizing: border-box;
     border-top: 1px solid #c0c0c0;
     margin-bottom: 10px;
+  }
+  
+  .links {
+    display: table;
+    width: 100%;  
+    box-sizing: border-box;
+    /* border-top: 1px solid #c0c0c0; */
+    margin-bottom: 10px;
+  }
+  .links label {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: .8em;
+  }
+  
+  .links input[type="checkbox"] {
+    width: 10%;
+    margin-right: 5px;
   }
   
   .links a {
@@ -96,3 +115,34 @@
     text-align: center;
     color: red;
   }
+
+  .form-border {
+    padding: 2rem;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #f2efee;
+    border: none;
+		outline: none;
+		border-radius: 0.25rem;
+		color: black;
+		background: white;
+		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+.privacy-policy {
+  font-size: .65rem;
+  text-align: center;
+  color: #858282;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.image-login {
+  display: block;
+  margin: 0 auto;
+  width: 20%;
+}

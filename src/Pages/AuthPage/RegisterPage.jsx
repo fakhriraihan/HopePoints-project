@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navigation from '../../Components/Navigation/Navigation';
 import './Login.css';
 import { useRegister } from '../../Utils/auth';
+import logo from '../../assets/logo.png'
 import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
@@ -34,6 +35,8 @@ const RegisterPage = () => {
     <>
       <Navigation />
       <form className="login" onSubmit={handleLogin}>
+      <div className='form-border'>
+        <img src={logo} className='image-login centered' alt="Logo" />
         <h2>Hope Points</h2>
         <p>Please create your account!</p>
         <input type="text" placeholder="Full Name" required onChange={(e) => setName(e.target.value)} />
@@ -44,6 +47,7 @@ const RegisterPage = () => {
         <input type="submit" value="Sign Up" />
         <div className="links">
           <a href="/login">Already Have an Account? Login</a>
+        </div>
         </div>
       </form>
     </>

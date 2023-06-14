@@ -123,7 +123,7 @@ const Hero = () => {
               </div>
             </div>
             <div className="support-button text-center d-flex justify-content-center mt-4 wow fadeInUp" data-wow-delay="0.5s" style={{ visibility: 'visible', animationDelay: '0.4s', animationName: 'fadeInUp' }}>
-              <p clasNames="mb-0 px-2">Tidak menemukan Jawaban?</p>
+              <p className="mb-0 px-2">Tidak menemukan Jawaban?</p>
               <Link to="/contact" className="link">
                 Hubungi kami
               </Link>
