@@ -21,6 +21,7 @@ In HopePoints, our goal is to raise awareness about violence against women and c
 
 <a href="https://code.visualstudio.com/">
  <img src="https://user-images.githubusercontent.com/99185119/167304873-932c06c8-6fa6-49ba-b0ec-fdc4c30cbfd9.svg" alt="Visual Studio Code" width="60" height="70">
+  <br>
 
  <a href="https://www.javascript.com/">
     <img src="https://cdn.freebiesupply.com/logos/thumbs/1x/javascript-logo.png" alt="JavaScript" height="70">
