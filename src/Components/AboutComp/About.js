@@ -2,7 +2,7 @@ import React from 'react';
 import './about.css';
 import Card from 'react-bootstrap/Card';
 import hero from '../../assets/hero/hero.png';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/aboutus.jpg';
 import daffa from '../../assets/team/daffa.jpg';
 
 const About = () => {
