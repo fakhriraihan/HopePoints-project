@@ -32,7 +32,8 @@ In HopePoints, our goal is to raise awareness about violence against women and c
   <a href="https://v5.getbootstrap.com/">
     <img src="https://v5.getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-shadow.png" alt="Bootstrap logo" height="70">
   </a>&nbsp
-
+<br>
+  
   <a href="https://www.javascript.com/">
     <img src="https://assets.website-files.com/5d3ef00c73102c436bc83996/5d3ef00c73102c1f23c83a2a_logo-reversed.png" alt="Mapbox gl"height="70">
   </a>&nbsp
