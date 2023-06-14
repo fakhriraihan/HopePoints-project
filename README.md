@@ -9,6 +9,8 @@ This is the repository used for the capstone final project for the Program Indep
 
 ## Get To Know HopePoints
 
+HopePoints is a website that provides services for women and children, supporting their rights to be free from all forms of violence.
+
 In HopePoints, our goal is to raise awareness about violence against women and children in society. By providing comprehensive information and resources, HopePoints aims to educate the community, promote collective action, and provide support to victims and their families.
 
 In the developed application, there are two user sides: active users and office administrators. We provide office administrators in each region to assist users in their respective areas in handling their cases.
