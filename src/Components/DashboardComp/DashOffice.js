@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Card, Form, Modal, Pagination } from 'react-bootstrap';
 import './dashboardcomp.css';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 import { useRegisterOffice } from '../../Utils/auth';
-import { Map, Marker, NavigationControl, ScaleControl, GeolocateControl } from 'react-map-gl';
+import {
+  Map,
+  Marker,
+  NavigationControl,
+  ScaleControl,
+  GeolocateControl,
+} from 'react-map-gl';
 import Swal from 'sweetalert2';
 
 const DashOffice = () => {
@@ -20,6 +26,39 @@ const DashOffice = () => {
     latitude: 0.09273370918533735,
     zoom: 4.3,
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+
+  // Logic for pagination
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Fungsi untuk mengubah halaman ke halaman pertama
+  const goToFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman sebelumnya
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman berikutnya
+  const goToNextPage = () => {
+    if (currentPage < usersPerPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman terakhir
+  const goToLastPage = () => {
+    setCurrentPage(usersPerPage);
+  };
 
   const registerUser = useRegisterOffice();
   const handleRegister = async (e) => {
@@ -31,7 +70,16 @@ const DashOffice = () => {
     }
 
     try {
-      await registerUser(email, '123123', name, tlfn, 'null', 'office', newPlace.lat, newPlace.long);
+      await registerUser(
+        email,
+        '123123',
+        name,
+        tlfn,
+        'null',
+        'office',
+        newPlace.lat,
+        newPlace.long
+      );
       Swal.fire({
         icon: 'success',
         title: 'Registration Success',
@@ -101,16 +149,16 @@ const DashOffice = () => {
   }, [newPlace]);
 
   return (
-    <div className="container-dashboard">
-      <h2 className="text-white text-center mb-3">Table Data Office</h2>
+    <div className='container-dashboard'>
+      <h2 className='text-white text-center mb-3'>Table Data Office</h2>
       <Card>
-        <Card.Header className="d-flex align-items-center justify-content-between">
-          <Button variant="primary" onClick={() => setShowModal(true)}>
+        <Card.Header className='d-flex align-items-center justify-content-between'>
+          <Button variant='primary' onClick={() => setShowModal(true)}>
             Add Office
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table responsive bordered hover className="bg-white">
+          <Table responsive bordered hover className='bg-white'>
             <thead>
               <tr>
                 <th>No</th>
@@ -121,21 +169,41 @@ const DashOffice = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {currentUsers.map((user, index) => (
                 <tr key={user.id}>
                   <td>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
                   <td>
-                    <Button variant="danger" onClick={() => confirmDeleteUser(user.id)}>
-                      <i className="fa-solid fa-trash-can"></i>
+                    <Button
+                      variant='danger'
+                      onClick={() => confirmDeleteUser(user.id)}
+                    >
+                      <i className='fa-solid fa-trash-can'></i>
                     </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          <Pagination className='justify-content-center custom-pagination'>
+            <Pagination.First onClick={goToFirstPage} />
+            <Pagination.Prev onClick={goToPrevPage} />
+            {Array.from({
+              length: Math.ceil(users.length / usersPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={goToNextPage} />
+            <Pagination.Last onClick={goToLastPage} />
+          </Pagination>
         </Card.Body>
       </Card>
       <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -144,30 +212,51 @@ const DashOffice = () => {
             <Modal.Title>Add Office</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group controlId="name">
+            <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Form.Control
+                type='text'
+                name='name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </Form.Group>
-            <Form.Group controlId="email">
+            <Form.Group controlId='email'>
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Form.Control
+                type='email'
+                name='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </Form.Group>
-            <Form.Group controlId="phone">
+            <Form.Group controlId='phone'>
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" name="phone" value={tlfn} onChange={(e) => setPhone(e.target.value)} required />
+              <Form.Control
+                type='text'
+                name='phone'
+                value={tlfn}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
             </Form.Group>
-            <Form.Group controlId="location">
+            <Form.Group controlId='location'>
               <Form.Label>Location</Form.Label>
               {/* <Form.Control required /> */}
               <Card>
                 <Card.Body>
-                  <div className="map-container" style={{ width: '100%', height: '300px' }}>
+                  <div
+                    className='map-container'
+                    style={{ width: '100%', height: '300px' }}
+                  >
                     <Map
                       initialViewState={viewport}
                       mapboxAccessToken={token}
-                      mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w"
-                      width="100%"
-                      height="100%"
+                      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+                      width='100%'
+                      height='100%'
                       onViewportChange={setViewPort}
                     >
                       {newPlace && (
@@ -182,7 +271,7 @@ const DashOffice = () => {
                             style={{ zIndex: 999 }}
                           >
                             <i
-                              className="fa-solid fa-location-dot"
+                              className='fa-solid fa-location-dot'
                               style={{
                                 fontSize: 7 * viewport.zoom,
                                 color: 'tomato',
@@ -192,8 +281,11 @@ const DashOffice = () => {
                           </Marker>
                         </>
                       )}
-                      <GeolocateControl position="bottom-right" onGeolocate={handleGeolocateClick} />
-                      <NavigationControl position="bottom-right" />
+                      <GeolocateControl
+                        position='bottom-right'
+                        onGeolocate={handleGeolocateClick}
+                      />
+                      <NavigationControl position='bottom-right' />
                       <ScaleControl />
                       {/* Konten peta */}
                     </Map>
@@ -203,10 +295,10 @@ const DashOffice = () => {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
+            <Button variant='secondary' onClick={() => setShowModal(false)}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleRegister}>
+            <Button variant='primary' onClick={handleRegister}>
               Add
             </Button>
           </Modal.Footer>

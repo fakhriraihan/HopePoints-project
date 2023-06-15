@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Table, Button, Card } from 'react-bootstrap';
+import { Table, Button, Card, Pagination } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { GetReport, handleDeleteReport } from '../../Utils/crudData';
 import './dashboardcomp.css';
-import { getUserRoleFromLocalStorage,  getIdOfficeFromLocalStorage} from "../../Utils/UserData";
+import {
+  getUserRoleFromLocalStorage,
+  getIdOfficeFromLocalStorage,
+} from '../../Utils/UserData';
 import Swal from 'sweetalert2';
 
 const DashReport = () => {
@@ -11,6 +14,8 @@ const DashReport = () => {
   const [reports, setReports] = useState([]);
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reportsPerPage] = useState(10);
 
   const handleDelete = (reportId) => {
     Swal.fire({
@@ -29,8 +34,39 @@ const DashReport = () => {
       }
     });
   };
-  
-     
+
+  // Get current reports
+  const indexOfLastReport = currentPage * reportsPerPage;
+  const indexOfFirstReport = indexOfLastReport - reportsPerPage;
+  const currentReports = reports.slice(indexOfFirstReport, indexOfLastReport);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Fungsi untuk mengubah halaman ke halaman pertama
+  const goToFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman sebelumnya
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman berikutnya
+  const goToNextPage = () => {
+    if (currentPage < reportsPerPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman terakhir
+  const goToLastPage = () => {
+    setCurrentPage(reportsPerPage);
+  };
+
   return (
     <div className='container-dashboard'>
       <h2 className='text-white text-center mb-3'>Table Report</h2>
@@ -50,35 +86,59 @@ const DashReport = () => {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report, index) => (
+              {currentReports.map((report, index) => (
                 <tr key={report.idReport}>
                   <td>{index + 1}</td>
                   <td>{report.tgl}</td>
                   <td>{report.name}</td>
-                  <td>{report.kekerasanFisik && <small>Fisik </small>}
-                      {report.kekerasanPsikis && <small>Psikis </small>}
-                      {report.kekerasanSeksual && <small>Seksual</small>}</td>
-                      <td>{report.title}</td>
+                  <td>
+                    {report.kekerasanFisik && <small>Fisik </small>}
+                    {report.kekerasanPsikis && <small>Psikis </small>}
+                    {report.kekerasanSeksual && <small>Seksual</small>}
+                  </td>
+                  <td>{report.title}</td>
                   <td>{report.nameOffice}</td>
                   <td>{report.status}</td>
                   <td>
                     <Button
                       variant='info'
-                      onClick={() => Navigate(`/dashboard/report/detail/${report.idReport}`)}
+                      onClick={() =>
+                        Navigate(`/dashboard/report/detail/${report.idReport}`)
+                      }
                     >
                       <i className='fa-solid fa-eye'></i>
                     </Button>
                     {userRole === 'admin' && (
-                      <Button variant='danger' style={{marginTop: '5px'}} onClick={() => handleDelete(report.idReport)}>
+                      <Button
+                        variant='danger'
+                        style={{ marginTop: '5px' }}
+                        onClick={() => handleDelete(report.idReport)}
+                      >
                         <i className='fa-solid fa-trash-can'></i>
                       </Button>
                     )}
                   </td>
-
                 </tr>
               ))}
             </tbody>
           </Table>
+          <Pagination className='justify-content-center custom-pagination'>
+            <Pagination.First onClick={goToFirstPage} />
+            <Pagination.Prev onClick={goToPrevPage} />
+            {Array.from({
+              length: Math.ceil(reports.length / reportsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={goToNextPage} />
+            <Pagination.Last onClick={goToLastPage} />
+          </Pagination>
         </Card.Body>
       </Card>
       {userRole === 'admin' ? (

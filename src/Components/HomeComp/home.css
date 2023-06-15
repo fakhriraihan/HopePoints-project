@@ -226,9 +226,11 @@
   z-index: 1;
   margin-bottom: 1.5rem;
 }
+
 .faq-accordian .card:last-child {
   margin-bottom: 0;
 }
+
 .faq-accordian .card .card-header {
   background-color: #ffa1c9;
   padding: 0;
@@ -236,6 +238,13 @@
   border-radius: 10px;
   box-shadow: 0px 2px 5px rgb(211, 36, 94);
 }
+
+.faq-accordian .card .card-header:hover {
+  background-color: #e7ccd8;
+  border-bottom-color: #ffa1c9;
+  box-shadow: 0px 2px 5px rgb(211, 36, 94);
+}
+
 .faq-accordian .card .card-header h6 {
   cursor: pointer;
   padding: 1.75rem 2rem;
@@ -251,27 +260,34 @@
   -ms-flex-pack: justify;
   justify-content: space-between;
 }
+
 .faq-accordian .card .card-header h6 span {
   font-size: 1.5rem;
 }
+
 .faq-accordian .card .card-header h6.collapsed {
   color: black;
 }
+
 .faq-accordian .card .card-header h6.collapsed span {
   -webkit-transform: rotate(-180deg);
   transform: rotate(-180deg);
 }
+
 .faq-accordian .card .card-body {
   padding: 1.75rem 2rem;
   box-shadow: 0px 0px 5px rgb(211, 36, 94);
 }
+
 .faq-accordian .card .card-body p:last-child {
   margin-bottom: 0;
 }
+
 .link {
   color: #f94892;
   text-decoration: none;
 }
+
 .link:hover {
   text-decoration: underline;
   color: black;

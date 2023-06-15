@@ -1,16 +1,50 @@
+.custom-pagination .page-link {
+  background-color: white;
+  border-color: #f94892;
+  color: #f94892;
+}
+
+.custom-pagination .page-link:hover {
+  background-color: #f94892;
+  border-color: #f94892;
+  color: white;
+}
+
+.custom-pagination .page-link:focus {
+  box-shadow: none;
+  color: #f94892;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: #f94892;
+  border-color: #f94892;
+  color: white;
+}
+
 .office-container {
   min-height: 100vh;
   margin-top: 5rem;
   padding: 0 7%;
 }
 
-.cari {
-  border: none;
-  background-color: transparent;
+.office-card {
+  background-color: #ffa1c9;
+  padding: 20px;
+  border-bottom-color: #ffa1c9;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgb(211, 36, 94);
+  cursor: pointer;
 }
 
-.cari:hover {
-  color: #f94892;
+.office-card:hover {
+  background-color: #e7ccd8;
+  border-bottom-color: #ffa1c9;
+  box-shadow: 0px 2px 5px rgb(211, 36, 94);
+}
+
+.form-search {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .lihat-detail {
@@ -19,7 +53,7 @@
 }
 
 .lihat-detail:hover {
-  color: #f94892;
+  color: white;
 }
 
 .name-comment {

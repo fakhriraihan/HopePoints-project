@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { Pagination, Form, Button } from 'react-bootstrap';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
@@ -10,6 +16,8 @@ const Office = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -74,38 +82,91 @@ const Office = () => {
     }
   }, [searchValue, users]);
 
+  // Menghitung total halaman berdasarkan jumlah item per halaman
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  // Mengambil index awal dan akhir item untuk halaman saat ini
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Fungsi untuk mengubah halaman saat tombol halaman ditekan
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman pertama
+  const goToFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman sebelumnya
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman berikutnya
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman terakhir
+  const goToLastPage = () => {
+    setCurrentPage(totalPages);
+  };
+
   return (
     <div className='office-container'>
       <div className='py-3'>
         <h1 className='text-center mb-3'>Office</h1>
-        <form className='form-search' onSubmit={handleSearch} id='form-search'>
-          <input
-            className='rounded'
+        <Form
+          className='form-search d-flex justify-content-center align-items-center'
+          onSubmit={handleSearch}
+          id='form-search'
+        >
+          <Form.Control
             id='searchOffice'
             type='text'
             placeholder='Cari Nama Lembaga'
+            style={{ width: '20%' }}
           />
-          <button className='cari mx-3' type='submit'>
+          <Button className='cari-btn ms-3' type='submit' variant='pink'>
             <i className='fas fa-search'></i>
-          </button>
-        </form>
-        {users.map((user) => (
+          </Button>
+        </Form>
+        {currentItems.map((user) => (
           <React.Fragment key={user.id}>
-            <Card className='my-3'>
-              <Card.Body className='d-flex justify-content-between align-items-center'>
+            <div className='my-3'>
+              <div
+                className='d-flex justify-content-between align-items-center office-card'
+                onClick={() => navigate(`/detailoffice/${user.id}`)}
+              >
                 <h6>{user.name}</h6>
-                <div>
-                  <button
-                    className='lihat-detail'
-                    onClick={() => navigate(`/detailoffice/${user.id}`)}
-                  >
-                    <i className='fas fa-eye ml-auto fs-1'></i>
-                  </button>
-                </div>
-              </Card.Body>
-            </Card>
+                <div></div>
+              </div>
+            </div>
           </React.Fragment>
         ))}
+        {/* Pagination */}
+        <Pagination className='justify-content-center custom-pagination mt-5'>
+          <Pagination.First onClick={goToFirstPage} />
+          <Pagination.Prev onClick={goToPrevPage} />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next onClick={goToNextPage} />
+          <Pagination.Last onClick={goToLastPage} />
+        </Pagination>
       </div>
     </div>
   );

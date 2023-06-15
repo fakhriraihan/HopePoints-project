@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Card, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Card, Form, Modal, Pagination } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
 import {
   GetReviewWhereRole,
@@ -12,13 +12,15 @@ import {
 } from '../../Utils/UserData';
 import Swal from 'sweetalert2';
 
-const DashReview = ({ Toggle }) => {
+const DashReview = () => {
   const userRole = getUserRoleFromLocalStorage();
   const idOffice = getIdOfficeFromLocalStorage();
   const [show, setShow] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [replyValue, setReplyValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
   const handleClose = () => setShow(false);
   const handleShow = (review) => {
     setSelectedReview(review);
@@ -62,6 +64,39 @@ const DashReview = ({ Toggle }) => {
         Swal.fire('Deleted!', 'The review has been deleted.', 'success');
       }
     });
+  };
+
+  // Logic for pagination
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman pertama
+  const goToFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman sebelumnya
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman berikutnya
+  const goToNextPage = () => {
+    if (currentPage < reviewsPerPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Fungsi untuk mengubah halaman ke halaman terakhir
+  const goToLastPage = () => {
+    setCurrentPage(reviewsPerPage);
   };
 
   return (
@@ -109,8 +144,8 @@ const DashReview = ({ Toggle }) => {
               </tr>
             </thead>
             <tbody>
-              {reviews &&
-                reviews.map((review, index) => (
+              {currentReviews &&
+                currentReviews.map((review, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{review.name}</td>
@@ -168,6 +203,23 @@ const DashReview = ({ Toggle }) => {
                 ))}
             </tbody>
           </Table>
+          <Pagination className='justify-content-center custom-pagination'>
+            <Pagination.First onClick={goToFirstPage} />
+            <Pagination.Prev onClick={goToPrevPage} />
+            {Array.from({
+              length: Math.ceil(reviews.length / reviewsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={goToNextPage} />
+            <Pagination.Last onClick={goToLastPage} />
+          </Pagination>
         </Card.Body>
       </Card>
       {userRole === 'admin' ? (
