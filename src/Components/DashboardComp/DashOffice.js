@@ -27,7 +27,7 @@ const DashOffice = () => {
     zoom: 4.3,
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 5;
+  const usersPerPage = 8;
 
   // Logic for pagination
   const indexOfLastUser = currentPage * usersPerPage;
@@ -59,6 +59,8 @@ const DashOffice = () => {
   const goToLastPage = () => {
     setCurrentPage(usersPerPage);
   };
+
+  const nomorUrutAwal = (currentPage - 1) * usersPerPage;
 
   const registerUser = useRegisterOffice();
   const handleRegister = async (e) => {
@@ -161,7 +163,7 @@ const DashOffice = () => {
           <Table responsive bordered hover className='bg-white'>
             <thead>
               <tr>
-                <th>No</th>
+                <th style={{textAlign: 'center'}}>No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>No Kantor</th>
@@ -171,11 +173,11 @@ const DashOffice = () => {
             <tbody>
               {currentUsers.map((user, index) => (
                 <tr key={user.id}>
-                  <td>{index + 1}</td>
+                  <td style={{textAlign: 'center'}}>{nomorUrutAwal + index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
-                  <td>
+                  <td style={{textAlign: 'center'}}>
                     <Button
                       variant='danger'
                       onClick={() => confirmDeleteUser(user.id)}

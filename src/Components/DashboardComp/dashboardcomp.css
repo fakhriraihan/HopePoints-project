@@ -76,6 +76,24 @@
   margin-right: 10px;
 }
 
+.button-filter {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ebebeb;
+  color: #555555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button-filter.active {
+  background-color: rgb(249, 72, 146);
+  color: #ffffff;
+}
+
 @media screen and (max-width: 1025px) {
   .logo-dashboard {
     margin-right: 0;

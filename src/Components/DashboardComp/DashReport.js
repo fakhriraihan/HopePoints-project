@@ -16,6 +16,7 @@ const DashReport = () => {
   const idOffice = getIdOfficeFromLocalStorage();
   const [currentPage, setCurrentPage] = useState(1);
   const [reportsPerPage] = useState(10);
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const handleDelete = (reportId) => {
     Swal.fire({
@@ -67,12 +68,24 @@ const DashReport = () => {
     setCurrentPage(reportsPerPage);
   };
 
+  const nomorUrutAwal = (currentPage - 1) * reportsPerPage;
+
+  const handleStatusChange = (status) => {
+    setSelectedStatus(status);
+  };
+
   return (
     <div className='container-dashboard'>
       <h2 className='text-white text-center mb-3'>Table Report</h2>
       <Card>
         <Card.Body>
+        <button className={selectedStatus === null ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange(null)}>Semua</button>
+        <button className={selectedStatus === 'pending' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('pending')}>Perlu diproses</button>
+        <button className={selectedStatus === 'proses' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('proses')}>Telah diproses</button>
+        <button className={selectedStatus === 'selesai' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('selesai')}>Selesai</button>
+        <button className={selectedStatus === 'tolak' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('tolak')}>Ditolak</button>
           <Table responsive bordered hover className='table bg-white'>
+            
             <thead>
               <tr>
                 <th>No</th>
@@ -82,13 +95,13 @@ const DashReport = () => {
                 <th>Title</th>
                 <th>Office</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th style={{textAlign: 'center'}}>Action</th>
               </tr>
             </thead>
             <tbody>
               {currentReports.map((report, index) => (
                 <tr key={report.idReport}>
-                  <td>{index + 1}</td>
+                  <td style={{textAlign: 'center'}}>{nomorUrutAwal + index + 1}</td>
                   <td>{report.tgl}</td>
                   <td>{report.name}</td>
                   <td>
@@ -99,7 +112,7 @@ const DashReport = () => {
                   <td>{report.title}</td>
                   <td>{report.nameOffice}</td>
                   <td>{report.status}</td>
-                  <td>
+                  <td style={{textAlign: 'center'}}>
                     <Button
                       variant='info'
                       onClick={() =>
@@ -142,9 +155,9 @@ const DashReport = () => {
         </Card.Body>
       </Card>
       {userRole === 'admin' ? (
-        <GetReport setReports={setReports} />
+        <GetReport setReports={setReports} selectedStatus={selectedStatus}/>
       ) : (
-        <GetReport setReports={setReports} idOffice={idOffice} />
+        <GetReport setReports={setReports} idOffice={idOffice} selectedStatus={selectedStatus}/>
       )}
     </div>
   );

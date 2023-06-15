@@ -14,19 +14,19 @@ const DashAdmin = () => {
           <Table responsive bordered hover className='bg-white'>
             <thead>
               <tr>
-                <th>No</th>
+                <th style={{ width: '4%', textAlign: 'center' }}>No</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Action</th>
+                <th style={{ width: '4%', textAlign: 'center' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user, index) => (
                 <tr key={user.id}>
-                  <td>{index + 1}</td>
+                  <td style={{textAlign: 'center'}}>{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>
+                  <td style={{textAlign: 'center'}}>
                     <Button
                       variant='danger'
                       onClick={() => handleDeleteUser(user.id)}

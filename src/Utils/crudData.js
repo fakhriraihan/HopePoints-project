@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { collectionGroup, collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc, updateDoc } from 'firebase/firestore';
+import { collectionGroup, collection, query, where, onSnapshot, doc, deleteDoc, getDocs, getDoc, updateDoc, orderBy } from 'firebase/firestore';
 import { getAuth, updateProfile, reauthenticateWithCredential, updatePassword, EmailAuthProvider, deleteUser } from 'firebase/auth';
 import { db } from '../Config/firebase';
 
-const GetReport = ({ setReports, idOffice }) => {
+const GetReport = ({ setReports, idOffice, selectedStatus }) => {
   useEffect(() => {
     const reportsCollection = collection(db, 'reports');
     let reportsQuery = reportsCollection;
@@ -12,13 +12,21 @@ const GetReport = ({ setReports, idOffice }) => {
       reportsQuery = query(reportsCollection, where('idOffice', '==', idOffice));
     }
 
+    // Tambahkan orderBy untuk mengurutkan berdasarkan tanggal secara descending
+    reportsQuery = query(reportsQuery, orderBy('tgl', 'desc'));
+
+    // Tambahkan filter berdasarkan status yang dipilih
+    if (selectedStatus) {
+      reportsQuery = query(reportsQuery, where('status', '==', selectedStatus));
+    }
+
     const unsubscribe = onSnapshot(reportsQuery, (querySnapshot) => {
       const reportsData = querySnapshot.docs.map((doc) => doc.data());
       setReports(reportsData);
     });
 
     return () => unsubscribe();
-  }, [setReports, idOffice]);
+  }, [setReports, idOffice, selectedStatus]);
 
   return null;
 };

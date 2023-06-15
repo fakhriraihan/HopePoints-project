@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 const DashUser = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 5;
+  const usersPerPage = 8;
 
   // Logic for pagination
   const indexOfLastUser = currentPage * usersPerPage;
@@ -38,6 +38,8 @@ const DashUser = () => {
   const goToLastPage = () => {
     setCurrentPage(usersPerPage);
   };
+
+  const nomorUrutAwal = (currentPage - 1) * usersPerPage;
 
   const confirmDeleteUser = (userId) => {
     Swal.fire({
@@ -79,17 +81,17 @@ const DashUser = () => {
           <Table responsive bordered hover className='bg-white'>
             <thead>
               <tr>
-                <th>No</th>
+                <th style={{ width: '5%' }}>No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Telephone</th>
-                <th>Action</th>
+                <th style={{ width: '5%' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {currentUsers.map((user, index) => (
                 <tr key={user.id}>
-                  <td>{index + 1}</td>
+                  <td style={{textAlign: 'center'}}>{nomorUrutAwal + index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
