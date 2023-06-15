@@ -1,7 +1,7 @@
 .hero {
-  height: 100vh;
+  min-height: 75vh;
   top: 0;
-  padding: 200px 0 0 0;
+  padding: 150px 0 0 0;
   animation: fadeInAnimation 2s forwards;
   -webkit-animation: fadeInAnimation 2s forwards;
 }
@@ -48,31 +48,104 @@
   animation: heroAnimation 2s infinite alternate;
 }
 
+/* card carousel */
+.carousel-title {
+  text-align: center;
+  color: #f94892;
+  font-weight: 600;
+}
+
+.carousel-container {
+  min-height: 20vh;
+  margin-bottom: 15px;
+}
+
+.carousel-wrapper {
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.carousel-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f1f1;
+  box-shadow: 0px 0px 10px rgb(211, 36, 94);
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.carousel-slide:not(.active) {
+  transform: translateZ(-500px) scale(0.8);
+}
+
+.carousel-slide.active {
+  transform: translateZ(0) scale(1);
+}
+
+.carousel-slide > h2 {
+  text-align: center;
+}
+
+.carousel-slide > p {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f94892;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f94892;
+  border: none;
+  border-radius: 50%;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1;
+  padding: 10px 15px;
+}
+
+.carousel-button:hover {
+  color: white;
+}
+
+.carousel-button.prev {
+  left: 17%;
+}
+
+.carousel-button.next {
+  right: 17%;
+}
+
 /* Fitur */
 
 .feature {
-  background-color: #f94892;
+  background-color: #ffa1c9;
   padding-top: 15px;
   text-align: center;
   padding-bottom: 44px;
-}
-
-.overlay {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 30px;
+  min-height: 100vh;
 }
 
 .featureForm {
   align-items: center;
   text-align: center;
   padding: 20px;
-  margin: 10px;
   background-color: #f8f7f7;
   border-radius: 25px;
   overflow: hidden;
-  box-shadow: 3px 6px 9px #3d3d3d;
+  box-shadow: 3px 6px 9px rgb(211, 36, 94);
+  cursor: pointer;
+  font-size: 100px;
+  width: 100%;
+  height: 23rem;
 }
+
 .featureForm:hover {
   background-color: rgb(228, 224, 224);
 }
@@ -85,28 +158,17 @@
 .featureForm p {
   margin-top: 5px;
   font-size: 16px;
-  text-align: left;
+  text-align: center;
+}
+
+.featureForm i {
+  color: #f94892;
 }
 
 .feature > h1 {
   text-align: center;
-  color: white;
-}
-.feature .overlay .featureForm {
-  /* padding: 50px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  color: white; */
-
-  cursor: pointer;
-}
-.link-feature {
-  font-size: 20px;
-  text-decoration: none;
-  color: white;
-  background-color: #f5619f;
-  padding: 15px;
-  border-radius: 10px;
+  color: black;
+  font-weight: 700;
 }
 
 .feature > button {
@@ -121,18 +183,19 @@
   padding: 15px 35px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1rem;
   box-shadow: 0px 5px 6px rgb(211, 36, 94);
 }
 .feature > button:hover {
   background-color: rgb(238, 234, 234);
 }
 
-/* Dropdown */
+/* faq */
 
 .faq {
   padding: 60px 0;
+  min-height: 90vh;
 }
+
 .faq-title > h2 {
   color: #f94892;
   font-weight: 700;
@@ -157,16 +220,7 @@
   justify-content: center;
   align-items: center;
 }
-/* .faq_area {
-  position: relative;
-  z-index: 1;
-  background-color: #f5f5ff;
-} */
 
-/* .faq-accordian {
-  position: relative;
-  z-index: 1;
-} */
 .faq-accordian .card {
   /* position: relative; */
   z-index: 1;
@@ -176,16 +230,16 @@
   margin-bottom: 0;
 }
 .faq-accordian .card .card-header {
-  background-color: #ffffff;
+  background-color: #ffa1c9;
   padding: 0;
-  border-bottom-color: #ebebeb;
+  border-bottom-color: #ffa1c9;
   border-radius: 10px;
-  box-shadow: 0px 2px 5px #c5c4c4;
+  box-shadow: 0px 2px 5px rgb(211, 36, 94);
 }
 .faq-accordian .card .card-header h6 {
   cursor: pointer;
   padding: 1.75rem 2rem;
-  color: #3f43fd;
+  color: black;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -201,7 +255,7 @@
   font-size: 1.5rem;
 }
 .faq-accordian .card .card-header h6.collapsed {
-  color: #070a57;
+  color: black;
 }
 .faq-accordian .card .card-header h6.collapsed span {
   -webkit-transform: rotate(-180deg);
@@ -209,7 +263,7 @@
 }
 .faq-accordian .card .card-body {
   padding: 1.75rem 2rem;
-  box-shadow: 0px 0px 5px #c5c4c4;
+  box-shadow: 0px 0px 5px rgb(211, 36, 94);
 }
 .faq-accordian .card .card-body p:last-child {
   margin-bottom: 0;
@@ -222,18 +276,15 @@
   text-decoration: underline;
   color: black;
 }
-/* .collapsed i.fas.fa-arrow-up {
-    
-} */
 
 /* Start Animasi */
 .collapsed i.fas.fa-arrow-up {
   transform: rotate(180deg);
 }
 
-@media screen and (max-width: 950px) {
-  .hero {
-    padding: 100px 0 100px 0;
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
   }
   100% {
     opacity: 1;
@@ -258,7 +309,7 @@
 }
 /* Stop Animasi */
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 950px) {
   .hero {
     padding: 100px 0 100px 0;
   }
@@ -290,21 +341,43 @@
     width: 100%;
   }
 }
-@media screen and (max-width: 580px) {
-  .feature .overlay {
-    display: flex;
-    flex-direction: column;
-  }
-}
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 400px) {
   .hero .wrap-text > h1 {
     font-size: 2.5rem;
   }
-}
-@media screen and (max-width: 376px) {
-  .feature .overlay {
-    display: flex;
-    flex-direction: column;
+  .hero .wrap-text > p {
+    font-size: 1rem;
+  }
+  .hero .wrap-text > button {
+    font-size: 1rem;
+    width: 40%;
+  }
+  .carousel-container {
+    margin-top: 30px;
+  }
+
+  .carousel-button.prev {
+    left: 10%;
+  }
+
+  .carousel-button.next {
+    right: 10%;
+  }
+
+  .featureForm {
+    height: 15rem;
+  }
+
+  .featureForm p {
+    display: none;
+  }
+
+  .faq-title > h2 {
+    font-size: 2rem;
+  }
+
+  .faq-title > p {
+    font-size: 1rem;
   }
 }

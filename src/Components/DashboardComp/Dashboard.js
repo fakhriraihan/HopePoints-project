@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Map, {
   Marker,
   NavigationControl,
   ScaleControl,
   GeolocateControl,
 } from 'react-map-gl';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import './dashboardcomp.css';

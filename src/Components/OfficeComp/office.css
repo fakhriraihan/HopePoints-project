@@ -1,4 +1,5 @@
 .office-container {
+  min-height: 100vh;
   margin-top: 5rem;
   padding: 0 7%;
 }
@@ -30,13 +31,13 @@
 }
 
 .tgl-comment {
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 
 .comment-office {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .reply-comment {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }

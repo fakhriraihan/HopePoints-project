@@ -66,18 +66,6 @@ const Footer = () => {
             <h3>Contact</h3>
             <ul className='footer-list'>
               <li className='footer-item-social'>
-                <a href='/' className='footer-link'>
-                  <i className='fab fa-facebook-f p-3 fs-5' />
-                </a>
-                |
-                <a href='/' className='footer-link'>
-                  <i className='fab fa-instagram p-3 fs-5' />
-                </a>
-                |
-                <a href='/' className='footer-link'>
-                  <i className='fab fa-twitter p-3 fs-5' />
-                </a>
-                |
                 <a
                   href='mailto:hopepoints123@gmail.com'
                   target='_blank'
