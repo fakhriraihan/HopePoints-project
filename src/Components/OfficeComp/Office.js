@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { collection, query, where, orderBy, startAt, endAt, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';

@@ -1,25 +1,15 @@
 import React, { useState } from 'react';
 import { Table, Button, Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import './dashboardcomp.css';
 import { GetUserWhereRole, handleDeleteUser } from '../../Utils/crudData';
 
 const DashAdmin = () => {
-  const Navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
   return (
     <div className='container-dashboard'>
       <h2 className='text-white mb-3'>Table Data Admin</h2>
       <Card>
-        <Card.Header className='d-flex align-items-center justify-content-between'>
-          <Button
-            variant='primary'
-            onClick={() => Navigate('/dashboard/office/add')}
-          >
-            Add Admin
-          </Button>
-        </Card.Header>
         <Card.Body>
           <Table responsive bordered hover className='bg-white'>
             <thead>

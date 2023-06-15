@@ -97,7 +97,6 @@ const DashOffice = () => {
 
   useEffect(() => {
     if (newPlace) {
-      console.log(newPlace);
     }
   }, [newPlace]);
 

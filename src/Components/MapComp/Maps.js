@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GetReport } from '../../Utils/crudData';
 import * as firestore from 'firebase/firestore';
 import { db } from '../../Config/firebase';
-import { Form, Button, FloatingLabel } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import './popup.css';
 import { FaStar } from 'react-icons/fa';
 import HeatmapLegend from './Legend';
@@ -31,8 +31,6 @@ const MapComponent = () => {
 
   const handleClick = (value) => {
     setCurrentValue(value);
-
-    console.log(value);
   };
 
   const handleMouseOver = (newHoverValue) => {
@@ -61,7 +59,6 @@ const MapComponent = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log('Retrieved data:', userList);
         setUsers(userList);
       },
       (error) => {

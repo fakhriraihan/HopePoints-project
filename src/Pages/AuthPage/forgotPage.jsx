@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForgot } from '../../Utils/auth';
 import Swal from 'sweetalert2';
+import Navigation from '../../Components/Navigation/Navigation';
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -19,13 +20,16 @@ const LoginPage = () => {
 
   return (
     <>
+    <Navigation />
       <form className="login" onSubmit={handleLogin}>
+      <div className='form-border'>
         <h2>Hope Points</h2>
         <p>Forgot your password? Enter your email to reset it.</p>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
         <input type="submit" value="Reset Password" />
         <div className="links">
           <a href="/login">Back to Login/Signup</a>
+        </div>
         </div>
       </form>
     </>
