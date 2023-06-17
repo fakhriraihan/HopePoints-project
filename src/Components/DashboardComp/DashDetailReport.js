@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { GetDetailReport, handelChangeStatus } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-const token = process.env.REACT_APP_MAPBOX_TOKEN;
+const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
 const DashDetailReport = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -108,7 +108,7 @@ const DashDetailReport = () => {
               type='cancel'
               onClick={() => navigate('/dashboard/report')}
             >
-              Cancel
+              Back
             </Button>
           </div>
         </Card.Header>
@@ -180,7 +180,7 @@ const DashDetailReport = () => {
                     >
                       <div>
                         <Card.Text>
-                          <strong>Name:</strong> {report?.name}
+                          <strong>Nama:</strong> {report?.name}
                           <br />
                           <strong>Email:</strong> {report?.email}
                           <br />
@@ -191,7 +191,7 @@ const DashDetailReport = () => {
                   </Card>
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='formGroupTitle'>
-                  <Form.Label>Title</Form.Label>
+                  <Form.Label>Judul</Form.Label>
                   <Form.Control
                     type='text'
                     defaultValue={report?.title}
@@ -200,7 +200,7 @@ const DashDetailReport = () => {
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Tanggal dan Waktu Kejadian</Form.Label>
+                  <Form.Label>Tanggal Kejadian</Form.Label>
                   <Form.Control
                     type='dateandtime'
                     placeholder=''
@@ -221,17 +221,8 @@ const DashDetailReport = () => {
                     readOnly
                   />
                 </Form.Group>
-
-                <Form.Group className='mb-3' controlId='formGridAddress'>
-                  <Form.Label>Kantor Terdekat</Form.Label>
-                  <Form.Control
-                    placeholder='1234 Main St'
-                    defaultValue={report?.nameOffice}
-                    readOnly
-                  />
-                </Form.Group>
                 <Form.Group className='mb-3' controlId='formGridDescription'>
-                  <Form.Label>Description</Form.Label>
+                  <Form.Label>Deskripsi</Form.Label>
                   <Form.Control
                     as='textarea'
                     rows={3}

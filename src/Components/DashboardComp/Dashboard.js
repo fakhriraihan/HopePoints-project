@@ -14,7 +14,7 @@ import {
   getIdOfficeFromLocalStorage,
 } from '../../Utils/UserData';
 
-const token = process.env.REACT_APP_MAPBOX_TOKEN;
+const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
 const userRole = getUserRoleFromLocalStorage();
 const idOffice = getIdOfficeFromLocalStorage();
 

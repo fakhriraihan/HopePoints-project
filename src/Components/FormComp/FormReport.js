@@ -19,7 +19,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { GetUserById, ProvincesSelect } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-const token = process.env.REACT_APP_MAPBOX_TOKEN;
+const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
 
 const FormReportComp = () => {
   //maps
@@ -63,7 +63,6 @@ const FormReportComp = () => {
 
   useEffect(() => {
     if (newPlace) {
-      console.log(newPlace);
     }
   }, [newPlace]);
 
@@ -211,19 +210,52 @@ const FormReportComp = () => {
   };
 
   return (
-    <div className='px-3 mt-5 mb-5'>
-      <h2 className='text-white my-3'> D</h2>
-      <Card>
-        <Card.Header>
-          <h3 className='form-subtitle-page'>
-            Sampaikan laporan Anda langsung terhadap kekerasan yang dialami
-          </h3>
-        </Card.Header>
-        <Card.Body className=''>
-          <div className='row'>
-            <div className='col-md-6'>
-              <label className='mb-2'>Lokasi Kejadian</label>
-              <Card className='mb-3' style={{ width: '100%', height: '25rem' }}>
+    <div className='container'>
+      <div className='row justify-content-center'>
+        <div className='col-md-7 px-2 mt-4 mb-5'>
+          <h2 className='text-white my-3'> D</h2>
+          {/* <div className='col-md-6'> */}
+          <Card>
+            <Card.Header>
+              <h3 className='form-subtitle-page'>
+                Sampaikan laporan Anda langsung terhadap kekerasan yang dialami
+              </h3>
+            </Card.Header>
+
+            <Card.Body className=''>
+              <Form.Group className='mb-3' controlId='formGroupName'>
+                <Form.Label className='fw-bold'>Infromasi Pelapor</Form.Label>
+                <Card>
+                  <Card.Body
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div>
+                      <Card.Text>
+                        <strong>Nama:</strong> {users?.name}
+                        <br />
+                        <strong>Email:</strong> {users?.email}
+                        <br />
+                        <strong>Telephone:</strong> {users?.phone}
+                      </Card.Text>
+                    </div>
+                    <Button
+                      variant='primary'
+                      onClick={() => {
+                        window.location.href = '/profile';
+                      }}
+                    >
+                      {' '}
+                      Change
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Form.Group>
+
+              <label className='mb-2 fw-bold'>Lokasi Kejadian</label>
+              <Card className='' style={{ width: '100%', height: '25rem' }}>
                 <div
                   className='map-comp'
                   style={{ width: '100%', height: '100%' }}
@@ -267,45 +299,16 @@ const FormReportComp = () => {
                   </MapGL>
                 </div>
               </Card>
-            </div>
-            <div className='col-md-6'>
-              <label className='mb-2'>Detail Kejadian</label>
+              <p style={{ textAlign: 'center', padding: '0 20px' }}>
+                <small style={{ color: 'orange', fontSize: '0.7rem', textAlign: 'center', justifyContent: 'center' }}>Mohon masukan lokasi dengan benar, agar dapat membantu kami mengumpulkan informasi yang dibutuhkan</small>
+              </p>
+              <label className='mb-2 fw-bold'>Detail Kejadian</label>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Infromasi Pelapor</Form.Label>
-                  <Card>
-                    <Card.Body
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <Card.Text>
-                          <strong>Name:</strong> {users?.name}
-                          <br />
-                          <strong>Email:</strong> {users?.email}
-                          <br />
-                          <strong>Telephone:</strong> {users?.phone}
-                        </Card.Text>
-                      </div>
-                      <Button
-                        variant='primary'
-                        onClick={() => {
-                          window.location.href = '/profile';
-                        }}
-                      >
-                        {' '}
-                        Change
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formGroupName'>
-                  <Form.Label>Title</Form.Label>
+                  <Form.Label>Judul</Form.Label>
                   <Form.Control
                     type='text'
-                    placeholder=''
+                    placeholder='Masukan judul pelaporanmu'
                     onChange={(e) => setTitle(e.target.value)}
                     required
                   />
@@ -335,7 +338,7 @@ const FormReportComp = () => {
                   />
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='dateInput'>
-                  <Form.Label>Date:</Form.Label>
+                  <Form.Label>Tanggal Kejadian:</Form.Label>
                   <Form.Control
                     type='date'
                     onChange={(e) => setTglKejadian(e.target.value)}
@@ -343,7 +346,7 @@ const FormReportComp = () => {
                   />
                 </Form.Group>
                 <Form.Group id='province'>
-                  <Form.Label>Office</Form.Label>
+                  <Form.Label>Kantor</Form.Label>
                   <Select
                     placeholder='Pilih Kantor'
                     options={provinces}
@@ -354,15 +357,16 @@ const FormReportComp = () => {
                 </Form.Group>
 
                 <Form.Group className='mb-3' controlId='formGridDescription'>
-                  <Form.Label>Description</Form.Label>
+                  <Form.Label>Deskripsi</Form.Label>
                   <Form.Control
                     as='textarea'
+                    placeholder='Masukan deskripsi pelaporanmu'
                     rows={3}
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='fileInput'>
-                  <Form.Label>Choose a file:</Form.Label>
+                  <Form.Label>Bukti Gambar <small style={{ color: 'orange', fontSize: '0.7rem' }}>Opsional</small></Form.Label>
                   <Form.Control
                     type='file'
                     onChange={(e) => setFile(e.target.files[0])}
@@ -372,13 +376,15 @@ const FormReportComp = () => {
                   laporkan!
                 </Button>
               </Form>
-            </div>
-          </div>
-        </Card.Body>
-      </Card>
+              {/* </div> */}
+            </Card.Body>
+          </Card>
+          {/* </div> */}
 
-      <GetUserById setUser={setUser} uid={uid} />
-      <ProvincesSelect setProvinces={setProvinces} />
+          <GetUserById setUser={setUser} uid={uid} />
+          <ProvincesSelect setProvinces={setProvinces} />
+        </div>
+      </div>
     </div>
   );
 };

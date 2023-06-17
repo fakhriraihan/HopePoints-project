@@ -24,8 +24,7 @@ const Features = () => {
               <h2 className='featureFormTitle'>Maps</h2>
               <i className='fa-solid fa-map-location-dot'></i>
               <p>
-                Fitur Map ini akan membantu kamu dalam melihat lokasi yang
-                dibutuhkan
+                Fitur Map ini akan membantu kamu dalam melihat lokasi rawan kekerasan terhadap perempuan dan anak
               </p>
             </div>
           </div>
