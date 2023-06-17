@@ -1,16 +1,16 @@
-import FormReportComp from '../../Components/FormComp/FormReport';
+import React from 'react';
 import Navigation from '../../Components/Navigation/Navigation';
+import Office from '../../Components/OfficeComp/Office';
 import Footer from '../../Components/Footer/Footer';
-import './form.css';
 
-const FormPage = () => {
+const OfficePage = () => {
   return (
     <>
       <Navigation />
-      <FormReportComp />
+      <Office />
       <Footer />
     </>
   );
 };
 
-export default FormPage;
+export default OfficePage;

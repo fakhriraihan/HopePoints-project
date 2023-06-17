@@ -1,0 +1,15 @@
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+}
+
+.dropdown-city {
+  width: 100%;
+  margin: 20px;
+}
+
+.title-dropdown {
+  font-size: 1rem;
+  align-item: right;
+}

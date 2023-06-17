@@ -1,0 +1,142 @@
+.container-dashboard {
+  margin: 45px 15px 0 15px;
+  min-height: 80vh;
+}
+
+.custom-pagination .page-link {
+  background-color: white;
+  border-color: #f94892;
+  color: #f94892;
+}
+
+.custom-pagination .page-link:hover {
+  background-color: #f94892;
+  border-color: #f94892;
+  color: white;
+}
+
+.custom-pagination .page-link:focus {
+  box-shadow: none;
+  color: #f94892;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: #f94892;
+  border-color: #f94892;
+  color: white;
+}
+
+.sidebar {
+  min-height: 100vh;
+}
+
+.logo-dashboard {
+  margin-right: 10px;
+  width: 44px;
+}
+
+.brand-name {
+  font-weight: 600;
+}
+
+.list-group a:hover {
+  background-color: #f94892;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.sidebar .header-sidebar {
+  display: flex;
+  align-items: center;
+  margin: 20px 15px;
+}
+
+.sidebar .header-sidebar > img {
+  width: 30px;
+  height: 30px;
+}
+
+.button-account:hover {
+  background-color: #f94892;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.icon-sidebar {
+  margin-right: 10px;
+}
+
+.button-filter {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ebebeb;
+  color: #555555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button-filter.active {
+  background-color: rgb(249, 72, 146);
+  color: #ffffff;
+}
+
+@media screen and (max-width: 1025px) {
+  .logo-dashboard {
+    margin-right: 0;
+  }
+  .brand-name {
+    display: none;
+  }
+  .text-sidebar {
+    display: none;
+  }
+  .icon-sidebar {
+    font-size: 1.2rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 915px) {
+  .logo-dashboard {
+    margin-right: 0;
+  }
+  .brand-name {
+    display: none;
+  }
+  .text-sidebar {
+    display: none;
+  }
+  .icon-sidebar {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon-dropdown {
+    display: none;
+  }
+  .button-account {
+    display: flex;
+    justify-content: center;
+  }
+  .container-dashboard {
+    margin: 45px 5px 0 5px;
+  }
+}
