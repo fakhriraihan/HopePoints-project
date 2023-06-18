@@ -80,7 +80,7 @@ const DashUser = () => {
         <Card.Body>
           <Table responsive bordered hover className='bg-white'>
             <thead>
-              <tr>
+              <tr className='text-center'>
                 <th style={{ width: '5%' }}>No</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -91,7 +91,9 @@ const DashUser = () => {
             <tbody>
               {currentUsers.map((user, index) => (
                 <tr key={user.id}>
-                  <td style={{textAlign: 'center'}}>{nomorUrutAwal + index + 1}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    {nomorUrutAwal + index + 1}
+                  </td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>

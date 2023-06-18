@@ -2,7 +2,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate
+  Navigate,
 } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './Context/AuthContext';
@@ -25,20 +25,20 @@ import ListReportProfile from './Pages/ProfilePage/listReport';
 import UserProfile from './Pages/ProfilePage/userProfile';
 import ChangePasswordProfile from './Pages/ProfilePage/changePassword';
 import ForgotPage from './Pages/AuthPage/forgotPage';
+import PageNotFound from './Pages/NotFound/PageNotFound';
 
 const App = () => {
-  
   const RequireAuth = ({ children, requiredRole }) => {
-    
     const { currentUser } = useContext(AuthContext);
-  
+
     // Check if the user role matches any of the required roles
-    const isAuthorized = Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
-  
+    const isAuthorized =
+      Array.isArray(requiredRole) && requiredRole.includes(currentUser?.role);
+
     if (isAuthorized) {
       return children;
     } else {
-      return <Navigate to="/login" />;
+      return <Navigate to='/login' />;
     }
   };
 
@@ -54,6 +54,7 @@ const App = () => {
           <Route path='/maps' element={<MapPage />} />
           <Route path='/office' element={<OfficePage />} />
           <Route path='/detailoffice/:id' element={<DetailOfficePage />} />
+          <Route path='*' element={<PageNotFound />} />
 
           <Route path='profile'>
             <Route

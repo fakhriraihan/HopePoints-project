@@ -26,6 +26,7 @@ const MapComponent = () => {
   const [reviews, setReviews] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const stars = Array(5).fill(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,
@@ -65,11 +66,13 @@ const MapComponent = () => {
           setUsers(usersData);
 
           await loadReviewsByUsers(usersData);
+          setIsLoading(false);
         } else {
           console.log('No users with role "office" found!');
         }
       } catch (error) {
         console.log('Error loading users and reviews:', error);
+        setIsLoading(false);
       }
     };
 
@@ -111,6 +114,14 @@ const MapComponent = () => {
     return averageRating;
   };
 
+  const handleMapClick = () => {
+    setSelectedMarker(null);
+  };
+
+  const handlePopupClose = () => {
+    setSelectedMarker(null);
+  };
+
   return (
     <Map
       initialViewState={viewport}
@@ -119,6 +130,7 @@ const MapComponent = () => {
       width='100%'
       height='100%'
       onViewportChange={setViewPort}
+      onMouseDown={handleMapClick}
     >
       <Source id='heatmapData' type='geojson' data={heatmapData}>
         <Layer
@@ -201,34 +213,46 @@ const MapComponent = () => {
               closeButton={true}
               closeOnClick={false}
               anchor='left'
-              onClose={() => setSelectedMarker(null)}
+              onClose={handlePopupClose}
               style={{ zIndex: 1 }}
             >
               <div className='popup-content'>
                 {/* Konten popup */}
-                <h2>Informasi Dinas</h2>
                 <h4 className='nama-dinas'>{user?.name}</h4>
-                <p>Alamat: {user?.address}</p>
-                <p>Phone: {user?.phone}</p>
+                <p>
+                  <span>Alamat:</span> {user?.address}
+                </p>
+                <p>
+                  <span>Phone:</span> {user?.phone}
+                </p>
 
+                <p>
+                  <span>Rating:</span>
+                </p>
                 {/* Review */}
-                <div className='stars' style={styles.stars}>
-                  {stars.map((_, index) => {
-                    return (
-                      <FaStar
-                        key={index}
-                        size={24}
-                        style={{
-                          marginRight: 2,
-                          cursor: 'pointer',
-                          color:
-                            calculateRatingByIdOffice(user.uid) > index
-                              ? colors.orange
-                              : colors.grey,
-                        }}
-                      />
-                    );
-                  })}
+                <div className='stars'>
+                  {isLoading ? (
+                    <div className='spinner'></div>
+                  ) : (
+                    <div style={styles.stars}>
+                      {/* Render stars when isLoading is false */}
+                      {stars.map((_, index) => {
+                        return (
+                          <FaStar
+                            key={index}
+                            size={24}
+                            style={{
+                              marginRight: 2,
+                              color:
+                                calculateRatingByIdOffice(user.uid) > index
+                                  ? colors.orange
+                                  : colors.grey,
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <Button

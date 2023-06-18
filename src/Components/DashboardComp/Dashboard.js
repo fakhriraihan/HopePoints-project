@@ -14,7 +14,8 @@ import {
   getIdOfficeFromLocalStorage,
 } from '../../Utils/UserData';
 
-const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+const token =
+  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
 const userRole = getUserRoleFromLocalStorage();
 const idOffice = getIdOfficeFromLocalStorage();
 
@@ -88,7 +89,7 @@ const Dashboard = () => {
             </Card>
           </div>
         </div>
-        <Card className='my-3' style={{ width: '100wh', height: '30.5rem' }}>
+        <Card className='my-3' style={{ width: '100wh', height: '30rem' }}>
           <Card.Body>
             <Map
               initialViewState={viewport}

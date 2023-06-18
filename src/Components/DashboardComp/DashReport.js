@@ -79,30 +79,90 @@ const DashReport = () => {
       <h2 className='text-white text-center mb-3'>Table Report</h2>
       <Card>
         <Card.Body>
-          <button className="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleFilter" aria-controls="collapsibleFilter" aria-label="Toggle navigation">
-            <i className="fa-solid fa-filter" style={{ cursor: 'pointer', color: '#f94892' }} /> <small style={{ cursor: 'pointer', color: '#f94892' }}>Filter</small>
+          <button
+            className='navbar-toggler d-md-none'
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target='#collapsibleFilter'
+            aria-controls='collapsibleFilter'
+            aria-label='Toggle navigation'
+          >
+            <i
+              className='fa-solid fa-filter'
+              style={{ cursor: 'pointer', color: '#f94892' }}
+            />{' '}
+            <small style={{ cursor: 'pointer', color: '#f94892' }}>
+              Filter
+            </small>
           </button>
-          <div className="collapse navbar-collapse d-md-block" id="collapsibleFilter">
-            <ul className="ms-auto mt-2 list-unstyled mt-lg-0">
-              <li className="nav-item dropdown">
-                <button className={selectedStatus === null ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange(null)}>Semua</button>
-                <button className={selectedStatus === 'pending' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('pending')}>Perlu diproses</button>
-                <button className={selectedStatus === 'proses' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('proses')}>Telah diproses</button>
-                <button className={selectedStatus === 'selesai' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('selesai')}>Selesai</button>
-                <button className={selectedStatus === 'tolak' ? 'button-filter active' : 'button-filter'} onClick={() => handleStatusChange('tolak')}>Ditolak</button>
+          <div
+            className='collapse navbar-collapse d-md-block'
+            id='collapsibleFilter'
+          >
+            <ul className='ms-auto mt-2 list-unstyled mt-lg-0'>
+              <li className='nav-item dropdown'>
+                <button
+                  className={
+                    selectedStatus === null
+                      ? 'button-filter active'
+                      : 'button-filter'
+                  }
+                  onClick={() => handleStatusChange(null)}
+                >
+                  Semua
+                </button>
+                <button
+                  className={
+                    selectedStatus === 'pending'
+                      ? 'button-filter active'
+                      : 'button-filter'
+                  }
+                  onClick={() => handleStatusChange('pending')}
+                >
+                  Perlu diproses
+                </button>
+                <button
+                  className={
+                    selectedStatus === 'proses'
+                      ? 'button-filter active'
+                      : 'button-filter'
+                  }
+                  onClick={() => handleStatusChange('proses')}
+                >
+                  Telah diproses
+                </button>
+                <button
+                  className={
+                    selectedStatus === 'selesai'
+                      ? 'button-filter active'
+                      : 'button-filter'
+                  }
+                  onClick={() => handleStatusChange('selesai')}
+                >
+                  Selesai
+                </button>
+                <button
+                  className={
+                    selectedStatus === 'tolak'
+                      ? 'button-filter active'
+                      : 'button-filter'
+                  }
+                  onClick={() => handleStatusChange('tolak')}
+                >
+                  Ditolak
+                </button>
               </li>
             </ul>
           </div>
           <Table responsive bordered hover className='table bg-white mt-1'>
-
             <thead>
-              <tr>
+              <tr className='text-center'>
                 <th>No</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Categories</th>
-                <th>Title</th>
-                <th>Office</th>
+                <th>Tanggal</th>
+                <th>Nama</th>
+                <th>Kategori</th>
+                <th>Judul</th>
+                <th>Kantor</th>
                 <th>Status</th>
                 <th style={{ textAlign: 'center' }}>Action</th>
               </tr>
@@ -110,7 +170,9 @@ const DashReport = () => {
             <tbody>
               {currentReports.map((report, index) => (
                 <tr key={report.idReport}>
-                  <td style={{ textAlign: 'center' }}>{nomorUrutAwal + index + 1}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    {nomorUrutAwal + index + 1}
+                  </td>
                   <td>{report.tgl}</td>
                   <td>{report.name}</td>
                   <td>
@@ -121,7 +183,7 @@ const DashReport = () => {
                   <td>{report.title}</td>
                   <td>{report.nameOffice}</td>
                   <td>{report.status}</td>
-                  <td style={{ textAlign: 'center' }}>
+                  <td className='d-flex flex-column align-items-center'>
                     <Button
                       variant='info'
                       onClick={() =>
@@ -133,7 +195,7 @@ const DashReport = () => {
                     {userRole === 'admin' && (
                       <Button
                         variant='danger'
-                        style={{ marginTop: '5px' }}
+                        className='mt-1'
                         onClick={() => handleDelete(report.idReport)}
                       >
                         <i className='fa-solid fa-trash-can'></i>
@@ -166,7 +228,11 @@ const DashReport = () => {
       {userRole === 'admin' ? (
         <GetReport setReports={setReports} selectedStatus={selectedStatus} />
       ) : (
-        <GetReport setReports={setReports} idOffice={idOffice} selectedStatus={selectedStatus} />
+        <GetReport
+          setReports={setReports}
+          idOffice={idOffice}
+          selectedStatus={selectedStatus}
+        />
       )}
     </div>
   );

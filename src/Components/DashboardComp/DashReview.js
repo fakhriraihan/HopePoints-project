@@ -131,7 +131,7 @@ const DashReview = () => {
         <Card.Body>
           <Table responsive bordered hover className='bg-white'>
             <thead>
-              <tr style={{textAlign: 'center'}}>
+              <tr className='text-center'>
                 <th style={{ width: '5%' }}>No</th>
                 <th style={{ width: '23%' }}>Name</th>
                 <th style={{ width: '35%' }}>Comment</th>
@@ -147,7 +147,7 @@ const DashReview = () => {
               {currentReviews &&
                 currentReviews.map((review, index) => (
                   <tr key={index}>
-                    <td style={{textAlign: 'center'}}>{index + 1}</td>
+                    <td style={{ textAlign: 'center' }}>{index + 1}</td>
                     <td>{review.name}</td>
                     <td>{review.comment}</td>
                     {userRole === 'admin' ? (
@@ -175,7 +175,7 @@ const DashReview = () => {
                       </td>
                     )}
                     {userRole === 'admin' ? (
-                      <td style={{textAlign: 'center'}}>
+                      <td style={{ textAlign: 'center' }}>
                         <Button
                           variant='danger'
                           onClick={() =>

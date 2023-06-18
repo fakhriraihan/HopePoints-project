@@ -19,7 +19,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { GetUserById, ProvincesSelect } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+const token =
+  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
 
 const FormReportComp = () => {
   //maps
@@ -300,7 +301,17 @@ const FormReportComp = () => {
                 </div>
               </Card>
               <p style={{ textAlign: 'center', padding: '0 20px' }}>
-                <small style={{ color: 'orange', fontSize: '0.7rem', textAlign: 'center', justifyContent: 'center' }}>Mohon masukan lokasi dengan benar, agar dapat membantu kami mengumpulkan informasi yang dibutuhkan</small>
+                <small
+                  style={{
+                    color: 'orange',
+                    fontSize: '0.7rem',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Mohon masukan lokasi dengan benar, agar dapat membantu kami
+                  mengumpulkan informasi yang dibutuhkan
+                </small>
               </p>
               <label className='mb-2 fw-bold'>Detail Kejadian</label>
               <Form onSubmit={handleSubmit}>
@@ -348,14 +359,14 @@ const FormReportComp = () => {
                 <Form.Group id='province'>
                   <Form.Label>Kantor</Form.Label>
                   <Select
-                    placeholder='Pilih Kantor'
+                    placeholder='Pilih kantor yang dituju untuk pelaporan'
+                    className='mb-3'
                     options={provinces}
                     onChange={(selectedOption) =>
                       setSelectedProvince(selectedOption)
                     }
                   />
                 </Form.Group>
-
                 <Form.Group className='mb-3' controlId='formGridDescription'>
                   <Form.Label>Deskripsi</Form.Label>
                   <Form.Control
@@ -366,7 +377,12 @@ const FormReportComp = () => {
                   />
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='fileInput'>
-                  <Form.Label>Bukti Gambar <small style={{ color: 'orange', fontSize: '0.7rem' }}>Opsional</small></Form.Label>
+                  <Form.Label>
+                    Bukti Gambar{' '}
+                    <small style={{ color: 'orange', fontSize: '0.7rem' }}>
+                      Opsional
+                    </small>
+                  </Form.Label>
                   <Form.Control
                     type='file'
                     onChange={(e) => setFile(e.target.files[0])}

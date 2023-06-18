@@ -11,5 +11,5 @@
 
 .title-dropdown {
   font-size: 1rem;
-  align-item: right;
+  align-items: flex-end;
 }

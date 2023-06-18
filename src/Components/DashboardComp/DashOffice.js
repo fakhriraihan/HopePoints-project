@@ -162,8 +162,8 @@ const DashOffice = () => {
         <Card.Body>
           <Table responsive bordered hover className='bg-white'>
             <thead>
-              <tr>
-                <th style={{textAlign: 'center'}}>No</th>
+              <tr className='text-center'>
+                <th style={{ textAlign: 'center' }}>No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>No Kantor</th>
@@ -173,11 +173,13 @@ const DashOffice = () => {
             <tbody>
               {currentUsers.map((user, index) => (
                 <tr key={user.id}>
-                  <td style={{textAlign: 'center'}}>{nomorUrutAwal + index + 1}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    {nomorUrutAwal + index + 1}
+                  </td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
-                  <td style={{textAlign: 'center'}}>
+                  <td style={{ textAlign: 'center' }}>
                     <Button
                       variant='danger'
                       onClick={() => confirmDeleteUser(user.id)}

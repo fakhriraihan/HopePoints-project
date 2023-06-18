@@ -54,9 +54,15 @@ Run server in development mode : <br>
 Build Production : <br>
 `npm run build`
 
+## Need Help?
+
+Contact <a href='mailto:hopepoints123@gmail.com' target='_blank' className='footer-link' rel='noreferrer'>
+Email HopePoints
+</a>
+
 ## Our Team
 
 1. F133XB334 - Fakhri Raihan
 2. F133XB302 - Ramji Renanda Sitorus
-3. F061XB089 - Muhammad Taufik Herdyunanto
+3. F061XB089 - Muhammad Taufik Heryunanto
 4. F165XB450 - Daffa Rizky Maulana Yusuf
