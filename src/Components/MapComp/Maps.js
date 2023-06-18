@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Map, { NavigationControl, ScaleControl, GeolocateControl, Source, Layer, Marker, Popup } from 'react-map-gl';
+import Map, {
+  NavigationControl,
+  ScaleControl,
+  GeolocateControl,
+  Source,
+  Layer,
+  Marker,
+  Popup,
+} from 'react-map-gl';
 import { useNavigate } from 'react-router-dom';
 import { GetReport } from '../../Utils/crudData';
 import { collection, getDocs, query, where, doc } from '@firebase/firestore';
@@ -9,7 +17,8 @@ import './popup.css';
 import { FaStar } from 'react-icons/fa';
 import HeatmapLegend from './Legend';
 
-const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+const token =
+  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
 const MapComponent = () => {
   const navigate = useNavigate();
   const [reports, setReports] = useState([]);
@@ -28,9 +37,11 @@ const MapComponent = () => {
     grey: '#a9a9a9',
   };
 
+  const filteredReports = reports.filter((report) => report.status !== 'tolak');
+
   const heatmapData = {
     type: 'FeatureCollection',
-    features: reports.map((report) => ({
+    features: filteredReports.map((report) => ({
       geometry: {
         type: 'Point',
         coordinates: [report.location.longitude, report.location.latitude],
@@ -42,12 +53,17 @@ const MapComponent = () => {
     const loadUsersAndReviews = async () => {
       try {
         const usersCollectionRef = collection(db, 'users');
-        const querySnapshot = await getDocs(query(usersCollectionRef, where('role', '==', 'office')));
-  
+        const querySnapshot = await getDocs(
+          query(usersCollectionRef, where('role', '==', 'office'))
+        );
+
         if (!querySnapshot.empty) {
-          const usersData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          const usersData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
           setUsers(usersData);
-  
+
           await loadReviewsByUsers(usersData);
         } else {
           console.log('No users with role "office" found!');
@@ -56,24 +72,28 @@ const MapComponent = () => {
         console.log('Error loading users and reviews:', error);
       }
     };
-  
+
     const loadReviewsByUsers = async (users) => {
       try {
         const reviewsData = [];
-  
+
         for (const user of users) {
           const userRef = doc(db, 'users', user.id);
-          const reviewsQuerySnapshot = await getDocs(collection(userRef, 'reviews'));
-          const userReviewsData = reviewsQuerySnapshot.docs.map((doc) => doc.data());
+          const reviewsQuerySnapshot = await getDocs(
+            collection(userRef, 'reviews')
+          );
+          const userReviewsData = reviewsQuerySnapshot.docs.map((doc) =>
+            doc.data()
+          );
           reviewsData.push(...userReviewsData);
         }
-  
+
         setReviews(reviewsData);
       } catch (error) {
         console.log('Error loading reviews:', error);
       }
     };
-  
+
     loadUsersAndReviews();
   }, []);
 
@@ -81,29 +101,30 @@ const MapComponent = () => {
     const ratingsByIdOffice = reviews
       .filter((review) => review.idOffice === idOffice)
       .map((review) => review.rating);
-  
-    const totalRating = ratingsByIdOffice.reduce((acc, rating) => acc + rating, 0);
+
+    const totalRating = ratingsByIdOffice.reduce(
+      (acc, rating) => acc + rating,
+      0
+    );
     const averageRating = totalRating / ratingsByIdOffice.length;
-  
+
     return averageRating;
   };
-              
 
   return (
-    
     <Map
       initialViewState={viewport}
       mapboxAccessToken={token}
-      mapStyle="mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w"
-      width="100%"
-      height="100%"
+      mapStyle='mapbox://styles/renanda26/cli49zhib02nc01qyaka1dq8w'
+      width='100%'
+      height='100%'
       onViewportChange={setViewPort}
     >
-      <Source id="heatmapData" type="geojson" data={heatmapData}>
+      <Source id='heatmapData' type='geojson' data={heatmapData}>
         <Layer
-          id="heatmapLayer"
-          type="heatmap"
-          source="heatmapData"
+          id='heatmapLayer'
+          type='heatmap'
+          source='heatmapData'
           maxzoom={15}
           paint={{
             'heatmap-weight': {
@@ -164,9 +185,8 @@ const MapComponent = () => {
             style={{ zIndex: 1 }}
             onClick={() => setSelectedMarker(user)}
           >
-
             <i
-              className="fa-solid fa-building"
+              className='fa-solid fa-building'
               style={{
                 fontSize: 4 * viewport.zoom,
                 color: '#f94892',
@@ -180,35 +200,41 @@ const MapComponent = () => {
               longitude={selectedMarker.location.longitude}
               closeButton={true}
               closeOnClick={false}
-              anchor="left"
+              anchor='left'
               onClose={() => setSelectedMarker(null)}
               style={{ zIndex: 1 }}
             >
-              <div className="popup-content">
+              <div className='popup-content'>
                 {/* Konten popup */}
                 <h2>Informasi Dinas</h2>
-                <h4 className="nama-dinas">{user?.name}</h4>
+                <h4 className='nama-dinas'>{user?.name}</h4>
                 <p>Alamat: {user?.address}</p>
                 <p>Phone: {user?.phone}</p>
 
                 {/* Review */}
-                <div className="stars" style={styles.stars}>
-                    {stars.map((_, index) => {
-                      return (
-                        <FaStar
-                          key={index}
-                          size={24}
-                          style={{
-                            marginRight: 2,
-                            cursor: 'pointer',
-                            color: calculateRatingByIdOffice(user.uid) > index ? colors.orange : colors.grey,
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
+                <div className='stars' style={styles.stars}>
+                  {stars.map((_, index) => {
+                    return (
+                      <FaStar
+                        key={index}
+                        size={24}
+                        style={{
+                          marginRight: 2,
+                          cursor: 'pointer',
+                          color:
+                            calculateRatingByIdOffice(user.uid) > index
+                              ? colors.orange
+                              : colors.grey,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
 
-                <Button variant="pink" onClick={() => navigate(`/detailoffice/${user.uid}`)}>
+                <Button
+                  variant='pink'
+                  onClick={() => navigate(`/detailoffice/${user.uid}`)}
+                >
                   Detail Office
                 </Button>
               </div>
@@ -217,8 +243,8 @@ const MapComponent = () => {
         </React.Fragment>
       ))}
       <HeatmapLegend />
-      <GeolocateControl position="bottom-right" />
-      <NavigationControl position="bottom-right" />
+      <GeolocateControl position='bottom-right' />
+      <NavigationControl position='bottom-right' />
       <ScaleControl />
       <GetReport setReports={setReports} />
     </Map>

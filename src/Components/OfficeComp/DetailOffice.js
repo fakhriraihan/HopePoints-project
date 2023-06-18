@@ -7,17 +7,25 @@ import Map, {
 } from 'react-map-gl';
 import { Modal, Button, Card, Form, FloatingLabel } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, collection, getDocs, addDoc, Timestamp } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  addDoc,
+  Timestamp,
+} from 'firebase/firestore';
 import { getAuth } from '@firebase/auth';
 import { db } from '../../Config/firebase';
 import { FaStar } from 'react-icons/fa';
 import './office.css';
 
-const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+const token =
+  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
 const DetailOffice = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [ setError] = useState(false);
+  const [setError] = useState(false);
   const [users, setUsers] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [viewport, setViewPort] = useState({
@@ -58,7 +66,6 @@ const DetailOffice = () => {
     const user = auth.currentUser;
 
     if (!user) {
-      
       setShowModal(true);
       return;
     }
@@ -129,10 +136,10 @@ const DetailOffice = () => {
   }, [id]);
 
   return (
-    <div className='px-3 mb-3'>
+    <div className='office-container px-3 mb-3'>
       {users.map((user) => (
         <div key={id}>
-          <h2 className='text-center my-5 pt-5 px-3'>{user.name}</h2>
+          <h2 className='text-center my-5 pt-3 px-3'>{user.name}</h2>
           <div className='row'>
             <div className='col-md-6'>
               <Card className='mb-3'>
@@ -280,35 +287,35 @@ const DetailOffice = () => {
               <div className='cardReview mb-3'>
                 {reviews.map((review, index) => (
                   <Card key={index} style={{ marginTop: '1rem' }}>
-                  <Card.Body key={review.id}>
-                    <div className='name-comment'>{review.name}</div>
-                    <div className='stars-comment'>
-                      {stars.map((_, index) => {
-                        return (
-                          <FaStar
-                            key={index}
-                            size={15}
-                            style={{
-                              marginRight: 2,
-                              cursor: 'pointer',
-                              color:
-                                (review.rating || hoverValue) > index
-                                  ? colors.orange
-                                  : colors.grey,
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                    <div className='tgl-comment'>{review.tgl}</div>
-                    <div className='comment-office'>{review.comment}</div>
-                  </Card.Body>
-                  {review.reply !== null && (
-                    <Card.Footer>
-                      <div className='name-comment'>Respon Office:</div>
-                      <div className='reply-comment'>{review.reply}</div>
-                    </Card.Footer>
-                  )}
+                    <Card.Body key={review.id}>
+                      <div className='name-comment'>{review.name}</div>
+                      <div className='stars-comment'>
+                        {stars.map((_, index) => {
+                          return (
+                            <FaStar
+                              key={index}
+                              size={15}
+                              style={{
+                                marginRight: 2,
+                                cursor: 'pointer',
+                                color:
+                                  (review.rating || hoverValue) > index
+                                    ? colors.orange
+                                    : colors.grey,
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                      <div className='tgl-comment'>{review.tgl}</div>
+                      <div className='comment-office'>{review.comment}</div>
+                    </Card.Body>
+                    {review.reply !== null && (
+                      <Card.Footer>
+                        <div className='name-comment'>Respon Office:</div>
+                        <div className='reply-comment'>{review.reply}</div>
+                      </Card.Footer>
+                    )}
                   </Card>
                 ))}
               </div>

@@ -9,15 +9,14 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../Config/firebase';
 import { useNavigate } from 'react-router-dom';
-import Fuse from 'fuse.js';
 import './office.css';
 
 const Office = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [originalUsers, setOriginalUsers] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -32,6 +31,7 @@ const Office = () => {
           ...doc.data(),
         }));
         setUsers(userList);
+        setOriginalUsers(userList);
       },
       (error) => {
         console.log(error);
@@ -46,41 +46,20 @@ const Office = () => {
   const handleSearch = (event) => {
     event.preventDefault();
     const searchInput = document.getElementById('searchOffice');
-    setSearchValue(searchInput.value);
-  };
+    const searchTerm = searchInput.value.trim().toLowerCase();
 
-  useEffect(() => {
-    if (searchValue !== '') {
-      const fuse = new Fuse(users, {
-        keys: ['name'],
+    if (searchTerm !== '') {
+      const filteredUsers = originalUsers.filter((user) => {
+        const userLowercase = user.name.toLowerCase();
+        return userLowercase.includes(searchTerm);
       });
-      const results = fuse.search(searchValue);
-      const filteredUsers = results.map((result) => result.item);
+      setCurrentPage(1); // Reset to first page
       setUsers(filteredUsers);
     } else {
-      const unsubscribe = onSnapshot(
-        query(
-          collection(db, 'users'),
-          where('role', '==', 'office'),
-          orderBy('name')
-        ),
-        (snapshot) => {
-          const userList = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setUsers(userList);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-
-      return () => {
-        unsubscribe();
-      };
+      // If search term is empty, reset to original list of users
+      setUsers(originalUsers);
     }
-  }, [searchValue, users]);
+  };
 
   // Menghitung total halaman berdasarkan jumlah item per halaman
   const totalPages = Math.ceil(users.length / itemsPerPage);
