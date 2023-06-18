@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "hopepoints"
-  }
+    "default": "hopepoints-project",
+    "main": "hopepoints-project"
+  },
+  "targets": {},
+  "etags": {}
 }
