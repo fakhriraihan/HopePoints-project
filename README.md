@@ -62,7 +62,7 @@ HopePoints
 
 ## Need Help?
 
-Contact <a href='mailto:hopepoints123@gmail.com' target='\_blank'rel='noreferrer'>
+Contact <a href='mailto:hopepoints123@gmail.com' target='_blank' rel='noreferrer'>
 Email HopePoints
 </a>
 
