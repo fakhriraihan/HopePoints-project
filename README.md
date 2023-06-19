@@ -54,9 +54,15 @@ Run server in development mode : <br>
 Build Production : <br>
 `npm run build`
 
+## Website
+
+<a href='https://hopepoints-project.web.app/' target='_blank' rel='noreferrer'>
+HopePoints
+</a>
+
 ## Need Help?
 
-Contact <a href='mailto:hopepoints123@gmail.com' target='_blank' className='footer-link' rel='noreferrer'>
+Contact <a href='mailto:hopepoints123@gmail.com' target='\_blank'rel='noreferrer'>
 Email HopePoints
 </a>
 
