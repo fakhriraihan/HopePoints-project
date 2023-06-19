@@ -19,9 +19,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { GetUserById, ProvincesSelect } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-const token =
-  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
-
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const FormReportComp = () => {
   //maps
   const [newPlace, setNewPlace] = useState(null); // [longitude, latitude

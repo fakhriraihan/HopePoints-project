@@ -23,7 +23,7 @@ const Nav = ({ Toggle }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModalPassword, setShowModalPassword] = useState(false);
   const [newPlace, setNewPlace] = useState(null);
-  const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+  const token = process.env.REACT_APP_MAPBOX_TOKEN;
   const [viewport, setViewPort] = useState({
     longitude: 117.27756850787405,
     latitude: 0.09273370918533735,

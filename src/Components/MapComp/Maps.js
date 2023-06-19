@@ -17,8 +17,7 @@ import './popup.css';
 import { FaStar } from 'react-icons/fa';
 import HeatmapLegend from './Legend';
 
-const token =
-  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const MapComponent = () => {
   const navigate = useNavigate();
   const [reports, setReports] = useState([]);

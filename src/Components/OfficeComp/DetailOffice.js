@@ -20,8 +20,7 @@ import { db } from '../../Config/firebase';
 import { FaStar } from 'react-icons/fa';
 import './office.css';
 
-const token =
-  'pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw';
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DetailOffice = () => {
   const navigate = useNavigate();
   const { id } = useParams();

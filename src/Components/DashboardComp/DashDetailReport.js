@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { GetDetailReport, handelChangeStatus } from '../../Utils/crudData';
 import Swal from 'sweetalert2';
 
-const token = "pk.eyJ1IjoicmVuYW5kYTI2IiwiYSI6ImNsaHgxMTkzdzBsZWkzbW4wMnZ5cDd0OTgifQ.ubLqseZPFD3Ym8ENEzvbCw";
+const token = process.env.REACT_APP_MAPBOX_TOKEN;
 const DashDetailReport = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -98,7 +98,11 @@ const DashDetailReport = () => {
 
   return (
     <div className='container-dashboard'>
-      <GetDetailReport setReport={setReport} setViewPort={setViewPort} id={id} />
+      <GetDetailReport
+        setReport={setReport}
+        setViewPort={setViewPort}
+        id={id}
+      />
       <h2 className='text-white my-3'>Detail Report</h2>
       <Card>
         <Card.Header>
