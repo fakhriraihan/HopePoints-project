@@ -81,9 +81,7 @@ const Footer = () => {
         <hr />
         <Row>
           <Col sm className='footer-bottom'>
-            <p className='footer-text text-center'>
-              Copyright &copy;2023 <span>HopePoints</span>. All rights reserved.
-            </p>
+            <p className='footer-text text-center'>HopePoints</p>
           </Col>
         </Row>
       </Container>
